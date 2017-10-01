@@ -6,6 +6,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath "io.realm:realm-gradle-plugin:3.7.2"
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.8.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -15,24 +17,30 @@ buildscript {
 ext {
     // Gradle
     buildToolVersion = "26.0.1"
+
+    // Project
+    applicationId = "com.rodolfonavalon.canadatransit"
     compileSdkVersion = 26
     minSdkVersion = 21
     targetSdkVersion = 26
-
-    // Project
     versionCode = 1
     versionName = "1.0"
 
+    // Community Library
+    retrofitLibraryVersion = "2.3.0"
+    timberLibraryVersion = "4.5.1"
+    butterKnifeLibraryVersion = "8.8.1"
+
     // Google Library
-    supportLibraryVersion = "26.1.0"
-    contraintLayoutLibraryVersion = "1.0.2"
+    googleSupportLibraryVersion = "26.1.0"
+    googleDesignLibraryVersion = "26.1.0"
+    googleContraintLayoutLibraryVersion = "1.0.2"
+    googlePlayServiceLibraryVersion = "11.4.0"
 
     // Test Library
     junitLibraryVersion = "4.12"
-    espressoLibraryVersion = "2.2.2"
-
-    // Library
-
+    espressoLibraryVersion = "3.0.1"
+    jsr305LibraryVersion = "3.0.2"
 }
 
 allprojects {

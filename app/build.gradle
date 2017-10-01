@@ -1,10 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolVersion
     defaultConfig {
-        applicationId "com.rodolfonavalon.canadatransit"
+        applicationId rootProject.ext.applicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
@@ -28,10 +30,23 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Community Library
+    compile "com.jakewharton:butterknife:$butterKnifeLibraryVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeLibraryVersion"
+    compile "com.jakewharton.timber:timber:$timberLibraryVersion"
+    compile "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
+
+    // Google Library
+    compile "com.android.support:design:$googleDesignLibraryVersion"
+    compile "com.android.support:appcompat-v7:$googleSupportLibraryVersion"
+    compile "com.android.support.constraint:constraint-layout:$googleContraintLayoutLibraryVersion"
+    compile "com.google.android.gms:play-services-maps:$googlePlayServiceLibraryVersion"
+
+    // Test Library
+    androidTestCompile "com.google.code.findbugs:jsr305:$jsr305LibraryVersion"
     androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoLibraryVersion", {
         exclude group: "com.android.support", module: "support-annotations"
     })
-    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
-    compile "com.android.support.constraint:constraint-layout:$contraintLayoutLibraryVersion"
     testCompile "junit:junit:$junitLibraryVersion"
 }
