@@ -36,6 +36,11 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeLibraryVersion"
     compile "com.jakewharton.timber:timber:$timberLibraryVersion"
     compile "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
+    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidLibraryVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rxJavaLibraryVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$rxJavaRetrofitAdapterLibraryVersion"
+    compile "com.google.code.gson:gson:$gsonLibraryVersion"
+    compile "com.squareup.retrofit2:converter-gson:$gsonRetrofitConverterLibraryVersion"
 
     // Google Library
     compile "com.android.support:design:$googleDesignLibraryVersion"

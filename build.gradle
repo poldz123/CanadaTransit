@@ -30,6 +30,11 @@ ext {
     retrofitLibraryVersion = "2.3.0"
     timberLibraryVersion = "4.5.1"
     butterKnifeLibraryVersion = "8.8.1"
+    rxAndroidLibraryVersion = "2.0.1"
+    rxJavaLibraryVersion = "2.1.3"
+    gsonLibraryVersion = "2.8.2"
+    rxJavaRetrofitAdapterLibraryVersion = "2.3.0"
+    gsonRetrofitConverterLibraryVersion = "2.3.0"
 
     // Google Library
     googleSupportLibraryVersion = "26.1.0"
