@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -12,9 +13,6 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        jackOptions {
-            enabled = true
-        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -54,4 +52,8 @@ dependencies {
         exclude group: "com.android.support", module: "support-annotations"
     })
     testCompile "junit:junit:$junitLibraryVersion"
+
+    // Compile time plugin
+    provided "org.projectlombok:lombok:$lombokCompilerVersion"
+
 }
