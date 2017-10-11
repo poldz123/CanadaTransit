@@ -14,11 +14,9 @@ interface TransitLandApi {
     @GET("operators?exclude_geometry=true")
     Observable<OperatorsResponse> operators(@Query("country") String country, @Query("offset") int offset, @Query("per_page") int perPage);
 
-    // TODO: object model
     @GET("feeds/{onestop_id}?exclude_geometry=true")
     Observable<OperatorFeed> feed(@Path("onestop_id") String oneStopId);
 
-    // TODO: object model
     @GET("feed_versions/{active_feed_version}")
     Observable<OperatorFeedVersion> feedVersion(@Path("active_feed_version") String activeFeedVersion);
 
