@@ -4,50 +4,26 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
+import lombok.Getter;
+
 public class Meta {
 
     @SerializedName("sort_key")
-    private String sortKey;
+    @Getter private String sortKey;
     @SerializedName("sort_order")
-    private String sortOrder;
+    @Getter private String sortOrder;
 
     @Nullable
     @SerializedName("next")
-    private String next;
+    @Getter private String next;
     @Nullable
     @SerializedName("prev")
-    private String prev;
+    @Getter private String prev;
 
     @SerializedName("per_page")
-    private int perPage;
+    @Getter private int perPage;
     @SerializedName("offset")
-    private int offset;
-
-    public String getSortKey() {
-        return sortKey;
-    }
-
-    public String getSortOrder() {
-        return sortOrder;
-    }
-
-    @Nullable
-    public String getNext() {
-        return next;
-    }
-
-    @Nullable
-    public String getPrev() {
-        return prev;
-    }
-
-    public int getPerPage() {
-        return perPage;
-    }
-
-    public int getOffset() {
-        return offset;
-    }
+    @Getter private int offset;
 
     public boolean hasNext() {
         return next != null;
