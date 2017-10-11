@@ -10,6 +10,9 @@ import lombok.Getter;
 
 public class Operator {
 
+    @SerializedName("onestop_id") // TODO: primary key
+    @Getter private String onestopId;
+
     @SerializedName("name")
     @Getter private String name;
     @SerializedName("website")
@@ -20,8 +23,6 @@ public class Operator {
     @Getter private String state;
     @SerializedName("timezone")
     @Getter private String timezone;
-    @SerializedName("onestop_id") // TODO: primary key
-    @Getter private String onestopId;
     @SerializedName("created_at")
     @Getter private String createdAt;
     @SerializedName("updated_at")

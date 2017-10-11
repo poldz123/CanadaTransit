@@ -8,6 +8,9 @@ import lombok.Getter;
 
 public class OperatorFeedVersion {
 
+    @SerializedName("feed")
+    @Getter private String feedOneStopId; // TODO: primary key
+
     @SerializedName("sha1")
     @Getter private String sha1;
     @SerializedName("earliest_calendar_date")
@@ -28,8 +31,6 @@ public class OperatorFeedVersion {
     @Getter private String feedVersionImportsUrl;
     @SerializedName("import_status")
     @Getter private String importStatus;
-    @SerializedName("feed")
-    @Getter private String feed;
     @SerializedName("url")
     @Getter private String url;
     @SerializedName("download_url")

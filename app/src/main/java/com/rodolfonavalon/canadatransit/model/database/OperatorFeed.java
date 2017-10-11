@@ -10,11 +10,12 @@ import lombok.Getter;
 
 public class OperatorFeed {
 
+    @SerializedName("onestop_id")
+    @Getter private String feedOneStopId; // TODO: primary key
+
     @Nullable
     @SerializedName("name")
     @Getter private String name;
-    @SerializedName("onestop_id")
-    @Getter private String oneStopId;
     @SerializedName("created_at")
     @Getter private String createdAt;
     @SerializedName("updated_at")
