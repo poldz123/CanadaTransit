@@ -28,7 +28,6 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
          *              The stage of the activity life cycle
          *  @return boolean
          *              True when callback will be removed from the pool
-         *
          */
         boolean onActivityLifecycleCallback(LifecycleStage stage);
     }
@@ -129,6 +128,10 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
                     if (callback.onActivityLifecycleCallback(stage)) {
                         iterator.remove();
                     }
+                }
+                // If there are no more callbacks remove the activity from the pool
+                if (item.second.isEmpty()) {
+                    ignoreActivity(activity);
                 }
                 return;
             }
