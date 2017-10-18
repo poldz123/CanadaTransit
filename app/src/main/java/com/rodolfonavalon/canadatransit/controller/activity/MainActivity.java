@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void retrieveOperators() {
-        TransitLand.retrieveOperators(operators -> {
+        TransitLand.retrieveOperators(this, operators -> {
             for (Operator operator : operators) {
                 if (operator.getName().equals("OC Transpo")) {
                     retrieveOperatorVersion(operator);
@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void retrieveOperatorVersion(Operator operator) {
-        TransitLand.retrieveOperatorFeed(operator, operatorFeed -> {
+        TransitLand.retrieveOperatorFeed(this, operator, operatorFeed -> {
             Timber.d("Operator active version: " + operatorFeed.getActiveFeedVersion());
-            TransitLand.retrieveOperatorFeedVersion(operatorFeed, operatorFeedVersion -> {
+            TransitLand.retrieveOperatorFeedVersion(MainActivity.this, operatorFeed, operatorFeedVersion -> {
                 Timber.d("Operator feed version download URL: " + operatorFeedVersion.getDownloadUrl());
             }, error -> {
                 Timber.e("retrieveOperatorFeedVersion Error: " + error);

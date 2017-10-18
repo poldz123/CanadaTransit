@@ -37,7 +37,7 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
         DESTROYED   // onActivityDestroyed(Activity)
     }
 
-    private final List<Pair<Activity, LifecycleCallback>> lifecycleItems = new ArrayList<>();
+    private final List<Pair<Activity, List<LifecycleCallback>>> lifecycleItems = new ArrayList<>();
 
     private static LifecycleManager instance;
 
@@ -64,8 +64,18 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
      */
     public static void watchActivity(@NonNull Activity activity, @NonNull LifecycleCallback callback) {
         LifecycleManager manager = getInstance();
+        // If the activity already exist before then just attach the callback
+        for (Pair<Activity, List<LifecycleCallback>> item : manager.lifecycleItems) {
+            if (item.first == activity) {
+                item.second.add(callback);
+                return;
+            }
+        }
+        // Register the activity and then attach it with the callback
         activity.getApplication().registerActivityLifecycleCallbacks(manager);
-        manager.lifecycleItems.add(new Pair<>(activity, callback));
+        List<LifecycleCallback> callbacks = new ArrayList<>();
+        callbacks.add(callback);
+        manager.lifecycleItems.add(new Pair<>(activity, callbacks));
     }
 
     /**
@@ -80,10 +90,11 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
     public static void ignoreActivity(@NonNull Activity activity) {
         LifecycleManager manager = getInstance();
         activity.getApplication().unregisterActivityLifecycleCallbacks(manager);
-        Iterator<Pair<Activity, LifecycleCallback>> iterator = manager.lifecycleItems.iterator();
+        Iterator<Pair<Activity, List<LifecycleCallback>>> iterator = manager.lifecycleItems.iterator();
         while (iterator.hasNext()) {
-            Pair<Activity, LifecycleCallback> item = iterator.next();
+            Pair<Activity, List<LifecycleCallback>> item = iterator.next();
             if (activity == item.first) {
+                item.second.clear();
                 iterator.remove();
                 return;
             }
@@ -101,9 +112,11 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
      */
     private static void signalActivity(@NonNull Activity activity, LifecycleStage stage) {
         LifecycleManager manager = getInstance();
-        for (Pair<Activity, LifecycleCallback> item : manager.lifecycleItems) {
+        for (Pair<Activity, List<LifecycleCallback>> item : manager.lifecycleItems) {
             if (activity == item.first) {
-                item.second.onActivityLifecycleCallback(stage);
+                for (LifecycleCallback callback : item.second) {
+                    callback.onActivityLifecycleCallback(stage);
+                }
                 return;
             }
         }
