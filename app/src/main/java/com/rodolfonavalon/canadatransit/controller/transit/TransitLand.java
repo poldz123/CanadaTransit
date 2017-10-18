@@ -115,38 +115,38 @@ public class TransitLand {
 
     private static final class RetrofitSingleton {
 
-        private static Retrofit rInstance;
-        private static CompositeDisposable cdInstance;
+        private static Retrofit retrofitInstance;
+        private static CompositeDisposable disposableInstance;
 
         /**
          *  Retrieves the {@link Retrofit} singleton instance
          */
-        private static Retrofit getInstance() {
-            if (rInstance == null) {
-                rInstance = new Retrofit.Builder()
+        private static Retrofit getRetrofitInstance() {
+            if (retrofitInstance == null) {
+                retrofitInstance = new Retrofit.Builder()
                         .baseUrl(TRANSIT_LAND_API)
                         .addConverterFactory(GsonConverterFactory.create())
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                         .build();
             }
-            return rInstance;
+            return retrofitInstance;
         }
 
         /**
          *  Retrieves the {@link CompositeDisposable} singleton instance
          */
         public static CompositeDisposable getDisposableInstance() {
-            if (cdInstance == null) {
-                cdInstance = new CompositeDisposable();
+            if (disposableInstance == null) {
+                disposableInstance = new CompositeDisposable();
             }
-            return cdInstance;
+            return disposableInstance;
         }
 
         /**
          *  Retrieves the {@link TransitLandApi} instance
          */
         private static TransitLandApi getTransitLandApi() {
-            return getInstance().create(TransitLandApi.class);
+            return getRetrofitInstance().create(TransitLandApi.class);
         }
     }
 }
