@@ -21,7 +21,16 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
      * Callback whenever an activity's life cycle is triggered.
      */
     public interface LifecycleCallback {
-        void onActivityLifecycleCallback(LifecycleStage stage);
+        /**
+         *  Callback method when an activity has triggered its life cycle.
+         *
+         *  @param stage
+         *              The stage of the activity life cycle
+         *  @return boolean
+         *              True when callback will be removed from the pool
+         *
+         */
+        boolean onActivityLifecycleCallback(LifecycleStage stage);
     }
 
     /**
@@ -114,8 +123,12 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
         LifecycleManager manager = getInstance();
         for (Pair<Activity, List<LifecycleCallback>> item : manager.lifecycleItems) {
             if (activity == item.first) {
-                for (LifecycleCallback callback : item.second) {
-                    callback.onActivityLifecycleCallback(stage);
+                Iterator<LifecycleCallback> iterator = item.second.iterator();
+                while (iterator.hasNext()) {
+                    LifecycleCallback callback = iterator.next();
+                    if (callback.onActivityLifecycleCallback(stage)) {
+                        iterator.remove();
+                    }
                 }
                 return;
             }

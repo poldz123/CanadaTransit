@@ -48,8 +48,6 @@ public class TransitLand {
      *              The callback method when something went wrong during retrieval of the operators
      */
     public static void retrieveOperators(Activity activity, Consumer<List<Operator>> success, Consumer<Throwable> error) {
-        // TODO: Attach the observable to CompositeDisposable
-
         List<Operator> operators = new ArrayList<>();
         Disposable disposable = retrieveOperators(0)
                 .subscribeOn(Schedulers.io())
@@ -106,8 +104,6 @@ public class TransitLand {
      *              The callback method when something went wrong during retrieval of the operator feed version
      */
     public static void retrieveOperatorFeedVersion(Activity activity, OperatorFeed operatorFeed, Consumer<OperatorFeedVersion> success, Consumer<Throwable> error) {
-        // TODO: Attach the observable to CompositeDisposable
-
         Disposable disposable = RetrofitSingleton.getTransitLandApi()
                 .feedVersion(operatorFeed.getActiveFeedVersion())
                 .subscribeOn(Schedulers.io())
@@ -133,9 +129,11 @@ public class TransitLand {
         RetrofitSingleton.getDisposableInstance().add(disposable);
         // Detaches the disposable from the composite whenever the activity is destroyed
         LifecycleManager.watchActivity(activity, stage -> {
-            if (stage == LifecycleManager.LifecycleStage.DESTROYED) {
+            if (stage == LifecycleManager.LifecycleStage.DESTROYED || disposable.isDisposed()) {
                 RetrofitSingleton.getDisposableInstance().remove(disposable);
+                return true;
             }
+            return false;
         });
     }
 
