@@ -2,6 +2,8 @@ package com.rodolfonavalon.canadatransit.model.database;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.joda.time.DateTime;
+
 import java.util.List;
 
 import lombok.Getter;
@@ -14,19 +16,19 @@ public class OperatorFeedVersion {
     @SerializedName("sha1")
     @Getter private String sha1;
     @SerializedName("earliest_calendar_date")
-    @Getter private String earliestCalendarDate;
+    @Getter private DateTime earliestCalendarDate;
     @SerializedName("latest_calendar_date")
-    @Getter private String latestCalendarDate;
+    @Getter private DateTime latestCalendarDate;
     @SerializedName("md5")
     @Getter private String md5;
     @SerializedName("fetched_at")
-    @Getter private String fetchedAt;
+    @Getter private DateTime fetchedAt;
     @SerializedName("imported_at")
-    @Getter private String importedAt;
+    @Getter private DateTime importedAt;
     @SerializedName("created_at")
-    @Getter private String createdAt;
+    @Getter private DateTime createdAt;
     @SerializedName("updated_at")
-    @Getter private String updatedAt;
+    @Getter private DateTime updatedAt;
     @SerializedName("feed_version_imports_url")
     @Getter private String feedVersionImportsUrl;
     @SerializedName("import_status")

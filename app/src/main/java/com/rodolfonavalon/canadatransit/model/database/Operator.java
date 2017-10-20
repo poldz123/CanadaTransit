@@ -4,6 +4,8 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.joda.time.DateTime;
+
 import java.util.List;
 
 import lombok.Getter;
@@ -24,9 +26,9 @@ public class Operator {
     @SerializedName("timezone")
     @Getter private String timezone;
     @SerializedName("created_at")
-    @Getter private String createdAt;
+    @Getter private DateTime createdAt;
     @SerializedName("updated_at")
-    @Getter private String updatedAt;
+    @Getter private DateTime updatedAt;
 
     @Nullable
     @SerializedName("metro")

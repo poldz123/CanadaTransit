@@ -39,6 +39,7 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava2:$rxJavaRetrofitAdapterLibraryVersion"
     compile "com.google.code.gson:gson:$gsonLibraryVersion"
     compile "com.squareup.retrofit2:converter-gson:$gsonRetrofitConverterLibraryVersion"
+    compile "net.danlew:android.joda:$jodaTimeAndroidLibraryVersion"
 
     // Google Library
     compile "com.android.support:design:$googleDesignLibraryVersion"

@@ -4,6 +4,8 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.joda.time.DateTime;
+
 import java.util.List;
 
 import lombok.Getter;
@@ -17,9 +19,9 @@ public class OperatorFeed {
     @SerializedName("name")
     @Getter private String name;
     @SerializedName("created_at")
-    @Getter private String createdAt;
+    @Getter private DateTime createdAt;
     @SerializedName("updated_at")
-    @Getter private String updatedAt;
+    @Getter private DateTime updatedAt;
     @SerializedName("url")
     @Getter private String url;
     @SerializedName("feed_format")
@@ -42,9 +44,9 @@ public class OperatorFeed {
     @Getter private String licenseAttributionText;
 
     @SerializedName("last_fetched_at")
-    @Getter private String lastFetchAt;
+    @Getter private DateTime lastFetchAt;
     @SerializedName("last_imported_at")
-    @Getter private String lastImportedAt;
+    @Getter private DateTime lastImportedAt;
     @SerializedName("import_status")
     @Getter private String importStatus;
     @SerializedName("active_feed_version")

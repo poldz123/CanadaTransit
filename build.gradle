@@ -36,6 +36,7 @@ ext {
     gsonLibraryVersion = "2.8.2"
     rxJavaRetrofitAdapterLibraryVersion = "2.3.0"
     gsonRetrofitConverterLibraryVersion = "2.3.0"
+    jodaTimeAndroidLibraryVersion = "2.9.9"
 
     // Google Library
     googleSupportLibraryVersion = "26.1.0"

@@ -2,12 +2,17 @@ package com.rodolfonavalon.canadatransit.controller.transit;
 
 import android.app.Activity;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager;
 import com.rodolfonavalon.canadatransit.model.database.Operator;
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeed;
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion;
+import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateTimeConverter;
 import com.rodolfonavalon.canadatransit.model.transit.Meta;
 import com.rodolfonavalon.canadatransit.model.transit.Response.OperatorsResponse;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,9 +165,13 @@ public class TransitLand {
          */
         static Retrofit getRetrofitInstance() {
             if (retrofitInstance == null) {
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(DateTime.class, new DateTimeConverter())
+                        .setPrettyPrinting()
+                        .create();
                 retrofitInstance = new Retrofit.Builder()
                         .baseUrl(TRANSIT_LAND_API)
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                         .build();
             }
