@@ -65,7 +65,7 @@ public class TransitLand {
                     if (meta.hasNext()) {
                         // Lets do another api call to retrieve operators
                         return Observable.just(operatorsResponse)
-                                .concatWith(retrieveOperators(meta.getOffset() + operatorsResponse.getOperators().size()));
+                                .concatWith(retrieveOperators(meta.getOffset() + API_PAGINATION_PER_PAGE));
                     } else {
                         return Observable.just(operatorsResponse);
                     }
@@ -73,7 +73,7 @@ public class TransitLand {
     }
 
     /**
-     *  Retrieves all of the {@link OperatorFeed} for given {@link Operator}
+     *  Retrieves all of the {@link OperatorFeed} for the given {@link Operator}
      *
      *  @param operator
      *              The bus operator to retrieve the all of the feeds
@@ -82,19 +82,29 @@ public class TransitLand {
      *  @param error
      *              The callback method when something went wrong during retrieval of the operator feeds
      */
-    public static void retrieveOperatorFeed(Activity activity, Operator operator, Consumer<OperatorFeed> success, Consumer<Throwable> error) {
-        // TODO: Handle multiple represented_in_feed_onestop_ids in Operator, EG: "operators_in_feed" -> "operator_onestop_id" && "feed_onestop_id"
-
+    public static void retrieveOperatorFeed(Activity activity, Operator operator, Consumer<List<OperatorFeed>> success, Consumer<Throwable> error) {
+        List<String> feedOneStopIds = operator.getRepresentedInFeedOneStopIds();
+        List<OperatorFeed> operatorFeeds = new ArrayList<>();
         Disposable disposable = RetrofitSingleton.getTransitLandApi()
-                .feed(operator.getRepresentedInFeedOneStopIds().get(0))
+                .feed(feedOneStopIds.get(0))
+                .concatMap(operatorFeed -> {
+                    Observable<OperatorFeed> observable = Observable.just(operatorFeed);
+                    // Start at the second feed_one_stop_id, since we are attaching it
+                    // from the first call.
+                    for (int i = 1; i < feedOneStopIds.size(); i++) {
+                        observable = observable.concatWith(RetrofitSingleton.getTransitLandApi()
+                                .feed(feedOneStopIds.get(i)));
+                    }
+                    return observable;
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(success, error);
+                .subscribe(operatorFeeds::add, error, () -> success.accept(operatorFeeds));
         attachRetrofitDisposable(activity, disposable);
     }
 
     /**
-     *  Retrieves the {@link OperatorFeedVersion} for given {@link OperatorFeed}
+     *  Retrieves the {@link OperatorFeedVersion} for the given {@link OperatorFeed}
      *
      *  @param operatorFeed
      *              The operator feed to retrieve the feed version
@@ -116,8 +126,8 @@ public class TransitLand {
      *  Attaches the disposable within the composite to safely dispose the retrofit observers
      *  whenever the activity is destroyed.
      *
-     *  This is to prevent executing the subscribe callbacks after the activity has been destroyed
-     *  since retrofit is subscribed in the background thread.
+     *  This is to prevent executing subscribe callbacks after the activity has been destroyed
+     *  since retrofit is subject to execute within the background thread.
      *
      *  @param activity
      *              The activity where the retrofit is executed

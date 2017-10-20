@@ -18,7 +18,7 @@ import java.util.List;
 public class LifecycleManager implements Application.ActivityLifecycleCallbacks {
 
     /**
-     * Callback whenever an activity's life cycle is triggered.
+     * Callback interface whenever an activity's life cycle is triggered.
      */
     public interface LifecycleCallback {
         /**
@@ -60,10 +60,10 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
     }
 
     /**
-     *  Watches the activity that registers the life cycle that can trigger every {@link LifecycleStage}.
+     *  Watches the activity and registers the life cycle that can trigger every {@link LifecycleStage}.
      *
      *  ATTENTION:  This wont remove the activity cycle callback until either the activity
-     *              is destroyed or unregister the activity through {@link #ignoreActivity(Activity)}.
+     *              is destroyed or it is unregistered through {@link #ignoreActivity(Activity)}.
      *
      *  @param activity
      *              The activity to listen for life cycle callbacks
@@ -87,7 +87,7 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
     }
 
     /**
-     *  Ignores the activity that will unregister the life cycle callbacks.
+     *  Ignores the activity and unregister it from all life cycle callbacks.
      *
      *  ATTENTION:  This must be called whenever an activity is registered for callbacks
      *              through {@link #watchActivity(Activity, LifecycleCallback)}
@@ -110,8 +110,8 @@ public class LifecycleManager implements Application.ActivityLifecycleCallbacks 
     }
 
     /**
-     *  Signals the activity for life cycle callback which will trigger the {@link LifecycleCallback}
-     *  if it exist in the pool.
+     *  Signals the activity for a life cycle callback which will trigger the {@link LifecycleCallback}
+     *  if ever it exist in the pool.
      *
      *  @param activity
      *              The activity to signal for life cycle callbacks
