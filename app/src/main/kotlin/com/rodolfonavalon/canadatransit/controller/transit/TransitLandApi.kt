@@ -6,7 +6,7 @@ import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager
 import com.rodolfonavalon.canadatransit.model.database.Operator
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
-import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateTimeConverter
+import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateConverter
 import com.rodolfonavalon.canadatransit.model.transit.response.OperatorsResponse
 
 import io.reactivex.Observable
@@ -15,13 +15,13 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import org.joda.time.DateTime
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.*
 
 interface TransitLandApi {
 
@@ -55,7 +55,7 @@ interface TransitLandApi {
          */
         private val retrofitInstance: TransitLandApi by lazy {
             val gson = GsonBuilder()
-                    .registerTypeAdapter(DateTime::class.java, DateTimeConverter())
+                    .registerTypeAdapter(Date::class.java, DateConverter())
                     .setPrettyPrinting()
                     .create()
             val retrofit = Retrofit.Builder()
