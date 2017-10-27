@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.controller.application
+package com.rodolfonavalon.canadatransit.controller
 
 import android.app.Application
 
