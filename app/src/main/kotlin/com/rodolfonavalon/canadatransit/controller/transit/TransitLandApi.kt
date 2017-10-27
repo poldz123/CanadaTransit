@@ -79,8 +79,8 @@ interface TransitLandApi {
          *  @param error
          *              The callback method when something went wrong during retrieval of the operators
          */
-        fun retrieveOperators(activity: Activity, success: (ArrayList<Operator>) -> Unit, error: (Throwable) -> Unit) {
-            val operators = ArrayList<Operator>()
+        fun retrieveOperators(activity: Activity, success: (MutableList<Operator>) -> Unit, error: (Throwable) -> Unit) {
+            val operators = mutableListOf<Operator>()
             val disposable = retrieveOperators(0)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -118,9 +118,9 @@ interface TransitLandApi {
          *  @param error
          *              The callback method when something went wrong during retrieval of the operator feeds
          */
-        fun retrieveOperatorFeed(activity: Activity, operator: Operator, success: (ArrayList<OperatorFeed>) -> Unit, error: (Throwable) -> Unit) {
+        fun retrieveOperatorFeed(activity: Activity, operator: Operator, success: (MutableList<OperatorFeed>) -> Unit, error: (Throwable) -> Unit) {
             val feedOneStopIds = operator.representedInFeedOneStopIds
-            val operatorFeeds = ArrayList<OperatorFeed>()
+            val operatorFeeds = mutableListOf<OperatorFeed>()
             val disposable = TransitLandApi.retrofitInstance
                     .feed(feedOneStopIds[0])
                     .concatMap { operatorFeed ->

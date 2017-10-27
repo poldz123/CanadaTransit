@@ -21,7 +21,12 @@ typealias LifecycleCallback = (LifecycleManager.LifecycleStage) -> Boolean
  */
 class LifecycleManager : Application.ActivityLifecycleCallbacks {
 
-    private val lifecycleItems = ArrayList<Pair<Activity, ArrayList<LifecycleCallback>>>()
+    private val lifecycleItems = mutableListOf<LifecycleItem>()
+
+    /**
+     * Life cycle item of the manager, which take the activity and callback when lifecycle triggers.
+     */
+    private data class LifecycleItem(val activity: Activity, val callbacks: MutableList<LifecycleCallback>)
 
     /**
      * Life cycle stages of the activity represented in enum values.
@@ -81,17 +86,18 @@ class LifecycleManager : Application.ActivityLifecycleCallbacks {
          */
         fun watchActivity(activity: Activity, callback: LifecycleCallback) {
             // If the activity already exist before then just attach the callback
-            for (item in instance.lifecycleItems) {
-                if (item.first === activity) {
-                    item.second.add(callback)
+            for ((itemActivity, itemCallbacks) in instance.lifecycleItems) {
+                if (itemActivity === activity) {
+                    itemCallbacks.add(callback)
                     return
                 }
             }
             // Register the activity and then attach it with the callback
             activity.application.registerActivityLifecycleCallbacks(instance)
-            val callbacks = ArrayList<LifecycleCallback>()
-            callbacks.add(callback)
-            instance.lifecycleItems.add(Pair(activity, callbacks))
+            instance.lifecycleItems.add(LifecycleItem(
+                    activity = activity,
+                    callbacks = mutableListOf(callback))
+            )
         }
 
         /**
@@ -105,11 +111,11 @@ class LifecycleManager : Application.ActivityLifecycleCallbacks {
          */
         fun ignoreActivity(activity: Activity) {
             activity.application.unregisterActivityLifecycleCallbacks(instance)
-            val iterator = instance.lifecycleItems.iterator()
+            val iterator = instance.lifecycleItems.listIterator()
             while (iterator.hasNext()) {
-                val item = iterator.next()
-                if (activity === item.first) {
-                    item.second.clear()
+                val (itemActivity, itemCallbacks) = iterator.next()
+                if (itemActivity === activity) {
+                    itemCallbacks.clear()
                     iterator.remove()
                     return
                 }
@@ -126,18 +132,19 @@ class LifecycleManager : Application.ActivityLifecycleCallbacks {
          * The stage of the activity life cycle
          */
         private fun signalActivity(activity: Activity, stage: LifecycleStage) {
-            for (item in instance.lifecycleItems) {
-                if (activity === item.first) {
-                    val iterator = item.second.iterator()
+            for ((itemActivity, itemCallbacks) in instance.lifecycleItems) {
+                if (itemActivity === activity) {
+                    val iterator = itemCallbacks.listIterator()
                     while (iterator.hasNext()) {
                         val callback = iterator.next()
+                        // Only remove the callback when the callee returns true
                         if (callback.invoke(stage)) {
                             iterator.remove()
                         }
                     }
                     // If there are no more callbacks remove the activity from the pool
-                    if (item.second.isEmpty()) {
-                        ignoreActivity(activity)
+                    if (itemCallbacks.isEmpty()) {
+                        ignoreActivity(itemActivity)
                     }
                     return
                 }
