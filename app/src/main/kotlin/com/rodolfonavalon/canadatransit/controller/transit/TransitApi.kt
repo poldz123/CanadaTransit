@@ -59,9 +59,11 @@ abstract class TransitApi<API> {
         if (feeds.isEmpty()) {
             throw IllegalArgumentException("Feeds list is empty.")
         }
+        // Return the result with chaining of the observable list feed
         return observer.invoke(feeds.first())
                 .concatMap { operatorFeed ->
                     var observable = Observable.just(operatorFeed)
+                    // Starts at index 1 since we already started at the index 0
                     for (i in 1 until feeds.size) {
                         observable = observable.concatWith(observer.invoke(feeds[i]))
                     }
@@ -81,15 +83,20 @@ abstract class TransitApi<API> {
         if (perPage <= 0) {
             throw IllegalArgumentException("Per page is not valid: $perPage")
         }
-        return observer.invoke(0, perPage).concatMap { metaResponse ->
-            val meta = metaResponse.meta
-            if (meta.hasNext()) {
-                // Lets do another api call to retrieve operators
-                Observable.just(metaResponse).concatWith(observer.invoke(meta.offset + perPage, perPage))
-            } else {
-                Observable.just(metaResponse)
+        // Recursion makes everything easier to do the paginated observable objects
+        fun retrievePaginatedObject(offset: Int): Observable<OBSERVER> {
+            return observer.invoke(offset, perPage).concatMap { metaResponse ->
+                val meta = metaResponse.meta
+                if (meta.hasNext()) {
+                    // Lets do another api call to retrieve operators
+                    Observable.just(metaResponse).concatWith(retrievePaginatedObject(meta.offset + perPage))
+                } else {
+                    Observable.just(metaResponse)
+                }
             }
         }
+        // Return the result while we start at the first offset
+        return retrievePaginatedObject(0)
     }
 
     /**
