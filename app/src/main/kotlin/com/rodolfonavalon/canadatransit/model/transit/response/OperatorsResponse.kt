@@ -5,6 +5,6 @@ import com.rodolfonavalon.canadatransit.model.database.Operator
 import com.rodolfonavalon.canadatransit.model.transit.Meta
 
 class OperatorsResponse(
-        @SerializedName("operators") val operators: ArrayList<Operator>,
+        @SerializedName("operators") val operators: List<Operator>,
         @SerializedName("meta") override val meta: Meta
 ): MetaResponse()

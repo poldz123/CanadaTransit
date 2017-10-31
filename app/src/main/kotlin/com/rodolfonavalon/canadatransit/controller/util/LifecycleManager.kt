@@ -3,8 +3,6 @@ package com.rodolfonavalon.canadatransit.controller.util
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import android.support.v4.util.Pair
-import java.util.*
 
 /**
  * Callback method when an activity has triggered its life cycle.
@@ -18,7 +16,7 @@ typealias LifecycleCallback = (LifecycleManager.LifecycleStage) -> Boolean
  * pool of activities. Once the activity is registered it will call its life cycle callback
  * multiple times, until, either it is unregistered or when the activity is destroyed.
  */
-class LifecycleManager : Application.ActivityLifecycleCallbacks {
+class LifecycleManager private constructor(): Application.ActivityLifecycleCallbacks {
 
     private val lifecycleItems = mutableListOf<LifecycleItem>()
 

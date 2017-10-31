@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 import java.util.*
 
-// TODO: primary key
 class Operator(
         @SerializedName("onestop_id") val onestopId: String, // TODO: primary key
         @SerializedName("name") val name: String,
@@ -17,7 +16,7 @@ class Operator(
         @SerializedName("metro") val metro: String?,
         @SerializedName("short_name") val shortName: String?,
         @SerializedName("tags") val tags: Tags,
-        @SerializedName("represented_in_feed_onestop_ids") val representedInFeedOneStopIds: ArrayList<String>
+        @SerializedName("represented_in_feed_onestop_ids") val representedInFeedOneStopIds: List<String>
 ) {
 
     inner class Tags(

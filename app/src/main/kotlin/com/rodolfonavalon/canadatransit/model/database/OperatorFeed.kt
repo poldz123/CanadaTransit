@@ -25,9 +25,9 @@ class OperatorFeed(
         @SerializedName("feed_versions_count") val feedVersionCount: Int,
         @SerializedName("created_or_updated_in_changeset_id") val createdOrUpdatedInChangesetId: Int,
         @SerializedName("import_level_of_active_feed_version") val importLevelActiveFeedVersion: Int,
-        @SerializedName("feed_versions") val feedVersion: ArrayList<String>,
-        @SerializedName("changesets_imported_from_this_feed") val changesetsImportedFromThisFeed: ArrayList<Int>,
-        @SerializedName("operators_in_feed") val operatorsInFeed: ArrayList<OperatorInFeed>
+        @SerializedName("feed_versions") val feedVersion: List<String>,
+        @SerializedName("changesets_imported_from_this_feed") val changesetsImportedFromThisFeed: List<Int>,
+        @SerializedName("operators_in_feed") val operatorsInFeed: List<OperatorInFeed>
 ) {
 
     inner class OperatorInFeed(

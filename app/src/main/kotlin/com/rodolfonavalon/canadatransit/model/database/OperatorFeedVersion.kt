@@ -20,7 +20,7 @@ class OperatorFeedVersion(
         @SerializedName("feedvalidator_url") val feedValidatorUrl: String,
         @SerializedName("import_level") val importLevel: Int,
         @SerializedName("is_active_feed_version") val isActiveFeedVersion: Boolean,
-        @SerializedName("feed_version_infos") val feedVersionInfos: ArrayList<Int>,
-        @SerializedName("feed_version_imports") val feedVersionImports: ArrayList<Int>,
-        @SerializedName("changesets_imported_from_this_feed_version") val changesetImportedFromThisFeedVersion: ArrayList<Int>
+        @SerializedName("feed_version_infos") val feedVersionInfos: List<Int>,
+        @SerializedName("feed_version_imports") val feedVersionImports: List<Int>,
+        @SerializedName("changesets_imported_from_this_feed_version") val changesetImportedFromThisFeedVersion: List<Int>
 )
