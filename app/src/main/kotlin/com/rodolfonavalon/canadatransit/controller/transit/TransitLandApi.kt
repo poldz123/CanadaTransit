@@ -15,8 +15,8 @@ import retrofit2.http.Query
 
 interface TransitLandApi {
 
-    @GET("operators?exclude_geometry=true")
-    fun operators(@Query("country") country: String, @Query("offset") offset: Int, @Query("per_page") perPage: Int): Observable<OperatorsResponse>
+    @GET("operators?exclude_geometry=true&country=${TransitLandApi.API_COUNTRY}")
+    fun operators(@Query("offset") offset: Int, @Query("per_page") perPage: Int): Observable<OperatorsResponse>
 
     @GET("feeds/{onestop_id}?exclude_geometry=true")
     fun feed(@Path("onestop_id") oneStopId: String): Observable<OperatorFeed>
@@ -54,7 +54,7 @@ interface TransitLandApi {
          */
         fun retrieveOperators(activity: Activity, success: (MutableList<Operator>) -> Unit, error: (Throwable) -> Unit) {
             val operators = mutableListOf<Operator>()
-            retrievePaginatedObject(API_PAGINATION_PER_PAGE, { offset -> retrofitInstance.operators(API_COUNTRY, offset, API_PAGINATION_PER_PAGE) })
+            retrievePaginatedObject(API_PAGINATION_PER_PAGE, retrofitInstance::operators)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .map(OperatorsResponse::operators)

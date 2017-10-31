@@ -74,17 +74,18 @@ abstract class TransitApi<API> {
      *  from the API through chaining the observer using its [MetaResponse].
      *
      *  @param OBSERVER the type of the object to be retrieve
+     *  @param observer the lambda that execute the observer, Parameter: [0] -> Offset [1] -> Per page
      *  @throws [IllegalArgumentException] if per page is an invalid value
      */
-    protected fun <OBSERVER: MetaResponse> retrievePaginatedObject(perPage: Int, observer: (Int) -> Observable<OBSERVER>): Observable<OBSERVER> {
+    protected fun <OBSERVER: MetaResponse> retrievePaginatedObject(perPage: Int, observer: (Int, Int) -> Observable<OBSERVER>): Observable<OBSERVER> {
         if (perPage <= 0) {
             throw IllegalArgumentException("Per page is not valid: $perPage")
         }
-        return observer.invoke(0).concatMap { metaResponse ->
+        return observer.invoke(0, perPage).concatMap { metaResponse ->
             val meta = metaResponse.meta
             if (meta.hasNext()) {
                 // Lets do another api call to retrieve operators
-                Observable.just(metaResponse).concatWith(observer.invoke(meta.offset + perPage))
+                Observable.just(metaResponse).concatWith(observer.invoke(meta.offset + perPage, perPage))
             } else {
                 Observable.just(metaResponse)
             }
