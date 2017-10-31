@@ -9,8 +9,7 @@ import java.util.*
 /**
  * Callback method when an activity has triggered its life cycle.
  *
- * @return boolean
- * True when callback will be removed from the pool
+ * @return True when callback will be removed from the pool
  */
 typealias LifecycleCallback = (LifecycleManager.LifecycleStage) -> Boolean
 
@@ -79,10 +78,8 @@ class LifecycleManager : Application.ActivityLifecycleCallbacks {
          * ATTENTION:  This wont remove the activity cycle callback until either the activity
          * is destroyed or it is unregistered through [.ignoreActivity].
          *
-         * @param activity
-         * The activity to listen for life cycle callbacks
-         * @param callback
-         * The callback method whenever the activity triggered the life cycle callbacks
+         * @param activity the activity to listen for life cycle callbacks
+         * @param callback the callback method whenever the activity triggered the life cycle callbacks
          */
         fun watchActivity(activity: Activity, callback: LifecycleCallback) {
             // If the activity already exist before then just attach the callback
@@ -106,8 +103,7 @@ class LifecycleManager : Application.ActivityLifecycleCallbacks {
          * ATTENTION:  This must be called whenever an activity is registered for callbacks
          * through [.watchActivity]
          *
-         * @param activity
-         * The activity to unregister the life cycle callbacks
+         * @param activity the activity to unregister the life cycle callbacks
          */
         fun ignoreActivity(activity: Activity) {
             activity.application.unregisterActivityLifecycleCallbacks(instance)
@@ -126,10 +122,8 @@ class LifecycleManager : Application.ActivityLifecycleCallbacks {
          * Signals the activity for a life cycle callback which will trigger the [LifecycleCallback]
          * if ever it exist in the pool.
          *
-         * @param activity
-         * The activity to signal for life cycle callbacks
-         * @param stage
-         * The stage of the activity life cycle
+         * @param activity the activity to signal for life cycle callbacks
+         * @param stage the stage of the activity life cycle
          */
         private fun signalActivity(activity: Activity, stage: LifecycleStage) {
             for ((itemActivity, itemCallbacks) in instance.lifecycleItems) {
