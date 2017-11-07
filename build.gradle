@@ -25,14 +25,15 @@ buildscript {
 
     // Google Library
     ext.googleSupportLibraryVersion = "26.1.0"
-    ext.googleDesignLibraryVersion = "26.1.0"
+    ext.googleDesignLibraryVersion = "27.0.0"
     ext.googleContraintLayoutLibraryVersion = "1.0.2"
-    ext.googlePlayServiceLibraryVersion = "11.4.0"
+    ext.googlePlayServiceLibraryVersion = "11.4.2"
 
     // Test Library
     ext.junitLibraryVersion = "4.12"
     ext.espressoLibraryVersion = "3.0.1"
     ext.jsr305LibraryVersion = "3.0.2"
+    ext.robolectricLibraryVersion = "3.5.1"
 
     // Tools Library
     ext.kotlinVersion = "1.1.51"

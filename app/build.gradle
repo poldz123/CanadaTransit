@@ -30,6 +30,15 @@ android {
     }
 }
 
+// Makes sure that kotlin test will not be used in production code
+afterEvaluate {
+    android.sourceSets.all { sourceSet ->
+        if (!sourceSet.name.startsWith("test") || !sourceSet.name.startsWith("androidTest")) {
+            sourceSet.kotlin.setSrcDirs([])
+        }
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -56,6 +65,9 @@ dependencies {
         exclude group: "com.android.support", module: "support-annotations"
     })
     testCompile "junit:junit:$junitLibraryVersion"
+    testCompile "org.robolectric:robolectric:$robolectricLibraryVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
 
     // Compile time plugin
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"

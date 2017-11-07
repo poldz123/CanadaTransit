@@ -1,6 +1,7 @@
 package com.rodolfonavalon.canadatransit.controller.transit
 
 import android.app.Activity
+import android.support.annotation.VisibleForTesting
 import com.google.gson.GsonBuilder
 import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager
 import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateConverter
@@ -25,16 +26,23 @@ abstract class TransitApi<API> {
     abstract protected val apiClass: Class<API>
 
     /**
+     * API test endpoint of the target transit
+     */
+    @VisibleForTesting
+    private var apiTestUrl: String? = null
+
+    /**
      *  Retrieves the [Retrofit] instance, that handles the api networking and
      *  properly converts the json as an object model.
      */
     protected val retrofitInstance: API by lazy {
+        val baseUrl = apiTestUrl ?: apiUrl
         val gson = GsonBuilder()
                 .registerTypeAdapter(Date::class.java, DateConverter())
                 .setPrettyPrinting()
                 .create()
         val retrofit = Retrofit.Builder()
-                .baseUrl(apiUrl)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
