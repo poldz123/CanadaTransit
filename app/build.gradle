@@ -86,14 +86,14 @@ dependencies {
     testCompile "junit:junit:$junitLibraryVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
+    testCompile "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
+    testCompile "org.mockito:mockito-core:$mockitoLibraryVersion"
 
     // Shared Test Library
     testCompile "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
     androidTestCompile "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
     testCompile "org.robolectric:robolectric:$robolectricLibraryVersion"
     androidTestCompile "org.robolectric:robolectric:$robolectricLibraryVersion"
-    testCompile "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
-    androidTestCompile "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
 
     // Compile time plugin
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
