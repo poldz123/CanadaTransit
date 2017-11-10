@@ -8,6 +8,10 @@ import okhttp3.mockwebserver.RecordedRequest
 import java.net.URI
 import java.util.*
 
+/**
+ * This is the wrapper of the [MockWebServer] that handles the request and response
+ * of the server and also the proper assertion if all of the request are consumed.
+ */
 class CustomMockWebServer {
     private val server: MockWebServer by lazy {
         val server = MockWebServer()
@@ -17,10 +21,23 @@ class CustomMockWebServer {
 
     private var responses: HashMap<String, Queue<MockWebServerResponse>> = hashMapOf()
 
+    /**
+     * Adds the response of the mock server for the request.
+     *
+     * @param path The api path to the request
+     * @param responseCode The response code of the request
+     */
     fun addResponse(path: String, responseCode: Int = 200) {
         addResponse(path, MockWebServerResponse(null, responseCode))
     }
 
+    /**
+     * Adds the response of the mock server for the request.
+     *
+     * @param path The api path to the request
+     * @param filePath The path of the response body of the request
+     * @param responseCode The response code of the request
+     */
     fun addResponse(path: String, filePath: String, responseCode: Int = 200) {
         val body = javaClass.getResource(filePath).readText()
         addResponse(path, MockWebServerResponse(body, responseCode))
@@ -50,6 +67,9 @@ class CustomMockWebServer {
         return response
     }
 
+    /**
+     * Starts the server and clearing the past responses.
+     */
     fun start() {
         // Clear the previous response in the queue
         responses.clear()
@@ -57,26 +77,59 @@ class CustomMockWebServer {
         server.start()
     }
 
+    /**
+     * Stops the server and checks if all of the responses
+     * are consumed by the network.
+     *
+     * @throws [AssertionError] If responses are not consumed
+     */
     fun stop() {
         // Stop the mock server
         server.shutdown()
         // All of the response should be consumed
         if (responses.isNotEmpty()) {
-            // TODO: print all of the responses that was not consumed
-            throw AssertionError("Stopping the server without consuming all responses")
+            var errorMessage = "Stopping the server without consuming all responses: \n"
+            for ((key, value) in responses) {
+                errorMessage += "\n\t[$key] => [${value.count()}] requests"
+            }
+            throw AssertionError(errorMessage)
         }
     }
 
+    /**
+     * Returns a URL for connecting to this server.
+     *
+     * @param path the request path, such as "/".
+     */
     fun url(path: String): HttpUrl {
         return server.url(path)
     }
 
-    fun takeRequest() {
-        server.takeRequest()
+    /**
+     * Awaits the next HTTP request, removes it, and returns it. Callers should use this to verify the
+     * request was sent as intended. This method will block until the request is available, possibly
+     * forever.
+     *
+     * @return the head of the request queue
+     */
+    fun takeRequest(): RecordedRequest {
+        return server.takeRequest()
     }
 
+    /**
+     * The response of the mock server for each request. Each request can return
+     * a response body only when response code a 200 series.
+     *
+     * @property response The response string of the request
+     * @property code The response code of the request
+     */
     private data class MockWebServerResponse(val response: String?, val code: Int)
 
+    /**
+     * This is the mock server handler for each of the request that will retrieve the
+     * responses that was attached. Each of the responses are removed if ever it was
+     * successfully requested by the mock server.
+     */
     private inner class MockWebServerDispatcher: Dispatcher() {
 
         override fun dispatch(request: RecordedRequest?): MockResponse {
