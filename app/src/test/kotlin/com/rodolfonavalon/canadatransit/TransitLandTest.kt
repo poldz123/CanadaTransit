@@ -10,8 +10,8 @@ import kotlin.test.*
 
 class TransitLandTest: BaseTest() {
 
-    override fun before() {
-        super.before()
+    override fun setup() {
+        super.setup()
         TransitLandApi.apiTestUrl = server.url("/api/v1/").toString()
     }
 
@@ -46,23 +46,23 @@ class TransitLandTest: BaseTest() {
         )
 
         for ((oneStopId, operatorId) in operatorFeedData) {
-            val mockOctranspoOperator = mock(Operator::class.java)
-            given(mockOctranspoOperator.representedInFeedOneStopIds).willReturn(mutableListOf(oneStopId))
+            val mockOperator = mock(Operator::class.java)
+            given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf(oneStopId))
 
             server.addResponse("/api/v1/feeds/$oneStopId", "/transitland/operator-feed-($oneStopId)")
-            var assertOcTranspoOperatorFeeds: List<OperatorFeed> = mutableListOf()
-            var assertOcTranspoOperatorFeedError: Throwable? = null
+            var assertOperatorFeeds: List<OperatorFeed> = mutableListOf()
+            var assertOperatorFeedError: Throwable? = null
 
-            TransitLandApi.retrieveOperatorFeed(mockOctranspoOperator, { operatorFeeds ->
-                assertOcTranspoOperatorFeeds = operatorFeeds
+            TransitLandApi.retrieveOperatorFeed(mockOperator, { operatorFeeds ->
+                assertOperatorFeeds = operatorFeeds
             }, { error ->
-                assertOcTranspoOperatorFeedError = error
+                assertOperatorFeedError = error
             })
 
             server.takeRequest()
-            assertNull(assertOcTranspoOperatorFeedError, "Error has occurred when retrieving operator feeds: $assertOcTranspoOperatorFeedError")
-            assertEquals(assertOcTranspoOperatorFeeds.count(), 1)
-            assertOperatorFeeds(assertOcTranspoOperatorFeeds, oneStopId, operatorId)
+            assertNull(assertOperatorFeedError, "Error has occurred when retrieving operator feeds: $assertOperatorFeedError")
+            assertEquals(assertOperatorFeeds.count(), 1)
+            assertOperatorFeeds(assertOperatorFeeds, oneStopId, operatorId)
         }
     }
 

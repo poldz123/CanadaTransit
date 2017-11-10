@@ -1,6 +1,5 @@
 package com.rodolfonavalon.canadatransit.model.database.converter.gson
 
-import android.text.TextUtils
 import com.google.gson.*
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
@@ -15,7 +14,7 @@ class DateConverter : JsonSerializer<Date>, JsonDeserializer<Date> {
 
     @Throws(JsonParseException::class)
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Date? {
-        if (TextUtils.isEmpty(json.asString)) {
+        if (json.asString == null || json.asString.isEmpty()) {
             return null
         }
         val formatter = ISODateTimeFormat.dateTimeParser()

@@ -8,41 +8,38 @@ import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-@Config(manifest = Config.NONE,
-        constants = BuildConfig::class,
-        minSdk = 21)
 open class BaseTest {
-    val server: CustomMockWebServer = CustomMockWebServer()
 
     companion object {
+        @JvmField
+        val server: CustomMockWebServer = CustomMockWebServer()
+
         @BeforeClass
         @JvmStatic
-        fun beforeClass() {
+        fun setupClass() {
+            server.start()
+            RxJavaPlugins.setNewThreadSchedulerHandler { _ -> Schedulers.trampoline() }
             RxJavaPlugins.setComputationSchedulerHandler { _ -> Schedulers.trampoline() }
             RxJavaPlugins.setIoSchedulerHandler { _ -> Schedulers.trampoline() }
-            RxJavaPlugins.setNewThreadSchedulerHandler { _ -> Schedulers.trampoline() }
+            RxAndroidPlugins.setMainThreadSchedulerHandler { _ -> Schedulers.trampoline() }
+            RxAndroidPlugins.setInitMainThreadSchedulerHandler { _ -> Schedulers.trampoline() }
         }
 
         @AfterClass
         @JvmStatic
-        fun afterClass() {
+        fun teardownClass() {
+            server.stop()
             RxJavaPlugins.reset()
             RxAndroidPlugins.reset()
         }
     }
 
     @Before
-    open fun before() {
-        server.start()
+    open fun setup() {
     }
 
     @After
-    open fun after(){
-        server.stop()
+    open fun teardown(){
     }
 }

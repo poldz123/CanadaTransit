@@ -71,8 +71,7 @@ class CustomMockWebServer {
      * Starts the server and clearing the past responses.
      */
     fun start() {
-        // Clear the previous response in the queue
-        responses.clear()
+        stop()
         // Start the mock server
         server.start()
     }
