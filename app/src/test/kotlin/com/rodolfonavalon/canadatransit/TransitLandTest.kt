@@ -4,10 +4,17 @@ import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.Operator
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeed
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.mock
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.test.*
 
+@RunWith(RobolectricTestRunner::class)
+@Config(manifest = Config.NONE,
+        constants = BuildConfig::class,
+        sdk = intArrayOf(26))
 class TransitLandTest: BaseTest() {
 
     override fun setup() {

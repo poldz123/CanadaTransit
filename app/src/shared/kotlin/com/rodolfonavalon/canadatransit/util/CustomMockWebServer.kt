@@ -7,12 +7,29 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import java.net.URI
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
- * This is the wrapper of the [MockWebServer] that handles the request and response
- * of the server and also the proper assertion if all of the request are consumed.
+ * This is the wrapper of the [MockWebServer] that handles the requests and responses
+ * of the server and also does proper assertion if all of the request are consumed.
+ *
+ * To use this server properly you need you only initialize and start it once and stop
+ * only when all tests for a class is completed. Having it configured that way will
+ * prevent the server from any abnormalities such as hanging forever in a limbo.
+ *
+ * Usage of the server within the test suites should be configured to [start] in [@BeforeClass]
+ * and should be [stop] within [@AfterClass] to properly prevent it for hanging.
  */
 class CustomMockWebServer {
+
+    companion object {
+        /**
+         * This it he default timeout in seconds the [takeRequest] will
+         * wait for the response for the mocked server.
+         */
+        const val DEFAULT_RESPONSE_TIMEOUT: Long = 5
+    }
+
     private val server: MockWebServer by lazy {
         val server = MockWebServer()
         server.setDispatcher(MockWebServerDispatcher())
@@ -43,6 +60,12 @@ class CustomMockWebServer {
         addResponse(path, MockWebServerResponse(body, responseCode))
     }
 
+    /**
+     * Adds the response of the mock server for the request.
+     *
+     * @param path The api path to the request
+     * @param response The response of the request
+     */
     private fun addResponse(path: String, response: MockWebServerResponse) {
         if (!responses.containsKey(path)) {
             // Initialize the queue of responses
@@ -52,6 +75,11 @@ class CustomMockWebServer {
         responses[path]!!.add(response)
     }
 
+    /**
+     * Removes the response of the mock server in the pool.
+     *
+     * @param path The api path to the request
+     */
     private fun removeResponse(path: String): MockWebServerResponse {
         if (!responses.containsKey(path) || responses[path] == null) {
             throw AssertionError("Removing without a response for path: $path")
@@ -71,6 +99,8 @@ class CustomMockWebServer {
      * Starts the server and clearing the past responses.
      */
     fun start() {
+        // Lets stop the server and see if it has some left over
+        // responses from last request
         stop()
         // Start the mock server
         server.start()
@@ -96,6 +126,14 @@ class CustomMockWebServer {
     }
 
     /**
+     * This cleans the mock server responses, queue, caches, etc. to have a clean
+     * slate for the next batch of requests.
+     */
+    fun clean() {
+        responses.clear()
+    }
+
+    /**
      * Returns a URL for connecting to this server.
      *
      * @param path the request path, such as "/".
@@ -111,8 +149,8 @@ class CustomMockWebServer {
      *
      * @return the head of the request queue
      */
-    fun takeRequest(): RecordedRequest {
-        return server.takeRequest()
+    fun takeRequest(timeout: Long = DEFAULT_RESPONSE_TIMEOUT): RecordedRequest {
+        return server.takeRequest(timeout, TimeUnit.SECONDS)
     }
 
     /**
