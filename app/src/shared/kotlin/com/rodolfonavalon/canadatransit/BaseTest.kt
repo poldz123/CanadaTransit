@@ -37,9 +37,11 @@ open class BaseTest {
 
     @Before
     open fun setup() {
+        server.clean()
     }
 
     @After
     open fun teardown(){
+        server.check()
     }
 }

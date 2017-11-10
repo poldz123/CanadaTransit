@@ -99,8 +99,7 @@ class CustomMockWebServer {
      * Starts the server and clearing the past responses.
      */
     fun start() {
-        // Lets stop the server and see if it has some left over
-        // responses from last request
+        // Lets stop the server
         stop()
         // Start the mock server
         server.start()
@@ -115,14 +114,6 @@ class CustomMockWebServer {
     fun stop() {
         // Stop the mock server
         server.shutdown()
-        // All of the response should be consumed
-        if (responses.isNotEmpty()) {
-            var errorMessage = "Stopping the server without consuming all responses: \n"
-            for ((key, value) in responses) {
-                errorMessage += "\n\t[$key] => [${value.count()}] requests"
-            }
-            throw AssertionError(errorMessage)
-        }
     }
 
     /**
@@ -131,6 +122,20 @@ class CustomMockWebServer {
      */
     fun clean() {
         responses.clear()
+    }
+
+    /**
+     * Checks that all of the responses are consumed by the request.
+     */
+    fun check() {
+        // All of the response should be consumed
+        if (responses.isNotEmpty()) {
+            var errorMessage = "Stopping the server without consuming all responses: \n"
+            for ((key, value) in responses) {
+                errorMessage += "\n\t[$key] => [${value.count()}] requests"
+            }
+            throw AssertionError(errorMessage)
+        }
     }
 
     /**
