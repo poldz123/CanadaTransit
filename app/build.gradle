@@ -14,9 +14,28 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
-        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+        String mainKotlinDir = "src/main/kotlin"
+        String sharedTestKotlinDir = "src/shared/kotlin"
+        String sharedResourceKotlinDir = "src/shared/res"
+        String unitTestKotlinDir = "src/test/kotlin"
+        String androidTestKotlinDir = "src/androidTest/kotlin"
+
+        main {
+            java.srcDir mainKotlinDir
+        }
+        test {
+            java.srcDir unitTestKotlinDir
+            java.srcDir sharedTestKotlinDir
+            resources.srcDir sharedResourceKotlinDir
+        }
+        androidTest {
+            java.srcDir androidTestKotlinDir
+            java.srcDir sharedTestKotlinDir
+            resources.srcDir sharedResourceKotlinDir
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -65,9 +84,16 @@ dependencies {
         exclude group: "com.android.support", module: "support-annotations"
     })
     testCompile "junit:junit:$junitLibraryVersion"
-    testCompile "org.robolectric:robolectric:$robolectricLibraryVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
+
+    // Shared Test Library
+    testCompile "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
+    androidTestCompile "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
+    testCompile "org.robolectric:robolectric:$robolectricLibraryVersion"
+    androidTestCompile "org.robolectric:robolectric:$robolectricLibraryVersion"
+    testCompile "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
+    androidTestCompile "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
 
     // Compile time plugin
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"

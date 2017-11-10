@@ -2,6 +2,7 @@ package com.rodolfonavalon.canadatransit.controller.transit
 
 import android.app.Activity
 import android.support.annotation.VisibleForTesting
+import android.support.annotation.VisibleForTesting.PRIVATE
 import com.google.gson.GsonBuilder
 import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager
 import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateConverter
@@ -28,8 +29,8 @@ abstract class TransitApi<API> {
     /**
      * API test endpoint of the target transit
      */
-    @VisibleForTesting
-    private var apiTestUrl: String? = null
+    @VisibleForTesting(otherwise = PRIVATE)
+    var apiTestUrl: String? = null
 
     /**
      *  Retrieves the [Retrofit] instance, that handles the api networking and
@@ -116,7 +117,11 @@ abstract class TransitApi<API> {
      *
      * @param activity The activity where the retrofit is executed
      */
-    fun Disposable.attachCompositeDisposable(activity: Activity) {
+    fun Disposable.attachCompositeDisposable(activity: Activity?) {
+        if (activity == null) {
+            // Do not attach disposable for null activity
+            return
+        }
         // Attaches the disposable retrofit to the pool
         disposableInstance.add(this)
         // Detaches the disposable from the composite whenever the activity is destroyed

@@ -52,7 +52,7 @@ interface TransitLandApi {
          *  @param success the callback method whenever the operators has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operators
          */
-        fun retrieveOperators(activity: Activity, success: (MutableList<Operator>) -> Unit, error: (Throwable) -> Unit) {
+        fun retrieveOperators(success: (List<Operator>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null) {
             val operators = mutableListOf<Operator>()
             retrievePaginatedObject(API_PAGINATION_PER_PAGE, retrofitInstance::operators)
                     .subscribeOn(Schedulers.io())
@@ -74,7 +74,7 @@ interface TransitLandApi {
          *  @param success the callback method whenever the operator feeds has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feeds
          */
-        fun retrieveOperatorFeed(activity: Activity, operator: Operator, success: (MutableList<OperatorFeed>) -> Unit, error: (Throwable) -> Unit) {
+        fun retrieveOperatorFeed(operator: Operator, success: (List<OperatorFeed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null) {
             val feedOneStopIds = operator.representedInFeedOneStopIds
             val operatorFeeds = mutableListOf<OperatorFeed>()
             retrieveListObject(feedOneStopIds, TransitLandApi.retrofitInstance::feed)
@@ -96,7 +96,7 @@ interface TransitLandApi {
          *  @param success the callback method whenever the operator feed version has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feed version
          */
-        fun retrieveOperatorFeedVersion(activity: Activity, operatorFeed: OperatorFeed, success: (OperatorFeedVersion) -> Unit, error: (Throwable) -> Unit) {
+        fun retrieveOperatorFeedVersion(operatorFeed: OperatorFeed, success: (OperatorFeedVersion) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null) {
             retrofitInstance.feedVersion(operatorFeed.activeFeedVersion)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
