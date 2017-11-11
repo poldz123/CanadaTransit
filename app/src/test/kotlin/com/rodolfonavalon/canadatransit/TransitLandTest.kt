@@ -3,6 +3,7 @@ package com.rodolfonavalon.canadatransit
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.Operator
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
@@ -70,6 +71,35 @@ class TransitLandTest: BaseTest() {
             assertNull(assertOperatorFeedError, "Error has occurred when retrieving operator feeds: $assertOperatorFeedError")
             assertEquals(assertOperatorFeeds.count(), 1)
             assertOperatorFeeds(assertOperatorFeeds, oneStopId, operatorId)
+        }
+    }
+
+    @Test
+    fun testRetrieveFeedVersion() {
+        val operatorFeedVersionData: List<Pair<String, String>> = mutableListOf(
+                Pair("f-f24-octranspo", "d157d50441cd64c50ec01a300da521a477aa03c4"),
+                Pair("f-f25d-agencemtropolitainedetransportexpress", "1b99f0448fb3ba210ea1b669529d60eeb5699a9b")
+        )
+
+        for ((oneStopId, activeFeedVersion) in operatorFeedVersionData) {
+            val mockOperatorFeed = mock(OperatorFeed::class.java)
+            given(mockOperatorFeed.activeFeedVersion).willReturn(activeFeedVersion)
+
+            server.addResponse("/api/v1/feed_versions/$activeFeedVersion", "/transitland/operator-feed-version-($oneStopId)")
+            var assertOperatorFeedVersion: OperatorFeedVersion? = null
+            var assertOperatorFeedVersionError: Throwable? = null
+
+            TransitLandApi.retrieveOperatorFeedVersion(mockOperatorFeed, { operatorFeedVersion ->
+                assertOperatorFeedVersion = operatorFeedVersion
+            }, { error ->
+                assertOperatorFeedVersionError = error
+            })
+
+            server.takeRequest()
+            assertNull(assertOperatorFeedVersionError, "Error has occurred when retrieving operator feed version: $assertOperatorFeedVersionError")
+            assertNotNull(assertOperatorFeedVersion)
+            assertEquals(assertOperatorFeedVersion!!.sha1, activeFeedVersion)
+            assertEquals(assertOperatorFeedVersion!!.feedOneStopId, oneStopId)
         }
     }
 
