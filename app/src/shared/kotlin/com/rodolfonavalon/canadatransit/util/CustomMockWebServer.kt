@@ -1,5 +1,8 @@
 package com.rodolfonavalon.canadatransit.util
 
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.plugins.RxJavaPlugins
+import junit.framework.AssertionFailedError
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -37,6 +40,12 @@ class CustomMockWebServer {
     }
 
     private var responses: HashMap<String, Queue<MockWebServerResponse>> = hashMapOf()
+
+    /**
+     * This flag serves as the trigger to fail the test cases, since some
+     * exception are occurring in the background.
+     */
+    private var failure: Boolean = false
 
     /**
      * Adds the response of the mock server for the request.
@@ -82,7 +91,7 @@ class CustomMockWebServer {
      */
     private fun removeResponse(path: String): MockWebServerResponse {
         if (!responses.containsKey(path) || responses[path] == null) {
-            throw AssertionError("Removing without a response for path: $path")
+            throw MockWebServerException("Removing without a response for path: $path")
         }
         // Retrieve the queue
         val serverResponses = responses[path]!!
@@ -108,12 +117,18 @@ class CustomMockWebServer {
     /**
      * Stops the server and checks if all of the responses
      * are consumed by the network.
-     *
-     * @throws [AssertionError] If responses are not consumed
      */
     fun stop() {
         // Stop the mock server
         server.shutdown()
+    }
+
+    /**
+     * Reset the mock server from all of the list, data, flags, etc.
+     */
+    fun reset() {
+        failure = false
+        clean()
     }
 
     /**
@@ -126,15 +141,26 @@ class CustomMockWebServer {
 
     /**
      * Checks that all of the responses are consumed by the request.
+     *
+     * @throws [AssertionError] If responses are not consumed
      */
     fun check() {
+        // Check that something has failed internally
+        if (failure) {
+            reset()
+            throw AssertionFailedError("Internal mock server has failed, check your logs")
+        }
+
         // All of the response should be consumed
         if (responses.isNotEmpty()) {
             var errorMessage = "Stopping the server without consuming all responses: \n"
             for ((key, value) in responses) {
                 errorMessage += "\n\t[$key] => [${value.count()}] requests"
             }
-            throw AssertionError(errorMessage)
+            // Need to reset before we throw the error, for the next test
+            // to have a clean slate
+            reset()
+            throw AssertionFailedError(errorMessage)
         }
     }
 
@@ -152,9 +178,14 @@ class CustomMockWebServer {
      * request was sent as intended. This method will block until the request is available, possibly
      * forever.
      *
+     * IMPORTANT: This will reset the [RxAndroidPlugins] and [RxJavaPlugins] plugins, which will make
+     * all of the schedulers to run in the background, if ever it was configured for the test cases.
+     *
      * @return the head of the request queue
      */
     fun takeRequest(timeout: Long = DEFAULT_RESPONSE_TIMEOUT): RecordedRequest {
+        RxAndroidPlugins.reset()
+        RxJavaPlugins.reset()
         return server.takeRequest(timeout, TimeUnit.SECONDS)
     }
 
@@ -166,6 +197,19 @@ class CustomMockWebServer {
      * @property code The response code of the request
      */
     private data class MockWebServerResponse(val response: String?, val code: Int)
+
+    /**
+     * The exception class for the mock web server which will flag the server
+     * that an exception has occurred, and when [check] is executed the test
+     * cases will fail.
+     *
+     * @property message The message of the exception
+     */
+    private inner class MockWebServerException(override var message: String): Exception() {
+        init {
+            failure = true
+        }
+    }
 
     /**
      * This is the mock server handler for each of the request that will retrieve the
@@ -183,11 +227,11 @@ class CustomMockWebServer {
                 val response = removeResponse(path)
                 // Create the response for the request
                 val mockResponse = MockResponse()
-                mockResponse.setBody(response.response)
+                mockResponse.setBody(response.response ?: "")
                 mockResponse.setResponseCode(response.code)
                 return mockResponse
             }
-            throw AssertionError("Unknown request from the mock server")
+            throw MockWebServerException("Unknown request from the mock server")
         }
 
     }

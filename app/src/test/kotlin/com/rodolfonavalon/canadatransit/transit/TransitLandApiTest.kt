@@ -1,5 +1,8 @@
-package com.rodolfonavalon.canadatransit
+package com.rodolfonavalon.canadatransit.transit
 
+import android.app.Activity
+import com.rodolfonavalon.canadatransit.BaseTest
+import com.rodolfonavalon.canadatransit.BuildConfig
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.Operator
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeed
@@ -8,6 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.mock
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.test.*
@@ -16,7 +20,7 @@ import kotlin.test.*
 @Config(manifest = Config.NONE,
         constants = BuildConfig::class,
         sdk = intArrayOf(26))
-class TransitLandTest: BaseTest() {
+class TransitLandApiTest : BaseTest() {
 
     override fun setup() {
         super.setup()
@@ -35,9 +39,6 @@ class TransitLandTest: BaseTest() {
         }, { error ->
             assertError = error
         })
-
-        server.takeRequest()
-        server.takeRequest()
 
         assertNull(assertError, "Error has occurred when retrieving operators: $assertError")
         assertOperators(assertOperators, "o-f24-octranspo",
@@ -67,7 +68,6 @@ class TransitLandTest: BaseTest() {
                 assertOperatorFeedError = error
             })
 
-            server.takeRequest()
             assertNull(assertOperatorFeedError, "Error has occurred when retrieving operator feeds: $assertOperatorFeedError")
             assertEquals(assertOperatorFeeds.count(), 1)
             assertOperatorFeeds(assertOperatorFeeds, oneStopId, operatorId)
@@ -95,12 +95,37 @@ class TransitLandTest: BaseTest() {
                 assertOperatorFeedVersionError = error
             })
 
-            server.takeRequest()
             assertNull(assertOperatorFeedVersionError, "Error has occurred when retrieving operator feed version: $assertOperatorFeedVersionError")
-            assertNotNull(assertOperatorFeedVersion)
-            assertEquals(assertOperatorFeedVersion!!.sha1, activeFeedVersion)
-            assertEquals(assertOperatorFeedVersion!!.feedOneStopId, oneStopId)
+            assertOperatorFeedVersion(assertOperatorFeedVersion!!, oneStopId, activeFeedVersion)
         }
+    }
+
+    @Test
+    fun testTransitLandApiActivityLifecycle() {
+        val controller = Robolectric.buildActivity(Activity::class.java).create().start()
+        val activity = controller.get()
+
+        // Lets reset the plugin to prevent any blocking operation that will
+        // result wait without us testing the life cycle
+        resetPlugins()
+
+        val mockOperator = mock(Operator::class.java)
+        given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf(""))
+        val mockOperatorFeed = mock(OperatorFeed::class.java)
+        given(mockOperatorFeed.activeFeedVersion).willReturn("")
+
+        val disposables = mutableListOf(
+                TransitLandApi.retrieveOperators({ _ -> }, { _ -> }, activity),
+                TransitLandApi.retrieveOperatorFeed(mockOperator, { _ -> }, { _ -> }, activity),
+                TransitLandApi.retrieveOperatorFeedVersion(mockOperatorFeed, { _ -> }, { _ -> }, activity)
+        )
+
+        controller.resume()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.pause()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.destroy()
+        disposables.forEach { disposable -> assertTrue(disposable.isDisposed) }
     }
 
     private fun assertOperators(operators: List<Operator>, operatorId: String, country: String, metro: String?, state: String, name: String, feedIdCount: Int) {
@@ -132,6 +157,11 @@ class TransitLandTest: BaseTest() {
                 assertEquals(operatorFeed.feedOneStopId, oneStopId)
             }
         }
+    }
+
+    private fun assertOperatorFeedVersion(operatorFeedVersion: OperatorFeedVersion, oneStopId: String, activeFeedVersion: String) {
+        assertEquals(operatorFeedVersion.sha1, activeFeedVersion)
+        assertEquals(operatorFeedVersion.feedOneStopId, oneStopId)
     }
 }
 

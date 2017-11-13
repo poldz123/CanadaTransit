@@ -117,10 +117,10 @@ abstract class TransitApi<API> {
      *
      * @param activity The activity where the retrofit is executed
      */
-    fun Disposable.attachCompositeDisposable(activity: Activity?) {
+    fun Disposable.attachCompositeDisposable(activity: Activity?): Disposable {
         if (activity == null) {
             // Do not attach disposable for null activity
-            return
+            return this
         }
         // Attaches the disposable retrofit to the pool
         disposableInstance.add(this)
@@ -132,5 +132,6 @@ abstract class TransitApi<API> {
             }
             isDestroyCallback
         }
+        return this
     }
 }

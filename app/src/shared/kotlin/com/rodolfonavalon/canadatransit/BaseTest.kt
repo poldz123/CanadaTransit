@@ -19,29 +19,44 @@ open class BaseTest {
         @JvmStatic
         fun setupClass() {
             server.start()
-            RxJavaPlugins.setNewThreadSchedulerHandler { _ -> Schedulers.trampoline() }
-            RxJavaPlugins.setComputationSchedulerHandler { _ -> Schedulers.trampoline() }
-            RxJavaPlugins.setIoSchedulerHandler { _ -> Schedulers.trampoline() }
-            RxAndroidPlugins.setMainThreadSchedulerHandler { _ -> Schedulers.trampoline() }
-            RxAndroidPlugins.setInitMainThreadSchedulerHandler { _ -> Schedulers.trampoline() }
         }
 
         @AfterClass
         @JvmStatic
         fun teardownClass() {
             server.stop()
-            RxJavaPlugins.reset()
-            RxAndroidPlugins.reset()
         }
     }
 
     @Before
     open fun setup() {
-        server.clean()
+        // Reset the server per test cases, this
+        // to have a clean slate on it
+        server.reset()
+        // Restore the plugins to be synchronize
+        // and wont run on different threads
+        restorePlugins()
     }
 
     @After
     open fun teardown(){
+        // Reset the plugins after each test cases to restore
+        // it to being non-synchronous again
+        resetPlugins()
+        // Check the server that all of the responses are consumed
         server.check()
+    }
+
+    fun restorePlugins() {
+        RxJavaPlugins.setNewThreadSchedulerHandler { _ -> Schedulers.trampoline() }
+        RxJavaPlugins.setComputationSchedulerHandler { _ -> Schedulers.trampoline() }
+        RxJavaPlugins.setIoSchedulerHandler { _ -> Schedulers.trampoline() }
+        RxAndroidPlugins.setMainThreadSchedulerHandler { _ -> Schedulers.trampoline() }
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { _ -> Schedulers.trampoline() }
+    }
+
+    fun resetPlugins() {
+        RxJavaPlugins.reset()
+        RxAndroidPlugins.reset()
     }
 }

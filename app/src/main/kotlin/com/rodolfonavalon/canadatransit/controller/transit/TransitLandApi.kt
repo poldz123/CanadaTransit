@@ -7,6 +7,7 @@ import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
 import com.rodolfonavalon.canadatransit.model.transit.response.OperatorsResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import retrofit2.http.GET
@@ -52,9 +53,9 @@ interface TransitLandApi {
          *  @param success the callback method whenever the operators has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operators
          */
-        fun retrieveOperators(success: (List<Operator>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null) {
+        fun retrieveOperators(success: (List<Operator>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
             val operators = mutableListOf<Operator>()
-            retrievePaginatedObject(API_PAGINATION_PER_PAGE, retrofitInstance::operators)
+            return retrievePaginatedObject(API_PAGINATION_PER_PAGE, retrofitInstance::operators)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .map(OperatorsResponse::operators)
@@ -74,10 +75,10 @@ interface TransitLandApi {
          *  @param success the callback method whenever the operator feeds has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feeds
          */
-        fun retrieveOperatorFeed(operator: Operator, success: (List<OperatorFeed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null) {
+        fun retrieveOperatorFeed(operator: Operator, success: (List<OperatorFeed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
             val feedOneStopIds = operator.representedInFeedOneStopIds
             val operatorFeeds = mutableListOf<OperatorFeed>()
-            retrieveListObject(feedOneStopIds, TransitLandApi.retrofitInstance::feed)
+            return retrieveListObject(feedOneStopIds, TransitLandApi.retrofitInstance::feed)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeBy(
@@ -96,8 +97,8 @@ interface TransitLandApi {
          *  @param success the callback method whenever the operator feed version has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feed version
          */
-        fun retrieveOperatorFeedVersion(operatorFeed: OperatorFeed, success: (OperatorFeedVersion) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null) {
-            retrofitInstance.feedVersion(operatorFeed.activeFeedVersion)
+        fun retrieveOperatorFeedVersion(operatorFeed: OperatorFeed, success: (OperatorFeedVersion) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+            return retrofitInstance.feedVersion(operatorFeed.activeFeedVersion)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(success, error)
