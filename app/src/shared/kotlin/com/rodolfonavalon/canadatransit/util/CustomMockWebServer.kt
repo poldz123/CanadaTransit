@@ -54,7 +54,7 @@ class CustomMockWebServer {
      * @param responseCode The response code of the request
      */
     fun addResponse(path: String, responseCode: Int = 200) {
-        addResponse(path, MockWebServerResponse(null, responseCode))
+        addResponse(path, MockWebServerResponse(null, responseCode, null))
     }
 
     /**
@@ -64,9 +64,20 @@ class CustomMockWebServer {
      * @param filePath The path of the response body of the request
      * @param responseCode The response code of the request
      */
-    fun addResponse(path: String, filePath: String, responseCode: Int = 200) {
+    fun addResponsePath(path: String, filePath: String, responseCode: Int = 200, delay: Long? = null) {
         val body = javaClass.getResource(filePath).readText()
-        addResponse(path, MockWebServerResponse(body, responseCode))
+        addResponse(path, MockWebServerResponse(body, responseCode, delay))
+    }
+
+    /**
+     * Adds the response of the mock server for the request.
+     *
+     * @param path The api path to the request
+     * @param body The body of the response to the request
+     * @param responseCode The response code of the request
+     */
+    fun addResponseBody(path: String, body: String, responseCode: Int = 200, delay: Long? = null) {
+        addResponse(path, MockWebServerResponse(body, responseCode, delay))
     }
 
     /**
@@ -196,7 +207,7 @@ class CustomMockWebServer {
      * @property response The response string of the request
      * @property code The response code of the request
      */
-    private data class MockWebServerResponse(val response: String?, val code: Int)
+    private data class MockWebServerResponse(val response: String?, val code: Int, var delay: Long?)
 
     /**
      * The exception class for the mock web server which will flag the server
@@ -229,6 +240,10 @@ class CustomMockWebServer {
                 val mockResponse = MockResponse()
                 mockResponse.setBody(response.response ?: "")
                 mockResponse.setResponseCode(response.code)
+                // Delay the response to the request
+                if (response.delay != null) {
+                    mockResponse.setBodyDelay(response.delay!!, TimeUnit.MILLISECONDS)
+                }
                 return mockResponse
             }
             throw MockWebServerException("Unknown request from the mock server")

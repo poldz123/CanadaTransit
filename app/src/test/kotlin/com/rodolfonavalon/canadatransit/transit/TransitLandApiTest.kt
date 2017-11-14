@@ -1,6 +1,7 @@
 package com.rodolfonavalon.canadatransit.transit
 
 import android.app.Activity
+import android.os.Bundle
 import com.rodolfonavalon.canadatransit.BaseTest
 import com.rodolfonavalon.canadatransit.BuildConfig
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
@@ -29,8 +30,8 @@ class TransitLandApiTest : BaseTest() {
 
     @Test
     fun testRetrieveOperators() {
-        server.addResponse("/api/v1/operators", "/transitland/operators-page1")
-        server.addResponse("/api/v1/operators", "/transitland/operators-page2")
+        server.addResponsePath("/api/v1/operators", "/transitland/operators-page1")
+        server.addResponsePath("/api/v1/operators", "/transitland/operators-page2")
         var assertOperators: List<Operator> = mutableListOf()
         var assertError: Throwable? = null
 
@@ -58,7 +59,7 @@ class TransitLandApiTest : BaseTest() {
             val mockOperator = mock(Operator::class.java)
             given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf(oneStopId))
 
-            server.addResponse("/api/v1/feeds/$oneStopId", "/transitland/operator-feed-($oneStopId)")
+            server.addResponsePath("/api/v1/feeds/$oneStopId", "/transitland/operator-feed-($oneStopId)")
             var assertOperatorFeeds: List<OperatorFeed> = mutableListOf()
             var assertOperatorFeedError: Throwable? = null
 
@@ -85,7 +86,7 @@ class TransitLandApiTest : BaseTest() {
             val mockOperatorFeed = mock(OperatorFeed::class.java)
             given(mockOperatorFeed.activeFeedVersion).willReturn(activeFeedVersion)
 
-            server.addResponse("/api/v1/feed_versions/$activeFeedVersion", "/transitland/operator-feed-version-($oneStopId)")
+            server.addResponsePath("/api/v1/feed_versions/$activeFeedVersion", "/transitland/operator-feed-version-($oneStopId)")
             var assertOperatorFeedVersion: OperatorFeedVersion? = null
             var assertOperatorFeedVersionError: Throwable? = null
 
@@ -108,11 +109,15 @@ class TransitLandApiTest : BaseTest() {
         // Lets reset the plugin to prevent any blocking operation that will
         // result wait without us testing the life cycle
         resetPlugins()
+        // Adds a delay to the response to properly test the activity lifecycle
+        server.addResponseBody("/api/v1/operators", "{}", delay = 100)
+        server.addResponseBody("/api/v1/feeds/test", "{}", delay = 100)
+        server.addResponseBody("/api/v1/feed_versions/test", "{}", delay = 100)
 
         val mockOperator = mock(Operator::class.java)
-        given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf(""))
+        given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf("test"))
         val mockOperatorFeed = mock(OperatorFeed::class.java)
-        given(mockOperatorFeed.activeFeedVersion).willReturn("")
+        given(mockOperatorFeed.activeFeedVersion).willReturn("test")
 
         val disposables = mutableListOf(
                 TransitLandApi.retrieveOperators({ _ -> }, { _ -> }, activity),
@@ -120,9 +125,17 @@ class TransitLandApiTest : BaseTest() {
                 TransitLandApi.retrieveOperatorFeedVersion(mockOperatorFeed, { _ -> }, { _ -> }, activity)
         )
 
+        controller.create()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.start()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
         controller.resume()
         disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
         controller.pause()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.stop()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.saveInstanceState(Bundle())
         disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
         controller.destroy()
         disposables.forEach { disposable -> assertTrue(disposable.isDisposed) }

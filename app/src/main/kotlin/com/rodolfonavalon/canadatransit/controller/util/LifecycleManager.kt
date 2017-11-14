@@ -38,7 +38,7 @@ class LifecycleManager private constructor(): Application.ActivityLifecycleCallb
         DESTROYED   // onActivityDestroyed(Activity)
     }
 
-    override fun onActivityCreated(activity: Activity, bundle: Bundle) {
+    override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
         signalActivity(activity, LifecycleStage.CREATED)
     }
 
@@ -58,7 +58,7 @@ class LifecycleManager private constructor(): Application.ActivityLifecycleCallb
         signalActivity(activity, LifecycleStage.STOPPED)
     }
 
-    override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {
+    override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle?) {
         signalActivity(activity, LifecycleStage.SAVED)
     }
 
