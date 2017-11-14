@@ -59,46 +59,46 @@ afterEvaluate {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Community Library
-    compile "com.jakewharton.timber:timber:$timberLibraryVersion"
-    compile "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
-    compile "io.reactivex.rxjava2:rxkotlin:$rxKotlinLibraryVersion"
-    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidLibraryVersion"
-    compile "io.reactivex.rxjava2:rxjava:$rxJavaLibraryVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava2:$rxJavaRetrofitAdapterLibraryVersion"
-    compile "com.google.code.gson:gson:$gsonLibraryVersion"
-    compile "com.squareup.retrofit2:converter-gson:$gsonRetrofitConverterLibraryVersion"
-    compile "net.danlew:android.joda:$jodaTimeAndroidLibraryVersion"
+    implementation "com.jakewharton.timber:timber:$timberLibraryVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinLibraryVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidLibraryVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaLibraryVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rxJavaRetrofitAdapterLibraryVersion"
+    implementation "com.google.code.gson:gson:$gsonLibraryVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$gsonRetrofitConverterLibraryVersion"
+    implementation "net.danlew:android.joda:$jodaTimeAndroidLibraryVersion"
 
     // Google Library
-    compile "com.android.support:design:$googleDesignLibraryVersion"
-    compile "com.android.support:appcompat-v7:$googleSupportLibraryVersion"
-    compile "com.android.support.constraint:constraint-layout:$googleContraintLayoutLibraryVersion"
-    compile "com.google.android.gms:play-services-maps:$googlePlayServiceLibraryVersion"
+    implementation "com.android.support:design:$googleDesignLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$googleSupportLibraryVersion"
+    implementation "com.android.support.constraint:constraint-layout:$googleContraintLayoutLibraryVersion"
+    implementation "com.google.android.gms:play-services-maps:$googlePlayServiceLibraryVersion"
 
     // Test Library
-    androidTestCompile "com.google.code.findbugs:jsr305:$jsr305LibraryVersion"
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoLibraryVersion", {
+    androidTestImplementation "com.google.code.findbugs:jsr305:$jsr305LibraryVersion"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoLibraryVersion", {
         exclude group: "com.android.support", module: "support-annotations"
     })
-    testCompile "junit:junit:$junitLibraryVersion"
-    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
-    testCompile "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
-    testCompile "org.mockito:mockito-core:$mockitoLibraryVersion"
+    testImplementation "junit:junit:$junitLibraryVersion"
+    testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
+    testImplementation "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoLibraryVersion"
 
     // Shared Test Library
-    testCompile "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
-    androidTestCompile "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
-    testCompile "org.robolectric:robolectric:$robolectricLibraryVersion"
-    androidTestCompile "org.robolectric:robolectric:$robolectricLibraryVersion"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricLibraryVersion"
+    androidTestImplementation "org.robolectric:robolectric:$robolectricLibraryVersion"
 
     // Compile time plugin
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
-
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
 }
+
 repositories {
     mavenCentral()
 }
