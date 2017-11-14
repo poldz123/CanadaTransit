@@ -2,7 +2,7 @@ package com.rodolfonavalon.canadatransit.transit
 
 import android.app.Activity
 import android.os.Bundle
-import com.rodolfonavalon.canadatransit.BaseTest
+import com.rodolfonavalon.canadatransit.BaseServerTest
 import com.rodolfonavalon.canadatransit.BuildConfig
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.Operator
@@ -21,11 +21,55 @@ import kotlin.test.*
 @Config(manifest = Config.NONE,
         constants = BuildConfig::class,
         sdk = intArrayOf(26))
-class TransitLandApiTest : BaseTest() {
+class TransitLandApiTest : BaseServerTest() {
 
     override fun setup() {
         super.setup()
         TransitLandApi.apiTestUrl = server.url("/api/v1/").toString()
+    }
+
+    @Test
+    fun testActivityLifecycle() {
+        val controller = Robolectric.buildActivity(Activity::class.java).create().start()
+        val activity = controller.get()
+
+        // Lets reset the plugin to prevent any blocking operation that will
+        // result wait without us testing the life cycle
+        resetPlugins()
+        // Adds a delay to the response to properly test the activity lifecycle
+        server.addResponseBody("/api/v1/operators", "{}", delay = 100)
+        server.addResponseBody("/api/v1/feeds/test", "{}", delay = 100)
+        server.addResponseBody("/api/v1/feed_versions/test", "{}", delay = 100)
+
+        val mockOperator = mock(Operator::class.java)
+        given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf("test"))
+        val mockOperatorFeed = mock(OperatorFeed::class.java)
+        given(mockOperatorFeed.activeFeedVersion).willReturn("test")
+
+        val disposables = mutableListOf(
+                TransitLandApi.retrieveOperators({ _ -> }, { _ -> }, activity),
+                TransitLandApi.retrieveOperatorFeed(mockOperator, { _ -> }, { _ -> }, activity),
+                TransitLandApi.retrieveOperatorFeedVersion(mockOperatorFeed, { _ -> }, { _ -> }, activity)
+        )
+
+        controller.create()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.start()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.resume()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.pause()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.stop()
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.saveInstanceState(Bundle())
+        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
+        controller.destroy()
+        disposables.forEach { disposable -> assertTrue(disposable.isDisposed) }
+
+        // Lets clean the responses, since it can trigger the assertion
+        // when server is checked.
+        server.clean()
     }
 
     @Test
@@ -99,46 +143,6 @@ class TransitLandApiTest : BaseTest() {
             assertNull(assertOperatorFeedVersionError, "Error has occurred when retrieving operator feed version: $assertOperatorFeedVersionError")
             assertOperatorFeedVersion(assertOperatorFeedVersion!!, oneStopId, activeFeedVersion)
         }
-    }
-
-    @Test
-    fun testTransitLandApiActivityLifecycle() {
-        val controller = Robolectric.buildActivity(Activity::class.java).create().start()
-        val activity = controller.get()
-
-        // Lets reset the plugin to prevent any blocking operation that will
-        // result wait without us testing the life cycle
-        resetPlugins()
-        // Adds a delay to the response to properly test the activity lifecycle
-        server.addResponseBody("/api/v1/operators", "{}", delay = 100)
-        server.addResponseBody("/api/v1/feeds/test", "{}", delay = 100)
-        server.addResponseBody("/api/v1/feed_versions/test", "{}", delay = 100)
-
-        val mockOperator = mock(Operator::class.java)
-        given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf("test"))
-        val mockOperatorFeed = mock(OperatorFeed::class.java)
-        given(mockOperatorFeed.activeFeedVersion).willReturn("test")
-
-        val disposables = mutableListOf(
-                TransitLandApi.retrieveOperators({ _ -> }, { _ -> }, activity),
-                TransitLandApi.retrieveOperatorFeed(mockOperator, { _ -> }, { _ -> }, activity),
-                TransitLandApi.retrieveOperatorFeedVersion(mockOperatorFeed, { _ -> }, { _ -> }, activity)
-        )
-
-        controller.create()
-        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
-        controller.start()
-        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
-        controller.resume()
-        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
-        controller.pause()
-        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
-        controller.stop()
-        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
-        controller.saveInstanceState(Bundle())
-        disposables.forEach { disposable -> assertFalse(disposable.isDisposed) }
-        controller.destroy()
-        disposables.forEach { disposable -> assertTrue(disposable.isDisposed) }
     }
 
     private fun assertOperators(operators: List<Operator>, operatorId: String, country: String, metro: String?, state: String, name: String, feedIdCount: Int) {

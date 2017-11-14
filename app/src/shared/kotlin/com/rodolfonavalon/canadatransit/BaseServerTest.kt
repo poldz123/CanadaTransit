@@ -9,7 +9,19 @@ import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
 
-open class BaseTest {
+/**
+ * Base class for testing with the mock server. This is mainly used for
+ * networking test cases to have a trampoline scheduler that will block
+ * threading.
+ *
+ * This also handles assertion if ever some of the request has not been
+ * consumed by the test case, also triggers to start and stop the mock
+ * server before and after the test suite.
+ *
+ * IMPORTANT: That during [setup] the URL endpoint from the mock server
+ * should be used by the API class as the base URL.
+ */
+open class BaseServerTest {
 
     companion object {
         @JvmField
