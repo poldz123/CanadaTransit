@@ -3,6 +3,7 @@ package com.rodolfonavalon.canadatransit.controller
 import android.app.Application
 
 import com.rodolfonavalon.canadatransit.BuildConfig
+import io.realm.Realm
 
 import net.danlew.android.joda.JodaTimeAndroid
 
@@ -15,7 +16,9 @@ class CanadaTransitApplication : Application() {
 
         // Initialize Joda-Time Android
         JodaTimeAndroid.init(this)
-
+        // Initialize Realm. Should only be done once when the application starts.
+        Realm.init(this)
+        // Initialize the Timber for both DEBUG and RELEASE Tree
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         } else {
