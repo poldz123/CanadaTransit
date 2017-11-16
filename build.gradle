@@ -39,7 +39,7 @@ buildscript {
 
     // Tools Library
     ext.kotlinVersion = "1.1.60"
-    ext.realmVersion = "4.0.0"
+    ext.realmVersion = "4.1.1"
 
     repositories {
         google()
