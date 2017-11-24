@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -76,6 +78,9 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$googleSupportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$googleContraintLayoutLibraryVersion"
     implementation "com.google.android.gms:play-services-maps:$googlePlayServiceLibraryVersion"
+    implementation "android.arch.persistence.room:runtime:$googleRoomLibraryVersion"
+    implementation "android.arch.persistence.room:rxjava2:$googleRoomLibraryVersion"
+    kapt "android.arch.persistence.room:compiler:$googleRoomLibraryVersion"
 
     // Test Library
     androidTestImplementation "com.google.code.findbugs:jsr305:$jsr305LibraryVersion"

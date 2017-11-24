@@ -6,8 +6,8 @@ buildscript {
 
     // Project
     ext.applicationId = "com.rodolfonavalon.canadatransit"
-    ext.compileSdkVersion = 26
-    ext.targetSdkVersion = 26
+    ext.compileSdkVersion = 27
+    ext.targetSdkVersion = 27
     ext.minSdkVersion = 21
     ext.versionCode = 1
     ext.versionName = "1.0"
@@ -25,10 +25,11 @@ buildscript {
     ext.jodaTimeAndroidLibraryVersion = "2.9.9"
 
     // Google Library
-    ext.googleSupportLibraryVersion = "26.1.0"
-    ext.googleDesignLibraryVersion = "27.0.0"
+    ext.googleSupportLibraryVersion = "27.0.1"
+    ext.googleDesignLibraryVersion = "27.0.1"
     ext.googleContraintLayoutLibraryVersion = "1.0.2"
-    ext.googlePlayServiceLibraryVersion = "11.4.2"
+    ext.googlePlayServiceLibraryVersion = "11.6.0"
+    ext.googleRoomLibraryVersion = "1.0.0"
 
     // Test Library
     ext.junitLibraryVersion = "4.12"
