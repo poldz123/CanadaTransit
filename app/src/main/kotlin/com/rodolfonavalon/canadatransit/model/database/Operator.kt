@@ -1,8 +1,7 @@
 package com.rodolfonavalon.canadatransit.model.database
 
 import com.google.gson.annotations.SerializedName
-
-import java.util.*
+import org.joda.time.DateTime
 
 class Operator(
         @SerializedName("onestop_id") val onestopId: String, // TODO: primary key
@@ -11,8 +10,8 @@ class Operator(
         @SerializedName("country") val country: String,
         @SerializedName("state") val state: String,
         @SerializedName("timezone") val timezone: String,
-        @SerializedName("created_at") val createdAt: Date,
-        @SerializedName("updated_at") val updatedAt: Date,
+        @SerializedName("created_at") val createdAt: DateTime,
+        @SerializedName("updated_at") val updatedAt: DateTime,
         @SerializedName("metro") val metro: String?,
         @SerializedName("short_name") val shortName: String?,
         @SerializedName("tags") val tags: Tags,

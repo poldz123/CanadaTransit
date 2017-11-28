@@ -1,14 +1,13 @@
 package com.rodolfonavalon.canadatransit.model.database
 
 import com.google.gson.annotations.SerializedName
-
-import java.util.*
+import org.joda.time.DateTime
 
 class OperatorFeed(
         @SerializedName("onestop_id") val feedOneStopId: String, // TODO: primary key
         @SerializedName("name") val name: String?,
-        @SerializedName("created_at") val createdAt: Date,
-        @SerializedName("updated_at") val updatedAt: Date,
+        @SerializedName("created_at") val createdAt: DateTime,
+        @SerializedName("updated_at") val updatedAt: DateTime,
         @SerializedName("url") val url: String,
         @SerializedName("feed_format") val feedFormat: String,
         @SerializedName("license_use_without_attribution") val licenseUseWithoutAttribution: String,
@@ -17,8 +16,8 @@ class OperatorFeed(
         @SerializedName("license_name") val licenseName: String?,
         @SerializedName("license_url") val licenseUrl: String?,
         @SerializedName("license_attribution_text") val licenseAttributionText: String?,
-        @SerializedName("last_fetched_at") val lastFetchAt: Date,
-        @SerializedName("last_imported_at") val lastImportedAt: Date,
+        @SerializedName("last_fetched_at") val lastFetchAt: DateTime,
+        @SerializedName("last_imported_at") val lastImportedAt: DateTime,
         @SerializedName("import_status") val importStatus: String,
         @SerializedName("active_feed_version") val activeFeedVersion: String,
         @SerializedName("feed_versions_url") val feedVersionUrl: String,

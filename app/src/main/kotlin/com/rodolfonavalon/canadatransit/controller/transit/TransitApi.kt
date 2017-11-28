@@ -10,10 +10,10 @@ import com.rodolfonavalon.canadatransit.model.transit.response.MetaResponse
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.joda.time.DateTime
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 
 abstract class TransitApi<API> {
     /**
@@ -39,7 +39,7 @@ abstract class TransitApi<API> {
     protected val retrofitInstance: API by lazy {
         val baseUrl = apiTestUrl ?: apiUrl
         val gson = GsonBuilder()
-                .registerTypeAdapter(Date::class.java, DateConverter())
+                .registerTypeAdapter(DateTime::class.java, DateConverter())
                 .setPrettyPrinting()
                 .create()
         val retrofit = Retrofit.Builder()
