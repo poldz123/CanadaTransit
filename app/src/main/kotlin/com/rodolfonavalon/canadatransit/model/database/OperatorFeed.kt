@@ -35,13 +35,12 @@ class OperatorFeed(
         @SerializedName("feed_versions") val feedVersion: List<String>,
         @SerializedName("changesets_imported_from_this_feed") val changesetsImportedFromThisFeed: List<Int>,
         @SerializedName("operators_in_feed") val operatorsInFeed: List<OperatorInFeed>
-) {
+)
 
-    inner class OperatorInFeed(
-            @SerializedName("gtfs_agency_id") val gtfsAgencyId: String?,
-            @SerializedName("operator_onestop_id") val operatorOneStopId: String,
-            @SerializedName("feed_onestop_id") val feedOneStopId: String,
-            @SerializedName("operator_url") val operatorUrl: String,
-            @SerializedName("feed_url") val feedUrl: String
-    )
-}
+class OperatorInFeed(
+        @SerializedName("gtfs_agency_id") val gtfsAgencyId: String?,
+        @SerializedName("operator_onestop_id") val operatorOneStopId: String,
+        @SerializedName("feed_onestop_id") val feedOneStopId: String,
+        @SerializedName("operator_url") val operatorUrl: String,
+        @SerializedName("feed_url") val feedUrl: String
+)

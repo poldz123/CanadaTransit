@@ -2,7 +2,7 @@ package com.rodolfonavalon.canadatransit.model.database.converter.room
 
 import android.arch.persistence.room.TypeConverter
 import com.google.gson.Gson
-import com.rodolfonavalon.canadatransit.model.database.OperatorFeed.OperatorInFeed
+import com.rodolfonavalon.canadatransit.model.database.OperatorInFeed
 
 class TransitLandConverter: BaseConverter() {
 

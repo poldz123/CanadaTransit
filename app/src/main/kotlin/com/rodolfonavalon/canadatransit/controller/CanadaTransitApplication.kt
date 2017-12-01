@@ -17,18 +17,20 @@ class CanadaTransitApplication : Application() {
 
         // Initialize Joda-Time Android
         JodaTimeAndroid.init(this)
+
+        // Initialize the database
+        appDatabase = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DATABASE_NAME).build()
+
         // Initialize the Timber for both DEBUG and RELEASE Tree
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         } else {
             // TODO: Release timber
         }
-        // Initialize the database
-        appDatabase = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DATABASE_NAME).build()
     }
 
     companion object {
-        const val DATABASE_NAME = "younility_food_delivery_database"
+        const val DATABASE_NAME = "canada_transit_database"
         lateinit var appDatabase: AppDatabase
             private set
     }

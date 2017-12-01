@@ -12,7 +12,7 @@ import org.joda.time.DateTime
 @TypeConverters(TransitLandConverter::class)
 class Operator(
         @PrimaryKey
-        @SerializedName("onestop_id") val onestopId: String,
+        @SerializedName("onestop_id") val oneStopId: String,
 
         @SerializedName("name") val name: String,
         @SerializedName("website") val website: String,
@@ -27,11 +27,10 @@ class Operator(
 
         @Embedded
         @SerializedName("tags") val tags: Tags
-) {
+)
 
-    inner class Tags(
-            @SerializedName("agency_id") val agencyId: String,
-            @SerializedName("agency_lang") val agencyLang: String,
-            @SerializedName("agency_phone") val agencyPhone: String
-    )
-}
+class Tags(
+        @SerializedName("agency_id") val agencyId: String,
+        @SerializedName("agency_lang") val agencyLang: String,
+        @SerializedName("agency_phone") val agencyPhone: String
+)
