@@ -9,7 +9,7 @@ import java.lang.reflect.Type
  * This is the [Gson] converter for the [DateTime] that serialize and deserialize from the
  * Room database.
  */
-class DateConverter : JsonSerializer<DateTime>, JsonDeserializer<DateTime> {
+class DateTimeConverter : JsonSerializer<DateTime>, JsonDeserializer<DateTime> {
 
     @Throws(JsonParseException::class)
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): DateTime? {

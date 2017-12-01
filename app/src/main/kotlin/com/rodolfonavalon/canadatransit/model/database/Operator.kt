@@ -1,10 +1,19 @@
 package com.rodolfonavalon.canadatransit.model.database
 
+import android.arch.persistence.room.Embedded
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.TypeConverters
 import com.google.gson.annotations.SerializedName
+import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
 import org.joda.time.DateTime
 
+@Entity
+@TypeConverters(TransitLandConverter::class)
 class Operator(
-        @SerializedName("onestop_id") val onestopId: String, // TODO: primary key
+        @PrimaryKey
+        @SerializedName("onestop_id") val onestopId: String,
+
         @SerializedName("name") val name: String,
         @SerializedName("website") val website: String,
         @SerializedName("country") val country: String,
@@ -14,8 +23,10 @@ class Operator(
         @SerializedName("updated_at") val updatedAt: DateTime,
         @SerializedName("metro") val metro: String?,
         @SerializedName("short_name") val shortName: String?,
-        @SerializedName("tags") val tags: Tags,
-        @SerializedName("represented_in_feed_onestop_ids") val representedInFeedOneStopIds: List<String>
+        @SerializedName("represented_in_feed_onestop_ids") val representedInFeedOneStopIds: List<String>,
+
+        @Embedded
+        @SerializedName("tags") val tags: Tags
 ) {
 
     inner class Tags(

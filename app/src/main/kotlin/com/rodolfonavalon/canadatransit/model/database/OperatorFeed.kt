@@ -1,10 +1,18 @@
 package com.rodolfonavalon.canadatransit.model.database
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.TypeConverters
 import com.google.gson.annotations.SerializedName
+import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
 import org.joda.time.DateTime
 
+@Entity
+@TypeConverters(TransitLandConverter::class)
 class OperatorFeed(
-        @SerializedName("onestop_id") val feedOneStopId: String, // TODO: primary key
+        @PrimaryKey
+        @SerializedName("onestop_id") val feedOneStopId: String,
+
         @SerializedName("name") val name: String?,
         @SerializedName("created_at") val createdAt: DateTime,
         @SerializedName("updated_at") val updatedAt: DateTime,

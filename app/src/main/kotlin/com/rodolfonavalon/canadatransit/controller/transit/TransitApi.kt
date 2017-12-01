@@ -5,7 +5,7 @@ import android.support.annotation.VisibleForTesting
 import android.support.annotation.VisibleForTesting.PRIVATE
 import com.google.gson.GsonBuilder
 import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager
-import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateConverter
+import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateTimeConverter
 import com.rodolfonavalon.canadatransit.model.transit.response.MetaResponse
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -39,7 +39,7 @@ abstract class TransitApi<API> {
     protected val retrofitInstance: API by lazy {
         val baseUrl = apiTestUrl ?: apiUrl
         val gson = GsonBuilder()
-                .registerTypeAdapter(DateTime::class.java, DateConverter())
+                .registerTypeAdapter(DateTime::class.java, DateTimeConverter())
                 .setPrettyPrinting()
                 .create()
         val retrofit = Retrofit.Builder()
