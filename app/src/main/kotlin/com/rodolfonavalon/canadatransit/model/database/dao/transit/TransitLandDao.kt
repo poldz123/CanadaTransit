@@ -28,29 +28,29 @@ interface TransitLandDao {
     fun loadOperatorFeedVersions(): Single<List<OperatorFeedVersion>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOperators(vararg operators: Operator)
+    fun insertOperators(vararg operators: Operator): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOperatorFeeds(vararg operatorFeeds: OperatorFeed)
+    fun insertOperatorFeeds(vararg operatorFeeds: OperatorFeed): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOperatorFeedVersions(vararg operatorFeedVersions: OperatorFeedVersion)
+    fun insertOperatorFeedVersions(vararg operatorFeedVersions: OperatorFeedVersion): List<Long>
 
     @Query("DELETE FROM Operator")
-    fun nukeOperator()
+    fun nukeOperator(): Int
 
     @Query("DELETE FROM OperatorFeed")
-    fun nukeOperatorFeed()
+    fun nukeOperatorFeed(): Int
 
     @Query("DELETE FROM OperatorFeedVersion")
-    fun nukeOperatorFeedVersion()
+    fun nukeOperatorFeedVersion(): Int
 
     @Delete
-    fun deleteOperator(vararg operators: Operator)
+    fun deleteOperator(vararg operators: Operator): Int
 
     @Delete
-    fun deleteOperatorFeed(vararg operatorFeeds: OperatorFeed)
+    fun deleteOperatorFeed(vararg operatorFeeds: OperatorFeed): Int
 
     @Delete
-    fun deleteOperatorFeedVersion(vararg operatorFeedVersions: OperatorFeedVersion)
+    fun deleteOperatorFeedVersion(vararg operatorFeedVersions: OperatorFeedVersion): Int
 }
