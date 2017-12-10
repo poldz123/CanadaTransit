@@ -4,28 +4,29 @@ import android.arch.persistence.room.*
 import com.rodolfonavalon.canadatransit.model.database.Operator
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
+import io.reactivex.Maybe
 import io.reactivex.Single
 
 @Dao
 interface TransitLandDao {
 
     @Query("SELECT * FROM Operator WHERE oneStopId = :oneStopId")
-    fun findOperator(oneStopId: String): Single<Operator>
+    fun findOperator(oneStopId: String): Maybe<Operator>
 
     @Query("SELECT * FROM OperatorFeed WHERE feedOneStopId = :feedOneStopId")
-    fun findOperatorFeed(feedOneStopId: String): Single<OperatorFeed>
+    fun findOperatorFeed(feedOneStopId: String): Maybe<OperatorFeed>
 
     @Query("SELECT * FROM OperatorFeedVersion WHERE feedOneStopId = :feedOneStopId")
-    fun findOperatorFeedVersion(feedOneStopId: String): Single<OperatorFeedVersion>
+    fun findOperatorFeedVersion(feedOneStopId: String): Maybe<OperatorFeedVersion>
 
     @Query("SELECT * FROM Operator")
-    fun loadOperators(): Single<List<Operator>>
+    fun loadOperators(): Maybe<List<Operator>>
 
     @Query("SELECT * FROM OperatorFeed")
-    fun loadOperatorFeeds(): Single<List<OperatorFeed>>
+    fun loadOperatorFeeds(): Maybe<List<OperatorFeed>>
 
     @Query("SELECT * FROM OperatorFeedVersion")
-    fun loadOperatorFeedVersions(): Single<List<OperatorFeedVersion>>
+    fun loadOperatorFeedVersions(): Maybe<List<OperatorFeedVersion>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOperators(vararg operators: Operator): List<Long>
