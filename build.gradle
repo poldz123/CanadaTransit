@@ -39,7 +39,7 @@ buildscript {
     ext.mockitoLibraryVersion = "2.12.0"
 
     // Tools Library
-    ext.kotlinVersion = "1.1.60"
+    ext.kotlinVersion = "1.2.0"
 
     repositories {
         google()

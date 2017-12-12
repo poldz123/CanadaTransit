@@ -5,7 +5,6 @@ import com.rodolfonavalon.canadatransit.model.database.Operator
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
 import io.reactivex.Maybe
-import io.reactivex.Single
 
 @Dao
 interface TransitLandDao {
