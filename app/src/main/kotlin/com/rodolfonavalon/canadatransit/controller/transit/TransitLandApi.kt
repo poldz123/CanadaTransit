@@ -10,9 +10,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import okhttp3.ResponseBody
+import retrofit2.Response
+import retrofit2.http.*
 
 interface TransitLandApi {
 
@@ -24,6 +24,9 @@ interface TransitLandApi {
 
     @GET("feed_versions/{active_feed_version}")
     fun feedVersion(@Path("active_feed_version") activeFeedVersion: String): Observable<OperatorFeedVersion>
+
+    @GET @Streaming
+    fun downloadFeed(@Url url: String): Observable<Response<ResponseBody>>
 
     companion object: TransitApi<TransitLandApi>() {
         /**
@@ -105,5 +108,16 @@ interface TransitLandApi {
                     .attachCompositeDisposable(activity)
         }
 
+        /**
+         *  Downloads the feed of the [OperatorFeedVersion]
+         *
+         *  @param operatorFeedVersion the operator feed version to download the feed
+         *  @return the observable response body of the feed
+         */
+        fun downloadOperatorFeed(operatorFeedVersion: OperatorFeedVersion): Observable<Response<ResponseBody>> {
+            return retrofitInstance.downloadFeed(operatorFeedVersion.downloadUrl)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+        }
     }
 }
