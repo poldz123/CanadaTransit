@@ -2,24 +2,42 @@ package com.rodolfonavalon.canadatransit.controller.util
 
 import android.os.Looper
 
-object Debug {
+/**
+ * DebugUtil
+ */
+object DebugUtil {
 
+    /**
+     * assertFalse
+     */
     fun assertFalse(assertion: Boolean) {
         assert(!assertion)
     }
 
+    /**
+     * assertFalse
+     */
     fun assertFalse(assertion: Boolean, lazyMessage: () -> Any) {
         assert(!assertion, lazyMessage)
     }
 
+    /**
+     * assertTrue
+     */
     fun assertTrue(assertion: Boolean) {
         assert(assertion)
     }
 
+    /**
+     * assertTrue
+     */
     fun assertTrue(assertion: Boolean, lazyMessage: () -> Any) {
         assert(assertion, lazyMessage)
     }
 
+    /**
+     * assertMainThread
+     */
     fun assertMainThread() {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             val message = "Method should be executed within the Main Thread!!"
@@ -27,6 +45,9 @@ object Debug {
         }
     }
 
+    /**
+     * assertWorkerThread
+     */
     fun assertWorkerThread() {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             val message = "Method should be executed within the Worker Thread!!"

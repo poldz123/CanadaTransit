@@ -92,7 +92,7 @@ private class DownloadForwardingSource(source: Source,
 /**
  * TransitFeedDownloader
  */
-private class TransitFeedDownloader(val downloadManager: DownloadManager, val feedOneStopId: String): DownloadImpl {
+private class TransitLandFeedDownloader(val downloadManager: DownloadManager, val feedOneStopId: String): DownloadImpl {
     var disposable: Disposable? = null
     var feedVersion: OperatorFeedVersion? = null
 
