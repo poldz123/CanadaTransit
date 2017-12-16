@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.controller.util
+package com.rodolfonavalon.canadatransit.controller.manager
 
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
@@ -21,6 +21,7 @@ import java.io.IOException
  */
 private interface DownloadImpl {
     fun onStart()
+    fun onCancel()
     fun onError(error: Throwable)
 }
 
@@ -38,7 +39,6 @@ class DownloadManager private constructor() {
     }
 
     fun next() {
-
     }
 
     fun success() {
@@ -98,7 +98,13 @@ private class TransitFeedDownloader(val downloadManager: DownloadManager, val fe
 
     override fun onStart() {
         val transitDao = CanadaTransitApplication.appDatabase.transitLandDao()
-        AppDatabase.query(transitDao.findOperatorFeedVersion(feedOneStopId), this::onRetrieveFeedVersion, this::onError)
+        AppDatabase.query(transitDao.findOperatorFeedVersion(feedOneStopId),
+                this::onRetrieveFeedVersion,
+                this::onError)
+    }
+
+    override fun onCancel() {
+        // TODO: Implement on cancel
     }
 
     override fun onError(error: Throwable) {

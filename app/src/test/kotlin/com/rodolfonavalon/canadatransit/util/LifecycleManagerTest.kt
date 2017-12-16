@@ -2,20 +2,20 @@ package com.rodolfonavalon.canadatransit.util
 
 import android.app.Activity
 import android.os.Bundle
-import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager.LifecycleStage.CREATED
-import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager.LifecycleStage.STARTED
-import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager.LifecycleStage.RESUMED
-import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager.LifecycleStage.PAUSED
-import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager.LifecycleStage.STOPPED
-import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager.LifecycleStage.SAVED
-import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager.LifecycleStage.DESTROYED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.CREATED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.STARTED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.RESUMED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.PAUSED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.STOPPED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.SAVED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.DESTROYED
 import org.robolectric.android.controller.ActivityController
 import java.util.*
 import kotlin.test.assertEquals

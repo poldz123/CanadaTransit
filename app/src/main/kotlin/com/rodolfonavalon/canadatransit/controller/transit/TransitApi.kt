@@ -4,7 +4,7 @@ import android.app.Activity
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.VisibleForTesting.PRIVATE
 import com.google.gson.GsonBuilder
-import com.rodolfonavalon.canadatransit.controller.util.LifecycleManager
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager
 import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateTimeConverter
 import com.rodolfonavalon.canadatransit.model.transit.response.MetaResponse
 import io.reactivex.Observable
