@@ -8,19 +8,6 @@ import timber.log.Timber
 import android.os.StatFs
 
 /**
- * Type of memories within the application.
- *
- * @property SYSTEM The system memory, entire phone memory
- * @property EXTERNAL The external memory, sd card memory
- * @property INTERNAL The system memory, application memory
- */
-enum class MemoryType {
-    SYSTEM,
-    EXTERNAL,
-    INTERNAL
-}
-
-/**
  * FileUtil
  */
 object FileUtil {
@@ -50,21 +37,26 @@ object FileUtil {
     }
 
     /**
-     * availableDiskMemory
+     * availableInternalMemory
      */
-    fun availableDiskMemory(memoryType: MemoryType): Long {
-        val memoryFileAbsolutePath = when (memoryType) {
-            MemoryType.SYSTEM -> Environment.getRootDirectory().absolutePath
-            MemoryType.EXTERNAL -> Environment.getExternalStorageDirectory().absolutePath
-            MemoryType.INTERNAL -> Environment.getDataDirectory().absolutePath
-        }
+    fun availableInternalMemory(): Long = availableDiskMemory(Environment.getDataDirectory().absolutePath)
 
+    /**
+     * availableExternalMemory
+     */
+    fun availableExternalMemory(): Long = availableDiskMemory(Environment.getExternalStorageDirectory().absolutePath)
+
+    /**
+     * availableSystemMemory
+     */
+    fun availableSystemMemory(): Long = availableDiskMemory(Environment.getRootDirectory().absolutePath)
+
+    private fun availableDiskMemory(memoryFileAbsolutePath: String): Long {
         val statFs = StatFs(memoryFileAbsolutePath)
         val availableBlocks = statFs.availableBlocksLong
         val blockSize = statFs.blockSizeLong
-
         val freeMemoryInMegabytes = availableBlocks * blockSize / 1048576L
-        Timber.d("Disk Memory left From: %s || %d MB", memoryType, freeMemoryInMegabytes)
+        Timber.d("Disk Memory left: %d MB", freeMemoryInMegabytes)
         return freeMemoryInMegabytes
     }
 
