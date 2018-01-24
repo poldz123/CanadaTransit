@@ -49,15 +49,6 @@ object FileUtil {
         return file
     }
 
-    private fun createDirectoryFile(directory: String): File {
-        val file = File(directory)
-        // Create the directory only when it was not already created from before
-        if (!file.exists()) {
-            file.mkdirs()
-        }
-        return file
-    }
-
     /**
      * availableDiskMemory
      */
