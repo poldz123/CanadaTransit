@@ -12,14 +12,16 @@ import android.os.StatFs
  */
 object FileUtil {
 
+    private const val TEMP_FILE_NAME_PREFIX = "-temp"
     private const val TRANSIT_LAND_DIRECTORY = "feed/transitland/"
 
     /**
      * createFile
      */
-    fun createFile(context: Context, operatorFeedVersion: OperatorFeedVersion): File {
+    fun createFile(context: Context, operatorFeedVersion: OperatorFeedVersion, temporary: Boolean = false): File {
         val directoryName = TRANSIT_LAND_DIRECTORY + operatorFeedVersion.feedOneStopId
-        val fileName = operatorFeedVersion.feedOneStopId + operatorFeedVersion.sha1
+        val prefix = if (temporary) TEMP_FILE_NAME_PREFIX else ""
+        val fileName = operatorFeedVersion.feedOneStopId + operatorFeedVersion.sha1 + prefix
         return File(createInternalDirectoryFile(context, directoryName), fileName)
     }
 

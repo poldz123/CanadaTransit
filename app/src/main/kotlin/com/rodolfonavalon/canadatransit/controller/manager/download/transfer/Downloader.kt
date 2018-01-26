@@ -32,10 +32,10 @@ class DownloadForwardingSource(source: Source,
         val bytesRead = super.read(sink, byteCount)
         // Must check that the bytes being read is not yet complete
         if (isReadExhausted(bytesRead)) {
-            currentBytesRead.plus(0L)
+            currentBytesRead += 0L
             emitter.onNext(DownloadForwardingProperty(progress = 1.0F))
         } else {
-            currentBytesRead.plus(bytesRead)
+            currentBytesRead += bytesRead
             emitter.onNext(DownloadForwardingProperty(progress = bytesRead.toFloat() / totalBytesToRead.toFloat()))
         }
         return bytesRead

@@ -16,7 +16,7 @@ import java.io.IOException
 /**
  * TransitFeedDownloader
  */
-private class TransitLandFeedDownloader(val downloadManager: DownloadManager, val feedOneStopId: String): Downloader {
+class TransitLandFeedDownloader(val downloadManager: DownloadManager, val feedOneStopId: String): Downloader {
     var disposable: Disposable? = null
     var feedVersion: OperatorFeedVersion? = null
 
