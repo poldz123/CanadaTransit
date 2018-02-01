@@ -2,7 +2,7 @@ package com.rodolfonavalon.canadatransit.controller.util
 
 import android.content.Context
 import android.os.Environment
-import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import java.io.File
 import timber.log.Timber
 import android.os.StatFs

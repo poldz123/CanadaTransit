@@ -9,7 +9,6 @@ import java.io.File
 interface Downloader {
     fun onStart()
     fun onCancel()
-    fun onError(error: Throwable)
 }
 
 /**

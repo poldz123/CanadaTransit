@@ -1,9 +1,9 @@
 package com.rodolfonavalon.canadatransit.controller.transit
 
 import android.app.Activity
-import com.rodolfonavalon.canadatransit.model.database.Operator
-import com.rodolfonavalon.canadatransit.model.database.OperatorFeed
-import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.Operator
+import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import com.rodolfonavalon.canadatransit.model.transit.response.OperatorsResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -2,9 +2,9 @@ package com.rodolfonavalon.canadatransit.model.database.dao
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
-import com.rodolfonavalon.canadatransit.model.database.Operator
-import com.rodolfonavalon.canadatransit.model.database.OperatorFeed
-import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.Operator
+import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import com.rodolfonavalon.canadatransit.model.database.dao.transit.TransitLandDao
 import io.reactivex.Flowable
 import io.reactivex.Maybe

@@ -5,13 +5,14 @@ import com.rodolfonavalon.canadatransit.controller.manager.download.DownloadMana
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.FileUtil
-import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import com.rodolfonavalon.canadatransit.model.database.dao.AppDatabase
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import okhttp3.ResponseBody
 import okio.Okio
 import retrofit2.Response
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -23,6 +24,7 @@ class TransitLandFeedDownloader(val downloadManager: DownloadManager, val feedOn
     var feedVersion: OperatorFeedVersion? = null
 
     override fun onStart() {
+        Timber.v("Download feed has STARTED for id: %s", feedOneStopId)
         val transitDao = CanadaTransitApplication.appDatabase.transitLandDao()
         AppDatabase.query(transitDao.findOperatorFeedVersion(feedOneStopId),
                 this::onRetrieveFeedVersion,
@@ -31,6 +33,7 @@ class TransitLandFeedDownloader(val downloadManager: DownloadManager, val feedOn
 
     override fun onCancel() {
         DebugUtil.assertMainThread()
+        Timber.d("Download feed has been CANCELLED for id: %s", feedOneStopId)
         // delete the temp file if exist
         if (feedVersion != null)
             FileUtil.createFile(CanadaTransitApplication.appContext, feedVersion!!).delete()
@@ -38,8 +41,9 @@ class TransitLandFeedDownloader(val downloadManager: DownloadManager, val feedOn
         disposable?.dispose()
     }
 
-    override fun onError(error: Throwable) {
+    private fun onError(error: Throwable) {
         DebugUtil.assertMainThread()
+        Timber.e(error, "Download feed has FAILED for id: %s", feedOneStopId)
         // delete the temp file if exist
         if (feedVersion != null)
             FileUtil.createFile(CanadaTransitApplication.appContext, feedVersion!!).delete()
@@ -69,7 +73,7 @@ class TransitLandFeedDownloader(val downloadManager: DownloadManager, val feedOn
                 // Close the emitter once the buffer is completely consumed
                 emitter.setCancellable(body::close)
                 try {
-                    // Create file to save the data
+                    // Create temp file to save the data
                     DebugUtil.assertTrue(feedVersion != null, "OperatorFeedVersion is null for id: $feedOneStopId")
                     val tempFile = FileUtil.createFile(CanadaTransitApplication.appContext, feedVersion!!, true)
                     // Read the buffer to the Forwarded Source
@@ -99,6 +103,7 @@ class TransitLandFeedDownloader(val downloadManager: DownloadManager, val feedOn
     }
 
     private fun onFeedDownloaded(file: File?) {
+        Timber.v("Download feed has been DOWNLOADED for id: %s", feedOneStopId)
         DebugUtil.assertMainThread()
         DebugUtil.assertTrue(file != null, "OperatorFeedVersion feed file is null for id: $feedOneStopId")
         downloadManager.success()

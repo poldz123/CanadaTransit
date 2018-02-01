@@ -3,7 +3,7 @@ package com.rodolfonavalon.canadatransit.controller.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 
 class TransitService: Service() {
 

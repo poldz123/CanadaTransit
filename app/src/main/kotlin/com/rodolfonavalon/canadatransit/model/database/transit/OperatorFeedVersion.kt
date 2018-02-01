@@ -1,13 +1,19 @@
-package com.rodolfonavalon.canadatransit.model.database
+package com.rodolfonavalon.canadatransit.model.database.transit
 
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 import android.arch.persistence.room.TypeConverters
 import com.google.gson.annotations.SerializedName
+import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
+import com.rodolfonavalon.canadatransit.model.database.DownloadableEntity
 import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
+import io.reactivex.Observable
+import okhttp3.ResponseBody
 import org.joda.time.DateTime
+import retrofit2.Response
 
-@Entity
+@Entity(indices = [Index(value = ["tracking_key"], name = "key", unique = true)])
 @TypeConverters(TransitLandConverter::class)
 class OperatorFeedVersion(
         @PrimaryKey
@@ -31,4 +37,9 @@ class OperatorFeedVersion(
         @SerializedName("feed_version_infos") val feedVersionInfos: List<Int>,
         @SerializedName("feed_version_imports") val feedVersionImports: List<Int>,
         @SerializedName("changesets_imported_from_this_feed_version") val changesetImportedFromThisFeedVersion: List<Int>
-)
+): DownloadableEntity() {
+
+        override fun downloadObservable(): Observable<Response<ResponseBody>> {
+                return TransitLandApi.downloadOperatorFeed(this)
+        }
+}

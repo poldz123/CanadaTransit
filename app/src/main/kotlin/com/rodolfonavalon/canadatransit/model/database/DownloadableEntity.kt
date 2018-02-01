@@ -1,0 +1,28 @@
+package com.rodolfonavalon.canadatransit.model.database
+
+import android.arch.persistence.room.ColumnInfo
+import com.google.gson.annotations.SerializedName
+import com.rodolfonavalon.canadatransit.controller.manager.download.DownloadManager
+import io.reactivex.Observable
+import okhttp3.ResponseBody
+import retrofit2.Response
+
+abstract class DownloadableEntity {
+
+    /**
+     * Tracking key when an entity is downloaded from the api server. This
+     * serves as the unique id within the [DownloadManager] which can be used
+     * to cancel or track the progress of the entity.
+     */
+    @ColumnInfo(name = "tracking_key")
+    @SerializedName("tracking_key") var trackingKey: String = DownloadManager.generateTrackingKey()
+
+    /**
+     * Retrieves the download observable of the entity where it can be downloaded.
+     * The Rx-Observable must configure its background task to be executed within the
+     * io and the subscription must be executed within the android's main thread.
+     *
+     * @return The observable response api where the entity must be downloaded
+     */
+    abstract fun downloadObservable(): Observable<Response<ResponseBody>>
+}

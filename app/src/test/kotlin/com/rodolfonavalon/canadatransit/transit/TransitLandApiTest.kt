@@ -5,9 +5,9 @@ import android.os.Bundle
 import com.rodolfonavalon.canadatransit.BaseServerTest
 import com.rodolfonavalon.canadatransit.BuildConfig
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
-import com.rodolfonavalon.canadatransit.model.database.Operator
-import com.rodolfonavalon.canadatransit.model.database.OperatorFeed
-import com.rodolfonavalon.canadatransit.model.database.OperatorFeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.Operator
+import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given

@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.model.database
+package com.rodolfonavalon.canadatransit.model.database.transit
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
