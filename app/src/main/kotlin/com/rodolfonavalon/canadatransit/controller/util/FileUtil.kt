@@ -6,6 +6,7 @@ import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersi
 import java.io.File
 import timber.log.Timber
 import android.os.StatFs
+import com.rodolfonavalon.canadatransit.model.database.DownloadableEntity
 
 /**
  * FileUtil
@@ -13,16 +14,16 @@ import android.os.StatFs
 object FileUtil {
 
     private const val TEMP_FILE_NAME_SUFFIX = "-temp"
-    private const val TRANSIT_LAND_DIRECTORY = "feed/transitland/"
 
     /**
      * createFile
      */
-    fun createFile(context: Context, operatorFeedVersion: OperatorFeedVersion, temporary: Boolean = false): File {
-        val directoryName = TRANSIT_LAND_DIRECTORY + operatorFeedVersion.feedOneStopId
+    fun createFile(context: Context, downloadableEntity: DownloadableEntity, temporary: Boolean = false): File {
+        DebugUtil.assertTrue(downloadableEntity.entityDirectoryPath().isNotEmpty(), "Entity's directory path is empty")
+        DebugUtil.assertTrue(downloadableEntity.entityId().isNotEmpty(), "Entity's id is empty")
         val suffix = if (temporary) TEMP_FILE_NAME_SUFFIX else ""
-        val fileName = operatorFeedVersion.feedOneStopId + operatorFeedVersion.sha1 + suffix
-        return File(createInternalDirectoryFile(context, directoryName), fileName)
+        val fileName = downloadableEntity.entityId() + suffix
+        return File(createInternalDirectoryFile(context, downloadableEntity.entityDirectoryPath()), fileName)
     }
 
     private fun createInternalDirectoryFile(context: Context, directory: String): File {

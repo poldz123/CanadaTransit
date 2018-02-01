@@ -39,7 +39,15 @@ class OperatorFeedVersion(
         @SerializedName("changesets_imported_from_this_feed_version") val changesetImportedFromThisFeedVersion: List<Int>
 ): DownloadableEntity() {
 
-        override fun downloadObservable(): Observable<Response<ResponseBody>> {
+        override fun entityObservable(): Observable<Response<ResponseBody>> {
                 return TransitLandApi.downloadOperatorFeed(this)
+        }
+
+        override fun entityId(): String {
+                return feedOneStopId
+        }
+
+        override fun entityDirectoryPath(): String {
+                return "feed/transitland/feed-version/"
         }
 }

@@ -24,5 +24,23 @@ abstract class DownloadableEntity {
      *
      * @return The observable response api where the entity must be downloaded
      */
-    abstract fun downloadObservable(): Observable<Response<ResponseBody>>
+    abstract fun entityObservable(): Observable<Response<ResponseBody>>
+
+    /**
+     * Retrieves the id of the entity which can be used as the file name of the downloaded
+     * file. Must use the id of the entity based on its primary key to distinguished it
+     * properly from other entity.
+     *
+     * @return The id of the entity
+     */
+    abstract fun entityId(): String
+
+    /**
+     * Retrieves the directory path where the entity will be downloaded. This must
+     * only contains string with no slash at the beginning and slash at the end:
+     * e.g "sample1/sample2/"
+     *
+     * @return The directory path where the entiry will be downloaded
+     */
+    abstract fun entityDirectoryPath(): String
 }
