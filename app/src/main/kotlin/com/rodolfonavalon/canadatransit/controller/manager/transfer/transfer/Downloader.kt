@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.controller.manager.download.transfer
+package com.rodolfonavalon.canadatransit.controller.manager.transfer.transfer
 
 interface Downloader {
     fun onStart()

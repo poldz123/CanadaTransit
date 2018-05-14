@@ -1,7 +1,7 @@
-package com.rodolfonavalon.canadatransit.controller.manager.download.transfer
+package com.rodolfonavalon.canadatransit.controller.manager.transfer.transfer
 
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
-import com.rodolfonavalon.canadatransit.controller.manager.download.DownloadManager
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferManager
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.FileUtil
 import com.rodolfonavalon.canadatransit.model.database.DownloadableEntity
@@ -23,7 +23,7 @@ import java.io.IOException
 /**
  * EntityDownloader
  */
-abstract class EntityDownloader<Entity: DownloadableEntity>(private val downloadManager: DownloadManager): Downloader {
+abstract class EntityDownloader<Entity: DownloadableEntity>(private val transferManager: TransferManager): Downloader {
     var disposable: Disposable? = null
     var entity: DownloadableEntity? = null
 
@@ -55,7 +55,7 @@ abstract class EntityDownloader<Entity: DownloadableEntity>(private val download
     final override fun onError(error: Throwable) {
         Timber.e(error, "Download entity has FAILED")
         onCancel()
-        downloadManager.failure()
+        transferManager.failure()
     }
 
     private fun retrieveFeedVersion(entity: DownloadableEntity) {
@@ -111,7 +111,7 @@ abstract class EntityDownloader<Entity: DownloadableEntity>(private val download
         Timber.v("Entity download has been SUCCESSFUL")
         DebugUtil.assertMainThread()
         DebugUtil.assertTrue(file != null, "Entity file is null")
-        downloadManager.success()
+        transferManager.success()
     }
 }
 

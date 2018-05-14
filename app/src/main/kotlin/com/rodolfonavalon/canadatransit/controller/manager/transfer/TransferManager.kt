@@ -1,13 +1,13 @@
-package com.rodolfonavalon.canadatransit.controller.manager.download
+package com.rodolfonavalon.canadatransit.controller.manager.transfer
 
-import com.rodolfonavalon.canadatransit.controller.manager.download.transfer.Downloader
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.transfer.Downloader
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import java.util.*
 
 /**
  * DownloadManager
  */
-class DownloadManager private constructor() {
+class TransferManager private constructor() {
     private val queue = LinkedList<Downloader>()
     private var active: Downloader? = null
 
@@ -51,7 +51,7 @@ class DownloadManager private constructor() {
     }
 
     companion object {
-        private val instance: DownloadManager = DownloadManager()
+        private val instance: TransferManager = TransferManager()
 
         fun generateTrackingKey(): String {
             // TODO: generate tracking key

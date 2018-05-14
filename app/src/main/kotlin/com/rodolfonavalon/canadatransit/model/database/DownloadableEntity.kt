@@ -2,7 +2,7 @@ package com.rodolfonavalon.canadatransit.model.database
 
 import android.arch.persistence.room.ColumnInfo
 import com.google.gson.annotations.SerializedName
-import com.rodolfonavalon.canadatransit.controller.manager.download.DownloadManager
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferManager
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -15,7 +15,7 @@ abstract class DownloadableEntity {
      * to cancel or track the progress of the entity.
      */
     @ColumnInfo(name = "tracking_key")
-    @SerializedName("tracking_key") var trackingKey: String = DownloadManager.generateTrackingKey()
+    @SerializedName("tracking_key") var trackingKey: String = TransferManager.generateTrackingKey()
 
     /**
      * Retrieves the download observable of the entity where it can be downloaded.
