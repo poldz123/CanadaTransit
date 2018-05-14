@@ -1,6 +1,5 @@
 package com.rodolfonavalon.canadatransit.controller.manager.transfer
 
-import com.rodolfonavalon.canadatransit.controller.manager.transfer.transfer.Downloader
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import java.util.*
 
@@ -8,8 +7,8 @@ import java.util.*
  * DownloadManager
  */
 class TransferManager private constructor() {
-    private val queue = LinkedList<Downloader>()
-    private var active: Downloader? = null
+    private val queue = LinkedList<Transfer>()
+    private var active: Transfer? = null
 
     var isBusy: Boolean = false
         private set
