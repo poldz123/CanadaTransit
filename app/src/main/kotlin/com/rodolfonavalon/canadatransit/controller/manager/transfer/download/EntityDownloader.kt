@@ -21,20 +21,17 @@ import java.io.IOException
 
 /**
  * EntityDownloader
+ *
+ * This should return an object that derived from [DownloadableEntity] which will be used
+ * to download the file from the web.
  */
-abstract class EntityDownloader<out Entity: DownloadableEntity>(private val transferManager: TransferManager): Transfer {
+abstract class EntityDownloader<out Entity: DownloadableEntity>(private val transferManager: TransferManager, private val entity: DownloadableEntity): Transfer {
     var disposable: Disposable? = null
-
-    /**
-     * This should return an object that derived from [DownloadableEntity] which will be used
-     * to download the file from the web.
-     */
-    abstract fun entity(): Entity
 
     final override fun onStart() {
         Timber.v("Download entity has STARTED")
         DebugUtil.assertMainThread()
-        this.disposable = entity().entityObservable()
+        this.disposable = entity.entityObservable()
                 .flatMap(this::entityDownload)
                 .filter(DownloadForwardingProperty::downloaded)
                 .doOnNext(this::entityProgress)
@@ -46,7 +43,7 @@ abstract class EntityDownloader<out Entity: DownloadableEntity>(private val tran
         DebugUtil.assertMainThread()
         Timber.d("Download entity has been CANCELLED")
         // delete the temp file if exist
-        FileUtil.createFile(CanadaTransitApplication.appContext, entity()).delete()
+        FileUtil.createFile(CanadaTransitApplication.appContext, entity).delete()
         // Dispose the retrofit call
         disposable?.dispose()
     }
@@ -68,13 +65,13 @@ abstract class EntityDownloader<out Entity: DownloadableEntity>(private val tran
                 emitter.setCancellable(body::close)
                 try {
                     // Create temp file to save the data
-                    val tempFile = FileUtil.createFile(CanadaTransitApplication.appContext, entity(), true)
+                    val tempFile = FileUtil.createFile(CanadaTransitApplication.appContext, entity, true)
                     // Read the buffer to the Forwarded Source
                     val sink = Okio.buffer(Okio.sink(tempFile))
                     sink.writeAll(forwardingSource)
                     sink.close()
                     // Copy and delete the temp file with the feed file
-                    val feedFile = FileUtil.createFile(CanadaTransitApplication.appContext, entity())
+                    val feedFile = FileUtil.createFile(CanadaTransitApplication.appContext, entity)
                     tempFile.copyTo(feedFile, overwrite = true)
                     tempFile.delete()
                     // Complete the emitter with the file
