@@ -19,12 +19,12 @@ abstract class TransitApi<API> {
     /**
      * API endpoint of the target transit
      */
-    abstract protected val apiUrl: String
+    protected abstract val apiUrl: String
 
     /**
      * API class that holds the endpoint interface for the target transit
      */
-    abstract protected val apiClass: Class<API>
+    protected abstract val apiClass: Class<API>
 
     /**
      * API test endpoint of the target transit

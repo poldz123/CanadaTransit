@@ -25,7 +25,7 @@ import java.io.IOException
  * This should return an object that derived from [DownloadableEntity] which will be used
  * to download the file from the web.
  */
-abstract class EntityDownloader<out Entity: DownloadableEntity>(private val transferManager: TransferManager, private val entity: DownloadableEntity): Transfer {
+abstract class EntityDownloader(private val transferManager: TransferManager, private val entity: DownloadableEntity): Transfer {
     var disposable: Disposable? = null
 
     final override fun onStart() {

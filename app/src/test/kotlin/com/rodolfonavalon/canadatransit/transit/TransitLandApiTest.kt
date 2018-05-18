@@ -20,7 +20,7 @@ import kotlin.test.*
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE,
         constants = BuildConfig::class,
-        sdk = intArrayOf(26))
+        sdk = [26])
 class TransitLandApiTest : BaseServerTest() {
 
     override fun setup() {
