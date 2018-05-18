@@ -15,12 +15,8 @@ class TransferManager private constructor() {
 
     private var active: Transfer? = null
 
-    var busy: Boolean = false
-        private set
-
     fun add(transfer: Transfer) {
         val trackingId = transfer.trackingId()
-
         if (queueKey.contains(trackingId) && queueMap.contains(trackingId)) {
             Timber.d("Transfer is already in progress with tracking-id: $trackingId")
             return
@@ -34,9 +30,7 @@ class TransferManager private constructor() {
         start()
     }
 
-    fun remove(transfer: Transfer) {
-        val trackingId = transfer.trackingId()
-
+    fun remove(trackingId: String) {
         if (!queueKey.contains(trackingId) && !queueMap.contains(trackingId)) {
             Timber.d("Transfer does not exist with tracking-id: $trackingId")
             return
@@ -69,35 +63,53 @@ class TransferManager private constructor() {
             complete()
             return
         }
-
         assert()
-
         // Retrieve the key and value for the next transfer, this will
         // remove the key from the list of keys.
         val key = queueKey.pop()
         val value = queueMap[key]
-
         // Make sure to remove also the value from the map as well
         // whenever the key is removed from the list.
         DebugUtil.assertTrue(value != null, "Transfer was not found within map for key: $key!")
         queueMap.remove(key)
-
         // Initialize the active transfer and then trigger it to start.
         DebugUtil.assertTrue(active != null, "Active transfer was not de-initialized when starting a new transfer!")
         active = value
         active!!.onStart()
     }
 
-    fun success() {
+    fun success(transfer: Transfer) {
+        val trackingId = transfer.trackingId()
+        Timber.d("Transferring data is a SUCCESS for tracking-id: $trackingId")
+        assert()
+        DebugUtil.assertTrue(queueKey.contains(trackingId) && queueMap.contains(trackingId), "The transfer object does not exist for tracking-id: $trackingId")
+        // Make sure to de-initialize the active transfer object to enable the next transfer
+        // object to be started.
+        active = null
+        remove(trackingId)
         next()
     }
 
-    fun failure() {
+    fun failure(transfer: Transfer) {
+        val trackingId = transfer.trackingId()
+        Timber.d("Transferring data is a FAILURE for tracking-id: $trackingId")
+        assert()
+        DebugUtil.assertTrue(queueKey.contains(trackingId) && queueMap.contains(trackingId), "The transfer object does not exist for tracking-id: $trackingId")
+        // Make sure to de-initialize the active transfer object to enable the next transfer
+        // object to be started.
+        active = null
+        remove(trackingId)
         next()
     }
 
     fun start() {
-
+        if (active != null || (queueKey.isNotEmpty() && queueMap.isNotEmpty())) {
+            Timber.d("Manager has already been started.")
+            return
+        }
+        Timber.d("Preparing to start the transfer manager.")
+        assert()
+        next()
     }
 
     fun complete() {

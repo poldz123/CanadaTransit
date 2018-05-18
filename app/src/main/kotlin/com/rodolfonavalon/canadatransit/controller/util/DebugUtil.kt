@@ -46,6 +46,7 @@ object DebugUtil {
 
     private fun assert(value: Boolean, message: String? = null) {
         if (!value) {
+            // TODO: Crashlytics
             throw AssertionError(message ?: "Assertion Failed")
         }
     }

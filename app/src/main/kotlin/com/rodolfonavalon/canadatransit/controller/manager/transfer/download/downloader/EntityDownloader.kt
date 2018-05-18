@@ -53,7 +53,7 @@ class EntityDownloader(private val transferManager: TransferManager, private val
     override fun onError(error: Throwable) {
         Timber.e(error, "Download entity has FAILED")
         onCancel()
-        transferManager.failure()
+        transferManager.failure(this)
     }
 
     override fun onProgress(property: DownloadForwardingProperty) {
@@ -98,6 +98,6 @@ class EntityDownloader(private val transferManager: TransferManager, private val
         Timber.v("Entity download has been SUCCESSFUL")
         DebugUtil.assertMainThread()
         DebugUtil.assertTrue(file != null, "Entity file is null")
-        transferManager.success()
+        transferManager.success(this)
     }
 }
