@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 import android.arch.persistence.room.TypeConverters
 import com.google.gson.annotations.SerializedName
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
-import com.rodolfonavalon.canadatransit.model.database.DownloadableEntity
+import com.rodolfonavalon.canadatransit.model.database.TransferableEntity
 import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
 import io.reactivex.Observable
 import okhttp3.ResponseBody
@@ -37,7 +37,7 @@ class OperatorFeedVersion(
         @SerializedName("feed_version_infos") val feedVersionInfos: List<Int>,
         @SerializedName("feed_version_imports") val feedVersionImports: List<Int>,
         @SerializedName("changesets_imported_from_this_feed_version") val changesetImportedFromThisFeedVersion: List<Int>
-): DownloadableEntity() {
+): TransferableEntity() {
 
         override fun entityObservable(): Observable<Response<ResponseBody>> {
                 return TransitLandApi.downloadOperatorFeed(this)

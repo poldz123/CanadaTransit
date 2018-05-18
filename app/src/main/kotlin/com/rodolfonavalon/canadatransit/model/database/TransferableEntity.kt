@@ -7,11 +7,11 @@ import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
 
-abstract class DownloadableEntity {
+abstract class TransferableEntity {
 
     /**
      * Tracking key when an entity is downloaded from the api server. This
-     * serves as the unique id within the [DownloadManager] which can be used
+     * serves as the unique id within the [TransferManager] which can be used
      * to cancel or track the progress of the entity.
      */
     @ColumnInfo(name = "tracking_key")

@@ -2,11 +2,10 @@ package com.rodolfonavalon.canadatransit.controller.util
 
 import android.content.Context
 import android.os.Environment
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import java.io.File
 import timber.log.Timber
 import android.os.StatFs
-import com.rodolfonavalon.canadatransit.model.database.DownloadableEntity
+import com.rodolfonavalon.canadatransit.model.database.TransferableEntity
 
 /**
  * FileUtil
@@ -18,12 +17,12 @@ object FileUtil {
     /**
      * createFile
      */
-    fun createFile(context: Context, downloadableEntity: DownloadableEntity, temporary: Boolean = false): File {
-        DebugUtil.assertTrue(downloadableEntity.entityDirectoryPath().isNotEmpty(), "Entity's directory path is empty")
-        DebugUtil.assertTrue(downloadableEntity.entityId().isNotEmpty(), "Entity's id is empty")
+    fun createFile(context: Context, transferableEntity: TransferableEntity, temporary: Boolean = false): File {
+        DebugUtil.assertTrue(transferableEntity.entityDirectoryPath().isNotEmpty(), "Entity's directory path is empty")
+        DebugUtil.assertTrue(transferableEntity.entityId().isNotEmpty(), "Entity's id is empty")
         val suffix = if (temporary) TEMP_FILE_NAME_SUFFIX else ""
-        val fileName = downloadableEntity.entityId() + suffix
-        return File(createInternalDirectoryFile(context, downloadableEntity.entityDirectoryPath()), fileName)
+        val fileName = transferableEntity.entityId() + suffix
+        return File(createInternalDirectoryFile(context, transferableEntity.entityDirectoryPath()), fileName)
     }
 
     private fun createInternalDirectoryFile(context: Context, directory: String): File {
