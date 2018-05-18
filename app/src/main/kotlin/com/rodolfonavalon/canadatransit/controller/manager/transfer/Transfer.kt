@@ -6,6 +6,11 @@ package com.rodolfonavalon.canadatransit.controller.manager.transfer
 interface Transfer {
 
     /**
+     * TODO: trackingId
+     */
+    fun trackingId(): String
+
+    /**
      * TODO: onStart
      */
     fun onStart()

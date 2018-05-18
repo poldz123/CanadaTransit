@@ -23,10 +23,14 @@ import java.io.IOException
  * This should return an object that derived from [TransferableEntity] which will be used
  * to download the file from the web.
  */
-abstract class EntityDownloader(private val transferManager: TransferManager, private val entity: TransferableEntity): DownloadTransfer {
+class EntityDownloader(private val transferManager: TransferManager, private val entity: TransferableEntity): DownloadTransfer {
     var disposable: Disposable? = null
 
-    final override fun onStart() {
+    override fun trackingId(): String {
+        return entity.trackingKey
+    }
+
+    override fun onStart() {
         Timber.v("Download entity has STARTED")
         DebugUtil.assertMainThread()
         this.disposable = entity.entityObservable()
@@ -37,7 +41,7 @@ abstract class EntityDownloader(private val transferManager: TransferManager, pr
                 .subscribe(this::didDownload, this::onError)
     }
 
-    final override fun onCancel() {
+    override fun onCancel() {
         DebugUtil.assertMainThread()
         Timber.d("Download entity has been CANCELLED")
         // delete the temp file if exist
@@ -46,19 +50,19 @@ abstract class EntityDownloader(private val transferManager: TransferManager, pr
         disposable?.dispose()
     }
 
-    final override fun onError(error: Throwable) {
+    override fun onError(error: Throwable) {
         Timber.e(error, "Download entity has FAILED")
         onCancel()
         transferManager.failure()
     }
 
-    final override fun onProgress(property: DownloadForwardingProperty) {
+    override fun onProgress(property: DownloadForwardingProperty) {
         DebugUtil.assertMainThread()
         DebugUtil.assertFalse(property.downloaded, "Entity progress is triggered where it was already downloaded")
         // TODO: Need to implement the feed progress
     }
 
-    final override fun willDownload(responseBody: Response<ResponseBody>): Observable<DownloadForwardingProperty> {
+    override fun willDownload(responseBody: Response<ResponseBody>): Observable<DownloadForwardingProperty> {
         return Observable.create { emitter ->
             val body = responseBody.body()
             if (body != null) {
@@ -90,7 +94,7 @@ abstract class EntityDownloader(private val transferManager: TransferManager, pr
         }
     }
 
-    final override fun didDownload(file: File?) {
+    override fun didDownload(file: File?) {
         Timber.v("Entity download has been SUCCESSFUL")
         DebugUtil.assertMainThread()
         DebugUtil.assertTrue(file != null, "Entity file is null")

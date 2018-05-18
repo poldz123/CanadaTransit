@@ -6,6 +6,7 @@ import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferMana
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
+import java.util.*
 
 abstract class TransferableEntity {
 
@@ -15,7 +16,7 @@ abstract class TransferableEntity {
      * to cancel or track the progress of the entity.
      */
     @ColumnInfo(name = "tracking_key")
-    @SerializedName("tracking_key") var trackingKey: String = TransferManager.generateTrackingKey()
+    @SerializedName("tracking_key") var trackingKey: String = UUID.randomUUID().toString()
 
     /**
      * Retrieves the download observable of the entity where it can be downloaded.
