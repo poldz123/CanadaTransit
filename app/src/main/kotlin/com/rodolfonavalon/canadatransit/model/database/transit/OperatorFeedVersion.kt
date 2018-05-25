@@ -1,19 +1,16 @@
 package com.rodolfonavalon.canadatransit.model.database.transit
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
-import android.arch.persistence.room.TypeConverters
+import android.arch.persistence.room.*
 import com.google.gson.annotations.SerializedName
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.Transferable
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
-import com.rodolfonavalon.canadatransit.model.database.TransferableEntity
 import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import org.joda.time.DateTime
 import retrofit2.Response
 
-@Entity(indices = [Index(value = ["tracking_key"], name = "key", unique = true)])
+@Entity(indices = [Index(value = ["feedOneStopId"], unique = true)])
 @TypeConverters(TransitLandConverter::class)
 class OperatorFeedVersion(
         @PrimaryKey
@@ -37,17 +34,21 @@ class OperatorFeedVersion(
         @SerializedName("feed_version_infos") val feedVersionInfos: List<Int>,
         @SerializedName("feed_version_imports") val feedVersionImports: List<Int>,
         @SerializedName("changesets_imported_from_this_feed_version") val changesetImportedFromThisFeedVersion: List<Int>
-): TransferableEntity() {
+): Transferable.Downloadable {
 
-        override fun entityObservable(): Observable<Response<ResponseBody>> {
-                return TransitLandApi.downloadOperatorFeed(this)
+        override fun transferObservable(): Observable<Response<ResponseBody>> {
+            return TransitLandApi.downloadOperatorFeed(this)
         }
 
-        override fun entityId(): String {
-                return feedOneStopId
+        override fun transferTrackingId(): String {
+            return feedOneStopId
         }
 
-        override fun entityDirectoryPath(): String {
-                return "feed/transitland/feed-version/"
+        override fun transferDirectoryPath(): String {
+            return "feed/transitland/feed-version/"
+        }
+
+        override fun download() {
+            // TODO: Transfer Manager download
         }
 }

@@ -1,13 +1,11 @@
 package com.rodolfonavalon.canadatransit.model.database.transit
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
-import android.arch.persistence.room.TypeConverters
+import android.arch.persistence.room.*
 import com.google.gson.annotations.SerializedName
 import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
 import org.joda.time.DateTime
 
-@Entity
+@Entity(indices = [(Index(value = ["feedOneStopId"], unique = true))])
 @TypeConverters(TransitLandConverter::class)
 class OperatorFeed(
         @PrimaryKey

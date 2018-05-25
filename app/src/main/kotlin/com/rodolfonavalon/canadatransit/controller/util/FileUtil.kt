@@ -5,7 +5,7 @@ import android.os.Environment
 import java.io.File
 import timber.log.Timber
 import android.os.StatFs
-import com.rodolfonavalon.canadatransit.model.database.TransferableEntity
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.Transferable
 
 /**
  * FileUtil
@@ -17,12 +17,12 @@ object FileUtil {
     /**
      * createFile
      */
-    fun createFile(context: Context, transferableEntity: TransferableEntity, temporary: Boolean = false): File {
-        DebugUtil.assertTrue(transferableEntity.entityDirectoryPath().isNotEmpty(), "Entity's directory path is empty")
-        DebugUtil.assertTrue(transferableEntity.entityId().isNotEmpty(), "Entity's id is empty")
+    fun createFile(context: Context, transferable: Transferable, temporary: Boolean = false): File {
+        DebugUtil.assertTrue(transferable.transferDirectoryPath().isNotEmpty(), "Entity's directory path is empty")
+        DebugUtil.assertTrue(transferable.transferTrackingId().isNotEmpty(), "Entity's id is empty")
         val suffix = if (temporary) TEMP_FILE_NAME_SUFFIX else ""
-        val fileName = transferableEntity.entityId() + suffix
-        return File(createInternalDirectoryFile(context, transferableEntity.entityDirectoryPath()), fileName)
+        val fileName = transferable.transferTrackingId() + suffix
+        return File(createInternalDirectoryFile(context, transferable.transferDirectoryPath()), fileName)
     }
 
     private fun createInternalDirectoryFile(context: Context, directory: String): File {
