@@ -24,6 +24,8 @@ import java.io.IOException
  *
  * This should return an object that derived from [Transferable] which will be used
  * to download the file from the web.
+ *
+ * //TODO: Do not download when it already exist in the download directory
  */
 class ObservableDownloader(private val transferManager: TransferManager, private val entity: Transferable): Transfer.DownloadTransfer {
     var disposable: Disposable? = null
@@ -34,7 +36,7 @@ class ObservableDownloader(private val transferManager: TransferManager, private
         DebugUtil.assertMainThread()
         this.disposable = entity.transferObservable()
                 .observeOn(Schedulers.io())
-                .flatMap(::willDownload)
+                .flatMap(::observableOnDownload)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(::observableOnNext)
                 .doOnComplete(::observableOnComplete)
@@ -42,40 +44,7 @@ class ObservableDownloader(private val transferManager: TransferManager, private
                 .subscribe()
     }
 
-    private fun observableOnNext(property: TransferForwardingProperty) {
-        if (!property.transferred) {
-            onProgress(property)
-        } else {
-            downloadedFile = property.transferredFile
-        }
-    }
-
-    private fun observableOnComplete() {
-        didDownload(downloadedFile)
-    }
-
-    override fun onCancel() {
-        DebugUtil.assertMainThread()
-        Timber.d("Download entity has been CANCELLED")
-        // delete the temp file if exist
-        FileUtil.createFile(CanadaTransitApplication.appContext, entity).delete()
-        // Dispose the retrofit call
-        disposable?.dispose()
-    }
-
-    override fun onError(error: Throwable) {
-        Timber.e(error, "Download entity has FAILED")
-        onCancel()
-        transferManager.failure(entity.transferTrackingId())
-    }
-
-    override fun onProgress(property: TransferForwardingProperty) {
-        DebugUtil.assertMainThread()
-        DebugUtil.assertFalse(property.transferred, "Entity progress is triggered where it was already transferred")
-        // TODO: Need to implement the feed progress
-    }
-
-    override fun willDownload(responseBody: Response<ResponseBody>): Observable<TransferForwardingProperty> {
+    private fun observableOnDownload(responseBody: Response<ResponseBody>): Observable<TransferForwardingProperty> {
         return Observable.create { emitter ->
             val body = responseBody.body()
             if (body != null) {
@@ -107,7 +76,40 @@ class ObservableDownloader(private val transferManager: TransferManager, private
         }
     }
 
-    override fun didDownload(file: File?) {
+    private fun observableOnNext(property: TransferForwardingProperty) {
+        if (!property.transferred) {
+            onProgress(property)
+        } else {
+            downloadedFile = property.transferredFile
+        }
+    }
+
+    private fun observableOnComplete() {
+        onDownload(downloadedFile)
+    }
+
+    override fun onCancel() {
+        DebugUtil.assertMainThread()
+        Timber.d("Download entity has been CANCELLED")
+        // delete the temp file if exist
+        FileUtil.createFile(CanadaTransitApplication.appContext, entity).delete()
+        // Dispose the retrofit call
+        disposable?.dispose()
+    }
+
+    override fun onError(error: Throwable) {
+        Timber.e(error, "Download entity has FAILED")
+        onCancel()
+        transferManager.failure(entity.transferTrackingId())
+    }
+
+    override fun onProgress(property: TransferForwardingProperty) {
+        DebugUtil.assertMainThread()
+        DebugUtil.assertFalse(property.transferred, "Entity progress is triggered where it was already transferred")
+        // TODO: Need to implement the feed progress
+    }
+
+    override fun onDownload(file: File?) {
         Timber.v("Entity download has been SUCCESSFUL")
         DebugUtil.assertMainThread()
         DebugUtil.assertTrue(file != null, "Entity file is null")

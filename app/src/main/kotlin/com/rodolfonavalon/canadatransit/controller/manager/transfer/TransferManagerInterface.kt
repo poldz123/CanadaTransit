@@ -36,14 +36,9 @@ interface Transfer {
     interface DownloadTransfer: Transfer {
 
         /**
-         * TODO: willDownload
+         * TODO: onDownload
          */
-        fun willDownload(responseBody: Response<ResponseBody>): Observable<TransferForwardingProperty>
-
-        /**
-         * TODO: didDownload
-         */
-        fun didDownload(file: File?)
+        fun onDownload(file: File?)
     }
 }
 
