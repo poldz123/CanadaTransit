@@ -36,6 +36,13 @@ class TransferForwardingSource(source: Source,
 /**
  * TODO: TransferForwardingProperty
  */
+
+
+class TransferForwardingStatus(val progress: Float? = null, val file: File? = null) {
+
+    fun isComplete(): Boolean = file != null
+}
+
 data class TransferForwardingProperty(val progress: Float? = null,
                                       val file: File? = null,
                                       val transferred: Boolean = (file != null))

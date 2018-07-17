@@ -2,6 +2,7 @@ package com.rodolfonavalon.canadatransit.model.database.transit
 
 import android.arch.persistence.room.*
 import com.google.gson.annotations.SerializedName
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferManager
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.Transferable
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
@@ -41,7 +42,7 @@ class OperatorFeedVersion(
         }
 
         override fun transferTrackingId(): String {
-            return feedOneStopId
+            return sha1
         }
 
         override fun transferDirectoryPath(): String {
@@ -50,5 +51,6 @@ class OperatorFeedVersion(
 
         override fun download() {
             // TODO: Transfer Manager download
+            TransferManager.download(this)
         }
 }

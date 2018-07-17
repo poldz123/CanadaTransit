@@ -10,6 +10,7 @@ import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.FileUtil
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import okio.Okio
 import retrofit2.Response
@@ -30,6 +31,7 @@ class ObservableDownloader(private val transferManager: TransferManager, private
         Timber.v("Download entity has STARTED")
         DebugUtil.assertMainThread()
         this.disposable = entity.transferObservable()
+                .observeOn(Schedulers.io())
                 .flatMap(this::willDownload)
                 .filter(TransferForwardingProperty::transferred)
                 .doOnNext(this::onProgress)
@@ -53,8 +55,9 @@ class ObservableDownloader(private val transferManager: TransferManager, private
     }
 
     override fun onProgress(property: TransferForwardingProperty) {
-        DebugUtil.assertMainThread()
+//        DebugUtil.assertMainThread()
         DebugUtil.assertFalse(property.transferred, "Entity progress is triggered where it was already transferred")
+        Timber.d("Progress: ${property.progress}")
         // TODO: Need to implement the feed progress
     }
 
@@ -78,6 +81,7 @@ class ObservableDownloader(private val transferManager: TransferManager, private
                     val feedFile = FileUtil.createFile(CanadaTransitApplication.appContext, entity)
                     tempFile.copyTo(feedFile, overwrite = true)
                     tempFile.delete()
+                    emitter.onNext(TransferForwardingProperty(file = File("")))
                     // Complete the emitter with the file
                     emitter.onNext(TransferForwardingProperty(file = feedFile))
                     emitter.onComplete()

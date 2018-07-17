@@ -1,5 +1,6 @@
 package com.rodolfonavalon.canadatransit.controller.manager.transfer
 
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.download.ObservableDownloader
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil.assertTrue
 import timber.log.Timber
 import java.util.*
@@ -120,13 +121,13 @@ class TransferManager private constructor() {
 
     fun isEmpty(): Boolean = queueKey.isEmpty() && queueMap.isEmpty()
 
-    fun isBusy(): Boolean = (activeTransfer != null && activeTrackingId != null) || !isEmpty()
+    fun isBusy(): Boolean = (activeTransfer != null && activeTrackingId != null)
 
     companion object {
         private val instance: TransferManager = TransferManager()
 
-        fun download(downloadTransfer: Transfer.DownloadTransfer) {
-
+        fun download(downloadable: Transferable.Downloadable) {
+            instance.add(downloadable.transferTrackingId(), ObservableDownloader(instance, downloadable))
         }
     }
 }

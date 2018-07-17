@@ -26,7 +26,12 @@ object FileUtil {
     }
 
     private fun createInternalDirectoryFile(context: Context, directory: String): File {
-        return context.getDir(directory, Context.MODE_PRIVATE)
+        val file = File(context.filesDir, directory)
+        // Create the directory only when it was not already created from before
+        if (!file.exists()) {
+            file.mkdirs()
+        }
+        return file
     }
 
     private fun createExternalDirectoryFile(directory: String): File {
