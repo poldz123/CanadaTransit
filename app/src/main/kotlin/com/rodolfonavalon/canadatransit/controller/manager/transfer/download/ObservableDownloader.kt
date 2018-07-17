@@ -9,6 +9,7 @@ import com.rodolfonavalon.canadatransit.controller.manager.transfer.util.Transfe
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.FileUtil
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
@@ -26,17 +27,31 @@ import java.io.IOException
  */
 class ObservableDownloader(private val transferManager: TransferManager, private val entity: Transferable): Transfer.DownloadTransfer {
     var disposable: Disposable? = null
+    var downloadedFile: File? = null
 
     override fun onStart() {
         Timber.v("Download entity has STARTED")
         DebugUtil.assertMainThread()
         this.disposable = entity.transferObservable()
                 .observeOn(Schedulers.io())
-                .flatMap(this::willDownload)
-                .filter(TransferForwardingProperty::transferred)
-                .doOnNext(this::onProgress)
-                .map(TransferForwardingProperty::file)
-                .subscribe(this::didDownload, this::onError)
+                .flatMap(::willDownload)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(::observableOnNext)
+                .doOnComplete(::observableOnComplete)
+                .doOnError(::onError)
+                .subscribe()
+    }
+
+    private fun observableOnNext(property: TransferForwardingProperty) {
+        if (!property.transferred) {
+            onProgress(property)
+        } else {
+            downloadedFile = property.transferredFile
+        }
+    }
+
+    private fun observableOnComplete() {
+        didDownload(downloadedFile)
     }
 
     override fun onCancel() {
@@ -55,9 +70,8 @@ class ObservableDownloader(private val transferManager: TransferManager, private
     }
 
     override fun onProgress(property: TransferForwardingProperty) {
-//        DebugUtil.assertMainThread()
+        DebugUtil.assertMainThread()
         DebugUtil.assertFalse(property.transferred, "Entity progress is triggered where it was already transferred")
-        Timber.d("Progress: ${property.progress}")
         // TODO: Need to implement the feed progress
     }
 
@@ -81,9 +95,8 @@ class ObservableDownloader(private val transferManager: TransferManager, private
                     val feedFile = FileUtil.createFile(CanadaTransitApplication.appContext, entity)
                     tempFile.copyTo(feedFile, overwrite = true)
                     tempFile.delete()
-                    emitter.onNext(TransferForwardingProperty(file = File("")))
                     // Complete the emitter with the file
-                    emitter.onNext(TransferForwardingProperty(file = feedFile))
+                    emitter.onNext(TransferForwardingProperty(filePath = feedFile.path))
                     emitter.onComplete()
                 } catch (ex: IOException) {
                     emitter.onError(ex)

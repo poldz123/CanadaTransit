@@ -23,7 +23,7 @@ class TransferForwardingSource(source: Source,
             emitter.onNext(TransferForwardingProperty(progress = 1.0F))
         } else {
             currentBytesRead += bytesRead
-            emitter.onNext(TransferForwardingProperty(progress = bytesRead.toFloat() / totalBytesToRead.toFloat()))
+            emitter.onNext(TransferForwardingProperty(progress = currentBytesRead / totalBytesToRead.toFloat()))
         }
         return bytesRead
     }
@@ -37,12 +37,7 @@ class TransferForwardingSource(source: Source,
  * TODO: TransferForwardingProperty
  */
 
-
-class TransferForwardingStatus(val progress: Float? = null, val file: File? = null) {
-
-    fun isComplete(): Boolean = file != null
-}
-
-data class TransferForwardingProperty(val progress: Float? = null,
-                                      val file: File? = null,
-                                      val transferred: Boolean = (file != null))
+data class TransferForwardingProperty(val progress: Float = 0f,
+                                      val filePath: String = "",
+                                      val transferred: Boolean = filePath != "",
+                                      val transferredFile: File = File(filePath))
