@@ -3,4 +3,5 @@ before_script:
 after_script:
 - 'whoami'
 job1:
+  tags: [ "Android" ]
   script: "whoami"
