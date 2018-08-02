@@ -2,3 +2,5 @@ before_script:
 - 'whoami'
 after_script:
 - 'whoami'
+job1:
+  script: "whoami"
