@@ -25,11 +25,10 @@ buildscript {
     ext.jodaTimeAndroidLibraryVersion = "2.9.9"
 
     // Google Library
-    ext.googleSupportLibraryVersion = "27.0.2"
-    ext.googleDesignLibraryVersion = "27.0.2"
-    ext.googleContraintLayoutLibraryVersion = "1.0.2"
-    ext.googlePlayServiceLibraryVersion = "11.8.0"
-    ext.googleRoomLibraryVersion = "1.0.0"
+    ext.googleSupportLibraryVersion = "27.1.1"
+    ext.googleContraintLayoutLibraryVersion = "1.1.2"
+    ext.googlePlayServiceLibraryVersion = "15.0.1"
+    ext.googleRoomLibraryVersion = "1.1.1"
 
     // Test Library
     ext.junitLibraryVersion = "4.12"
@@ -39,7 +38,7 @@ buildscript {
     ext.mockitoLibraryVersion = "2.12.0"
 
     // Tools Library
-    ext.kotlinVersion = "1.2.31"
+    ext.kotlinVersion = "1.2.60"
 
     repositories {
         google()
@@ -47,7 +46,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.3'
+        classpath 'com.android.tools.build:gradle:3.1.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
         // NOTE: Do not place your application dependencies here; they belong

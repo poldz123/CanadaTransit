@@ -74,7 +74,7 @@ dependencies {
     implementation "net.danlew:android.joda:$jodaTimeAndroidLibraryVersion"
 
     // Google Library
-    implementation "com.android.support:design:$googleDesignLibraryVersion"
+    implementation "com.android.support:design:$googleSupportLibraryVersion"
     implementation "com.android.support:appcompat-v7:$googleSupportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$googleContraintLayoutLibraryVersion"
     implementation "com.google.android.gms:play-services-maps:$googlePlayServiceLibraryVersion"
@@ -100,7 +100,7 @@ dependencies {
     androidTestImplementation "org.robolectric:robolectric:$robolectricLibraryVersion"
 
     // Compile time plugin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
 
 repositories {
