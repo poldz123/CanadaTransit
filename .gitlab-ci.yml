@@ -1,7 +1,0 @@
-before_script:
-- 'whoami'
-after_script:
-- 'whoami'
-job1:
-  tags: [ "Android" ]
-  script: "whoami"
