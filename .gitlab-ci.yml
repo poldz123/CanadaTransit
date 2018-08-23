@@ -1,0 +1,10 @@
+before_script:
+- "chmod +x ./gradlew"
+- "chmod +x scripts/unit-test.sh"
+
+stages: [ "Tests" ]
+
+"Unit Tests":
+  tags: [ "android", "unit-test" ]
+  stage: "Tests"
+  script: "scripts/unit-test.sh"
