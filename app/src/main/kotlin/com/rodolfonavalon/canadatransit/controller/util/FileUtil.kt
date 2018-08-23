@@ -22,7 +22,8 @@ object FileUtil {
         DebugUtil.assertTrue(transferable.transferTrackingId().isNotEmpty(), "Entity's id is empty")
         val suffix = if (temporary) TEMP_FILE_NAME_SUFFIX else ""
         val fileName = transferable.transferTrackingId() + suffix
-        return File(createInternalDirectoryFile(context, transferable.transferDirectoryPath()), fileName)
+        // TODO: Change the directory as internal
+        return File(createExternalDirectoryFile(transferable.transferDirectoryPath()), fileName)
     }
 
     private fun createInternalDirectoryFile(context: Context, directory: String): File {
@@ -35,6 +36,8 @@ object FileUtil {
     }
 
     private fun createExternalDirectoryFile(directory: String): File {
+        // TODO: Must request a permission dialog for user to accept the permission to write in
+        //       the sd card.
         val file = File(Environment.getExternalStorageDirectory(), directory)
         // Create the directory only when it was not already created from before
         if (!file.exists()) {
