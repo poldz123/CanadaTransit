@@ -8,3 +8,4 @@
 - Added Singletons for Retrofit
 - Added RxJava for Retrofit
 - Converted project to kotlin
+- Added Jacoco code coverage

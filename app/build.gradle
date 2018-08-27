@@ -3,6 +3,7 @@ apply plugin: 'com.adarshr.test-logger'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'jacoco'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -44,12 +45,20 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     testOptions {
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+        animationsDisabled true
+        unitTests {
+            includeAndroidResources = true
+        }
         unitTests.all {
             // Apply the gradle logs which the custom logger will configure
             testLogging {
@@ -59,6 +68,32 @@ android {
             }
         }
     }
+}
+
+jacoco {
+    toolVersion = "$jacocoVersion"
+    reportsDir = file("${project.buildDir}/reports/jacoco")
+}
+
+// Configured how the jacoco will create the code coverage. This customization will trigger the unit and integration tests
+// that will generate a merge code coverage.
+// TODO: Must run the emulator first before starting this task
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+    def fileFilter = [
+            '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', '**/*$[0-9].*'
+    ]
+    def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
+    def mainSrc = "$project.projectDir/src/main/kotlin"
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = files(
+            "${project.buildDir}/jacoco/testDebugUnitTest.exec",
+            "${project.buildDir}/outputs/code-coverage/connected/*.ec"
+    )
 }
 
 // Makes sure that kotlin test will not be used in production code
@@ -103,12 +138,13 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
     testImplementation "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
     testImplementation "org.mockito:mockito-core:$mockitoLibraryVersion"
+    testImplementation "com.android.support.test:runner:$googleTestSupport"
+    testImplementation "com.android.support.test:rules:$googleTestSupport"
 
     // Shared Test Library
     testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
     testImplementation "org.robolectric:robolectric:$robolectricLibraryVersion"
-    androidTestImplementation "org.robolectric:robolectric:$robolectricLibraryVersion"
 
     // Compile time plugin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
