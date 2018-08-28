@@ -5,6 +5,7 @@ import android.support.annotation.VisibleForTesting
 import android.support.annotation.VisibleForTesting.PRIVATE
 import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager
 import com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter.DateTimeAdapter
+import com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter.OperatorFeedForeignKeyAdapter
 import com.rodolfonavalon.canadatransit.model.transit.response.MetaResponse
 import com.squareup.moshi.Moshi
 import io.reactivex.Observable
@@ -39,6 +40,7 @@ abstract class TransitApi<API> {
         val baseUrl = apiTestUrl ?: apiUrl
         val moshi = Moshi.Builder()
                 .add(DateTimeAdapter())
+                .add(OperatorFeedForeignKeyAdapter())
                 .build()
         val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)

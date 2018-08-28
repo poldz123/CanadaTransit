@@ -5,6 +5,7 @@ import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
+import com.rodolfonavalon.canadatransit.model.transit.response.OperatorFeedsResponse
 import com.rodolfonavalon.canadatransit.model.transit.response.OperatorsResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,11 +18,11 @@ import retrofit2.http.*
 
 interface TransitLandApi {
 
-    @GET("operators?exclude_geometry=true&country=${TransitLandApi.API_COUNTRY}")
+    @GET("operators?exclude_geometry=true&without_feed=false&country=${TransitLandApi.API_COUNTRY}")
     fun operators(@Query("offset") offset: Int, @Query("per_page") perPage: Int): Observable<OperatorsResponse>
 
-    @GET("feeds/{onestop_id}?exclude_geometry=true")
-    fun feed(@Path("onestop_id") oneStopId: String): Observable<OperatorFeed>
+    @GET("feeds?active_feed_version_update=true&exclude_geometry=true")
+    fun feed(@Query("onestop_id") feedOneStopIds: String): Observable<OperatorFeedsResponse>
 
     @GET("feed_versions/{active_feed_version}")
     fun feedVersion(@Path("active_feed_version") activeFeedVersion: String): Observable<OperatorFeedVersion>
@@ -80,16 +81,12 @@ interface TransitLandApi {
          *  @param error the callback method when something went wrong during retrieval of the operator feeds
          */
         fun retrieveOperatorFeed(operator: Operator, success: (List<OperatorFeed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            val feedOneStopIds = operator.representedInFeedOneStopIds
-            val operatorFeeds = mutableListOf<OperatorFeed>()
-            return retrieveListObject(feedOneStopIds, TransitLandApi.retrofitInstance::feed)
+            val feedOneStopIds = operator.representedInFeedOneStopIds.joinToString(",")
+            return TransitLandApi.retrofitInstance.feed(feedOneStopIds)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeBy(
-                            onNext = { apiOperatorFeeds -> operatorFeeds.add(apiOperatorFeeds) },
-                            onError = error,
-                            onComplete = { success.invoke(operatorFeeds) }
-                    )
+                    .map(OperatorFeedsResponse::operatorFeeds)
+                    .subscribe(success, error)
                     .attachCompositeDisposable(activity)
         }
 

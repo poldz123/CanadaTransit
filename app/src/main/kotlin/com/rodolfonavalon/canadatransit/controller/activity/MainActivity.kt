@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
             TransitLandApi.retrieveOperatorFeed(operator, { operatorFeeds ->
                 onOperatorFeedRetrieved(operator, operatorFeeds)
             }, ::onError)
-            break
         }
     }
 
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
         // TODO: save the operator and operator feed version
-        TransitLandApi.retrieveOperatorFeedVersion(operatorFeed, ::onOperatorFeedVersionRetreived, ::onError)
+//        TransitLandApi.retrieveOperatorFeedVersion(operatorFeed, ::onOperatorFeedVersionRetreived, ::onError)
     }
 
     fun onOperatorFeedVersionRetreived(operatorFeedVersion: OperatorFeedVersion) {
