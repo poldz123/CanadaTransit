@@ -9,8 +9,8 @@ import io.reactivex.Maybe
 @Dao
 interface TransitLandDao {
 
-    @Query("SELECT * FROM Operator WHERE oneStopId = :oneStopId")
-    fun findOperator(oneStopId: String): Maybe<Operator>
+    @Query("SELECT * FROM Operator WHERE operatorOneStopId = :operatorOneStopId")
+    fun findOperator(operatorOneStopId: String): Maybe<Operator>
 
     @Query("SELECT * FROM OperatorFeed WHERE feedOneStopId = :feedOneStopId")
     fun findOperatorFeed(feedOneStopId: String): Maybe<OperatorFeed>

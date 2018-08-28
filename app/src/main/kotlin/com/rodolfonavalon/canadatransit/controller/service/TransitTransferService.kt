@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 
-class TransitService: Service() {
+class TransitTransferService: Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null

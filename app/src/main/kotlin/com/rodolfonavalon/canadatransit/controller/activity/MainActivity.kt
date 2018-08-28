@@ -21,16 +21,27 @@ class MainActivity : AppCompatActivity() {
     fun onOperatorsRetrieved(operators: List<Operator>) {
         Timber.d("Was able to download operators: " + operators.count())
         for (operator in operators) {
-            if (operator.oneStopId == "o-f24-octranspo") {
-                TransitLandApi.retrieveOperatorFeed(operator, ::onOperatorFeedRetrieved, ::onError)
-                return
-            }
+            TransitLandApi.retrieveOperatorFeed(operator, { operatorFeeds ->
+                onOperatorFeedRetrieved(operator, operatorFeeds)
+            }, ::onError)
+            break
         }
     }
 
-    fun onOperatorFeedRetrieved(operatorFeeds: List<OperatorFeed>) {
-        Timber.d("Was able to download operator feeds for OC-Transpo: " + operatorFeeds.count())
-        TransitLandApi.retrieveOperatorFeedVersion(operatorFeeds.first(), ::onOperatorFeedVersionRetreived, ::onError)
+    fun onOperatorFeedRetrieved(operator: Operator, operatorFeeds: List<OperatorFeed>) {
+        if (operatorFeeds.isEmpty()) {
+            Timber.d("Empty operator feeds, will not use it.")
+            // TODO: Remove the operator from the database when saving it.
+            return
+        }
+        val operatorFeed = operatorFeeds.first()
+        // A valid operator feed must have a feed version to point to the schedules
+        if (operatorFeed.activeFeedVersion == null) {
+            Timber.d("No active feed found, will not use it.")
+            return
+        }
+        // TODO: save the operator and operator feed version
+        TransitLandApi.retrieveOperatorFeedVersion(operatorFeed, ::onOperatorFeedVersionRetreived, ::onError)
     }
 
     fun onOperatorFeedVersionRetreived(operatorFeedVersion: OperatorFeedVersion) {

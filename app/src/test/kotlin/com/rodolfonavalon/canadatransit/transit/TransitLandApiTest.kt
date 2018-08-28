@@ -149,11 +149,11 @@ class TransitLandApiTest : BaseServerTest() {
         assertTrue(operators.isNotEmpty(), "Operators is empty")
         var foundTestOperator = false
         for (operator in operators) {
-            assertFalse(operator.representedInFeedOneStopIds.contains(operator.oneStopId),
-                    "One stop id exist in feed: ${operator.oneStopId}")
+            assertFalse(operator.representedInFeedOneStopIds.contains(operator.operatorOneStopId),
+                    "One stop id exist in feed: ${operator.operatorOneStopId}")
             assertEquals(operator.country, country)
             // Lets find the test operator
-            if (operatorId == operator.oneStopId) {
+            if (operatorId == operator.operatorOneStopId) {
                 assertEquals(operator.metro, metro)
                 assertEquals(operator.state, state)
                 assertEquals(operator.name, name)

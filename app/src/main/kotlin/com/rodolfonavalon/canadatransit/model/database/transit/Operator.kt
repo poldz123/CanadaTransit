@@ -12,7 +12,7 @@ import org.joda.time.DateTime
 @TypeConverters(TransitLandConverter::class)
 class Operator(
         @PrimaryKey
-        @SerializedName("onestop_id") val oneStopId: String,
+        @SerializedName("onestop_id") val operatorOneStopId: String,
 
         @SerializedName("name") val name: String,
         @SerializedName("website") val website: String,

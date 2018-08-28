@@ -11,13 +11,22 @@ import okhttp3.ResponseBody
 import org.joda.time.DateTime
 import retrofit2.Response
 
-@Entity(indices = [Index(value = ["feedOneStopId"], unique = true)])
+@Entity(indices = [
+            Index(value = ["sha1"], unique = true),
+            Index(value = ["feedOneStopId"], unique = true)
+        ],
+        foreignKeys = [
+                ForeignKey(entity = OperatorFeed::class,
+                parentColumns = ["feedOneStopId"],
+                childColumns = ["feedOneStopId"],
+                onDelete = ForeignKey.CASCADE)
+        ])
 @TypeConverters(TransitLandConverter::class)
 class OperatorFeedVersion(
         @PrimaryKey
+        @SerializedName("sha1") val sha1: String,
         @SerializedName("feed") val feedOneStopId: String,
 
-        @SerializedName("sha1") val sha1: String,
         @SerializedName("earliest_calendar_date") val earliestCalendarDate: DateTime,
         @SerializedName("latest_calendar_date") val latestCalendarDate: DateTime,
         @SerializedName("md5") val md5: String,

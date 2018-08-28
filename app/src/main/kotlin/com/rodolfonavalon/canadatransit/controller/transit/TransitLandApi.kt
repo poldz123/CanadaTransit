@@ -1,6 +1,7 @@
 package com.rodolfonavalon.canadatransit.controller.transit
 
 import android.app.Activity
+import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
@@ -101,7 +102,8 @@ interface TransitLandApi {
          *  @param error the callback method when something went wrong during retrieval of the operator feed version
          */
         fun retrieveOperatorFeedVersion(operatorFeed: OperatorFeed, success: (OperatorFeedVersion) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            return retrofitInstance.feedVersion(operatorFeed.activeFeedVersion)
+            DebugUtil.assertTrue(operatorFeed.activeFeedVersion != null, "Active feed version for operator feed is null: ${operatorFeed.feedOneStopId}")
+            return retrofitInstance.feedVersion(operatorFeed.activeFeedVersion!!)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(success, error)
