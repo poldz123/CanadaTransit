@@ -4,7 +4,7 @@ import android.app.Activity
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.VisibleForTesting.PRIVATE
 import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager
-import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateTimeAdapter
+import com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter.DateTimeAdapter
 import com.rodolfonavalon.canadatransit.model.transit.response.MetaResponse
 import com.squareup.moshi.Moshi
 import io.reactivex.Observable

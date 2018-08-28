@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.model.database.converter.gson
+package com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter
 
 import com.squareup.moshi.FromJson
 import org.joda.time.DateTime
@@ -12,7 +12,12 @@ import org.joda.time.format.ISODateTimeFormat
  */
 class DateTimeAdapter {
 
-    @FromJson fun fromJson(value: String): DateTime {
+    @FromJson fun fromJson(value: String?): DateTime? {
+        // Returns null when the json value for date is null or empty,
+        // this could mean that the server spits out wrong data.
+        if (value.isNullOrEmpty()) {
+            return null
+        }
         val formatter = ISODateTimeFormat.dateTimeParser()
         return formatter.parseDateTime(value)
     }
