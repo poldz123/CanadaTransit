@@ -96,15 +96,15 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Community Library
-    implementation "com.jakewharton.timber:timber:$timberLibraryVersion"
-    implementation "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinLibraryVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidLibraryVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaLibraryVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$rxJavaRetrofitAdapterLibraryVersion"
-    implementation "com.google.code.gson:gson:$gsonLibraryVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$gsonRetrofitConverterLibraryVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitLibraryVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitLibraryVersion"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiLibraryVersion"
     implementation "net.danlew:android.joda:$jodaTimeAndroidLibraryVersion"
+    implementation "com.jakewharton.timber:timber:$timberLibraryVersion"
 
     // Google Library
     implementation "com.android.support:design:$googleSupportLibraryVersion"

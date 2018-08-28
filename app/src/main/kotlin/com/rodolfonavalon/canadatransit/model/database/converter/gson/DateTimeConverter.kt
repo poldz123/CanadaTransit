@@ -1,27 +1,24 @@
 package com.rodolfonavalon.canadatransit.model.database.converter.gson
 
-import com.google.gson.*
+import com.squareup.moshi.FromJson
 import org.joda.time.DateTime
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.ToJson
 import org.joda.time.format.ISODateTimeFormat
-import java.lang.reflect.Type
 
 /**
- * This is the [Gson] converter for the [DateTime] that serialize and deserialize from the
+ * This is the [Moshi] converter for the [DateTime] that serialize and deserialize from the
  * Room database.
  */
-class DateTimeConverter : JsonSerializer<DateTime>, JsonDeserializer<DateTime> {
+class DateTimeAdapter {
 
-    @Throws(JsonParseException::class)
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): DateTime? {
-        if (json.asString == null || json.asString.isEmpty()) {
-            return null
-        }
+    @FromJson fun fromJson(value: String): DateTime {
         val formatter = ISODateTimeFormat.dateTimeParser()
-        return formatter.parseDateTime(json.asString)
+        return formatter.parseDateTime(value)
     }
 
-    override fun serialize(src: DateTime, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+    @ToJson fun toJson(dateTime: DateTime): String {
         val formatter = ISODateTimeFormat.dateTimeParser()
-        return JsonPrimitive(formatter.print(DateTime(src)))
+        return formatter.print(DateTime(dateTime))
     }
 }

@@ -3,17 +3,16 @@ package com.rodolfonavalon.canadatransit.controller.transit
 import android.app.Activity
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.VisibleForTesting.PRIVATE
-import com.google.gson.GsonBuilder
 import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager
-import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateTimeConverter
+import com.rodolfonavalon.canadatransit.model.database.converter.gson.DateTimeAdapter
 import com.rodolfonavalon.canadatransit.model.transit.response.MetaResponse
+import com.squareup.moshi.Moshi
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import org.joda.time.DateTime
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 abstract class TransitApi<API> {
     /**
@@ -38,13 +37,12 @@ abstract class TransitApi<API> {
      */
     protected val retrofitInstance: API by lazy {
         val baseUrl = apiTestUrl ?: apiUrl
-        val gson = GsonBuilder()
-                .registerTypeAdapter(DateTime::class.java, DateTimeConverter())
-                .setPrettyPrinting()
-                .create()
+        val moshi = Moshi.Builder()
+                .add(DateTimeAdapter())
+                .build()
         val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         retrofit.create(apiClass)

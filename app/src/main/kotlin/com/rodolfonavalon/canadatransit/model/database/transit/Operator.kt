@@ -4,33 +4,33 @@ import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.arch.persistence.room.TypeConverters
-import com.google.gson.annotations.SerializedName
 import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
+import com.squareup.moshi.Json
 import org.joda.time.DateTime
 
 @Entity
 @TypeConverters(TransitLandConverter::class)
-class Operator(
+data class Operator(
         @PrimaryKey
-        @SerializedName("onestop_id") val operatorOneStopId: String,
+        @field:Json(name ="onestop_id") val operatorOneStopId: String,
 
-        @SerializedName("name") val name: String,
-        @SerializedName("website") val website: String,
-        @SerializedName("country") val country: String,
-        @SerializedName("state") val state: String,
-        @SerializedName("timezone") val timezone: String,
-        @SerializedName("created_at") val createdAt: DateTime,
-        @SerializedName("updated_at") val updatedAt: DateTime,
-        @SerializedName("metro") val metro: String?,
-        @SerializedName("short_name") val shortName: String?,
-        @SerializedName("represented_in_feed_onestop_ids") val representedInFeedOneStopIds: List<String>,
+        @field:Json(name ="name") val name: String,
+        @field:Json(name ="website") val website: String,
+        @field:Json(name ="country") val country: String,
+        @field:Json(name ="state") val state: String,
+        @field:Json(name ="timezone") val timezone: String,
+        @field:Json(name ="created_at") val createdAt: DateTime,
+        @field:Json(name ="updated_at") val updatedAt: DateTime,
+        @field:Json(name ="metro") val metro: String?,
+        @field:Json(name ="short_name") val shortName: String?,
+        @field:Json(name ="represented_in_feed_onestop_ids") val representedInFeedOneStopIds: List<String>,
 
         @Embedded
-        @SerializedName("tags") val tags: Tags
+        @field:Json(name ="tags") val tags: Tags
 )
 
-class Tags(
-        @SerializedName("agency_id") val agencyId: String,
-        @SerializedName("agency_lang") val agencyLang: String,
-        @SerializedName("agency_phone") val agencyPhone: String
+data class Tags(
+        @field:Json(name ="agency_id") val agencyId: String,
+        @field:Json(name ="agency_lang") val agencyLang: String,
+        @field:Json(name ="agency_phone") val agencyPhone: String
 )

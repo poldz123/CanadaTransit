@@ -1,7 +1,7 @@
 package com.rodolfonavalon.canadatransit.model.database.converter.room
 
 import android.arch.persistence.room.TypeConverter
-import com.google.gson.Gson
+import com.rodolfonavalon.canadatransit.controller.util.MoshiUtil
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 
@@ -17,17 +17,17 @@ open class BaseConverter {
 
     @TypeConverter
     fun listIntegerToString(value: List<Int>): String
-            = Gson().toJson(value)
+            = MoshiUtil.toJson(value)
 
     @TypeConverter
     fun stringToListInteger(value: String): List<Int>
-            = Gson().fromJson(value, Array<Int>::class.java).toList()
+            = MoshiUtil.fromJson(value, Int::class.java)
 
     @TypeConverter
     fun stringToListStrings(value: String): List<String>
-            = Gson().fromJson(value, Array<String>::class.java).toList()
+            = MoshiUtil.fromJson(value, String::class.java)
 
     @TypeConverter
-    fun listStringsToString(association: List<String>): String
-            = Gson().toJson(association)
+    fun listStringsToString(value: List<String>): String
+            = MoshiUtil.toJson(value)
 }

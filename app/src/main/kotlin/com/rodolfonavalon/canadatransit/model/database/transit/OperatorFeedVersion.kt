@@ -1,11 +1,11 @@
 package com.rodolfonavalon.canadatransit.model.database.transit
 
 import android.arch.persistence.room.*
-import com.google.gson.annotations.SerializedName
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferManager
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.Transferable
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
+import com.squareup.moshi.Json
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import org.joda.time.DateTime
@@ -24,26 +24,26 @@ import retrofit2.Response
 @TypeConverters(TransitLandConverter::class)
 class OperatorFeedVersion(
         @PrimaryKey
-        @SerializedName("sha1") val sha1: String,
-        @SerializedName("feed") val feedOneStopId: String,
+        @field:Json(name ="sha1") val sha1: String,
+        @field:Json(name ="feed") val feedOneStopId: String,
 
-        @SerializedName("earliest_calendar_date") val earliestCalendarDate: DateTime,
-        @SerializedName("latest_calendar_date") val latestCalendarDate: DateTime,
-        @SerializedName("md5") val md5: String,
-        @SerializedName("fetched_at") val fetchedAt: DateTime,
-        @SerializedName("imported_at") val importedAt: DateTime,
-        @SerializedName("created_at") val createdAt: DateTime,
-        @SerializedName("updated_at") val updatedAt: DateTime,
-        @SerializedName("feed_version_imports_url") val feedVersionImportsUrl: String,
-        @SerializedName("import_status") val importStatus: String,
-        @SerializedName("url") val url: String,
-        @SerializedName("download_url") val downloadUrl: String,
-        @SerializedName("feedvalidator_url") val feedValidatorUrl: String,
-        @SerializedName("import_level") val importLevel: Int,
-        @SerializedName("is_active_feed_version") val isActiveFeedVersion: Boolean,
-        @SerializedName("feed_version_infos") val feedVersionInfos: List<Int>,
-        @SerializedName("feed_version_imports") val feedVersionImports: List<Int>,
-        @SerializedName("changesets_imported_from_this_feed_version") val changesetImportedFromThisFeedVersion: List<Int>
+        @field:Json(name ="earliest_calendar_date") val earliestCalendarDate: DateTime,
+        @field:Json(name ="latest_calendar_date") val latestCalendarDate: DateTime,
+        @field:Json(name ="md5") val md5: String,
+        @field:Json(name ="fetched_at") val fetchedAt: DateTime,
+        @field:Json(name ="imported_at") val importedAt: DateTime,
+        @field:Json(name ="created_at") val createdAt: DateTime,
+        @field:Json(name ="updated_at") val updatedAt: DateTime,
+        @field:Json(name ="feed_version_imports_url") val feedVersionImportsUrl: String,
+        @field:Json(name ="import_status") val importStatus: String,
+        @field:Json(name ="url") val url: String,
+        @field:Json(name ="download_url") val downloadUrl: String,
+        @field:Json(name ="feedvalidator_url") val feedValidatorUrl: String,
+        @field:Json(name ="import_level") val importLevel: Int,
+        @field:Json(name ="is_active_feed_version") val isActiveFeedVersion: Boolean,
+        @field:Json(name ="feed_version_infos") val feedVersionInfos: List<Int>,
+        @field:Json(name ="feed_version_imports") val feedVersionImports: List<Int>,
+        @field:Json(name ="changesets_imported_from_this_feed_version") val changesetImportedFromThisFeedVersion: List<Int>
 ): Transferable.Downloadable {
 
         override fun transferObservable(): Observable<Response<ResponseBody>> {

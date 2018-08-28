@@ -1,10 +1,10 @@
 package com.rodolfonavalon.canadatransit.model.transit.response
 
-import com.google.gson.annotations.SerializedName
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.transit.Meta
+import com.squareup.moshi.Json
 
 class OperatorsResponse(
-        @SerializedName("operators") val operators: List<Operator>,
-        @SerializedName("meta") override val meta: Meta
+        @field:Json(name ="operators") val operators: List<Operator>,
+        @field:Json(name ="meta") override val meta: Meta
 ): MetaResponse()
