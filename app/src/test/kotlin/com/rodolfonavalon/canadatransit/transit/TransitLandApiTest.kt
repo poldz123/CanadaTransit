@@ -103,7 +103,7 @@ class TransitLandApiTest : BaseServerTest() {
             val mockOperator = mock(Operator::class.java)
             given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf(oneStopId))
 
-            server.addResponsePath("/api/v1/feeds/$oneStopId", "/transitland/operator-feed-($oneStopId)")
+            server.addResponsePath("/api/v1/feeds", "/transitland/operator-feed-($oneStopId)")
             var assertOperatorFeeds: List<OperatorFeed> = mutableListOf()
             var assertOperatorFeedError: Throwable? = null
 
@@ -169,10 +169,8 @@ class TransitLandApiTest : BaseServerTest() {
 
         for (operatorFeed in operatorFeeds) {
             assertEquals(operatorFeed.feedOneStopId, oneStopId)
-            for (operatorInFeed in operatorFeed.operatorsInFeed) {
-                assertEquals(operatorInFeed.operatorOneStopId, operatorId)
-                assertEquals(operatorFeed.feedOneStopId, oneStopId)
-            }
+            assertEquals(operatorFeed.operatorOneStopId, operatorId)
+            assertEquals(operatorFeed.feedOneStopId, oneStopId)
         }
     }
 
