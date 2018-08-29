@@ -38,7 +38,7 @@ class TransitLandApiTest : BaseServerTest() {
         resetPlugins()
         // Adds a delay to the response to properly test the activity lifecycle
         server.addResponseBody("/api/v1/operators", "{}", delay = 100)
-        server.addResponseBody("/api/v1/feeds/test", "{}", delay = 100)
+        server.addResponseBody("/api/v1/feeds", "{}", delay = 100)
         server.addResponseBody("/api/v1/feed_versions/test", "{}", delay = 100)
 
         val mockOperator = mock(Operator::class.java)
