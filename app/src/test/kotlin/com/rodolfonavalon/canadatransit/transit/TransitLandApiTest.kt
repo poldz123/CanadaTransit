@@ -20,7 +20,7 @@ import kotlin.test.*
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE,
         constants = BuildConfig::class,
-        sdk = [26])
+        sdk = [27])
 class TransitLandApiTest : BaseServerTest() {
 
     override fun setup() {
@@ -76,19 +76,19 @@ class TransitLandApiTest : BaseServerTest() {
     fun testRetrieveOperators() {
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page1")
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page2")
-        var assertOperators: List<Operator> = mutableListOf()
-        var assertError: Throwable? = null
+        var testOperators: List<Operator> = mutableListOf()
+        var testOperatorError: Throwable? = null
 
         TransitLandApi.retrieveOperators({ operators ->
-            assertOperators = operators
+            testOperators = operators
         }, { error ->
-            assertError = error
+            testOperatorError = error
         })
 
-        assertNull(assertError, "Error has occurred when retrieving operators: $assertError")
-        assertOperators(assertOperators, "o-f24-octranspo",
+        assertNull(testOperatorError, "Error has occurred when retrieving operators: $testOperatorError")
+        assertOperators(testOperators, "o-f24-octranspo",
                 "CA", "Ottawa", "CA-ON", "OC Transpo", 1)
-        assertOperators(assertOperators, "o-f25-agencemtropolitainedetransport",
+        assertOperators(testOperators, "o-f25-agencemtropolitainedetransport",
                 "CA", null, "CA-QC", "Agence métropolitaine de transport", 2)
     }
 
@@ -104,18 +104,18 @@ class TransitLandApiTest : BaseServerTest() {
             given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf(oneStopId))
 
             server.addResponsePath("/api/v1/feeds", "/transitland/operator-feed-($oneStopId)")
-            var assertOperatorFeeds: List<OperatorFeed> = mutableListOf()
-            var assertOperatorFeedError: Throwable? = null
+            var testOperatorFeeds: List<OperatorFeed> = mutableListOf()
+            var testOperatorFeedError: Throwable? = null
 
             TransitLandApi.retrieveOperatorFeed(mockOperator, { operatorFeeds ->
-                assertOperatorFeeds = operatorFeeds
+                testOperatorFeeds = operatorFeeds
             }, { error ->
-                assertOperatorFeedError = error
+                testOperatorFeedError = error
             })
 
-            assertNull(assertOperatorFeedError, "Error has occurred when retrieving operator feeds: $assertOperatorFeedError")
-            assertEquals(assertOperatorFeeds.count(), 1)
-            assertOperatorFeeds(assertOperatorFeeds, oneStopId, operatorId)
+            assertNull(testOperatorFeedError, "Error has occurred when retrieving operator feeds: $testOperatorFeedError")
+            assertEquals(testOperatorFeeds.count(), 1)
+            assertOperatorFeeds(testOperatorFeeds, oneStopId, operatorId)
         }
     }
 
@@ -131,17 +131,17 @@ class TransitLandApiTest : BaseServerTest() {
             given(mockOperatorFeed.activeFeedVersion).willReturn(activeFeedVersion)
 
             server.addResponsePath("/api/v1/feed_versions/$activeFeedVersion", "/transitland/operator-feed-version-($oneStopId)")
-            var assertOperatorFeedVersion: OperatorFeedVersion? = null
-            var assertOperatorFeedVersionError: Throwable? = null
+            var testOperatorFeedVersion: OperatorFeedVersion? = null
+            var testOperatorFeedVersionError: Throwable? = null
 
             TransitLandApi.retrieveOperatorFeedVersion(mockOperatorFeed, { operatorFeedVersion ->
-                assertOperatorFeedVersion = operatorFeedVersion
+                testOperatorFeedVersion = operatorFeedVersion
             }, { error ->
-                assertOperatorFeedVersionError = error
+                testOperatorFeedVersionError = error
             })
 
-            assertNull(assertOperatorFeedVersionError, "Error has occurred when retrieving operator feed version: $assertOperatorFeedVersionError")
-            assertOperatorFeedVersion(assertOperatorFeedVersion!!, oneStopId, activeFeedVersion)
+            assertNull(testOperatorFeedVersionError, "Error has occurred when retrieving operator feed version: $testOperatorFeedVersionError")
+            assertOperatorFeedVersion(testOperatorFeedVersion!!, oneStopId, activeFeedVersion)
         }
     }
 
