@@ -8,6 +8,9 @@ import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.TestScheduler
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
@@ -19,8 +22,7 @@ import kotlin.test.*
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE,
-        constants = BuildConfig::class,
-        sdk = [27])
+        constants = BuildConfig::class)
 class TransitLandApiTest : BaseServerTest() {
 
     override fun setup() {
@@ -33,13 +35,16 @@ class TransitLandApiTest : BaseServerTest() {
         val controller = Robolectric.buildActivity(Activity::class.java).create().start()
         val activity = controller.get()
 
-        // Lets reset the plugin to prevent any blocking operation that will
-        // result wait without us testing the life cycle
-        resetPlugins()
+        val testScheduler = TestScheduler()
+        RxJavaPlugins.setNewThreadSchedulerHandler { _ -> testScheduler }
+        RxJavaPlugins.setComputationSchedulerHandler { _ -> testScheduler }
+        RxJavaPlugins.setIoSchedulerHandler { _ -> testScheduler }
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { testScheduler }
+
         // Adds a delay to the response to properly test the activity lifecycle
-        server.addResponseBody("/api/v1/operators", "{}", delay = 100)
-        server.addResponseBody("/api/v1/feeds", "{}", delay = 100)
-        server.addResponseBody("/api/v1/feed_versions/test", "{}", delay = 100)
+        server.addResponseBody("/api/v1/operators", "{}")
+        server.addResponseBody("/api/v1/feeds", "{}")
+        server.addResponseBody("/api/v1/feed_versions/test", "{}")
 
         val mockOperator = mock(Operator::class.java)
         given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf("test"))
@@ -67,8 +72,8 @@ class TransitLandApiTest : BaseServerTest() {
         controller.destroy()
         disposables.forEach { disposable -> assertTrue(disposable.isDisposed) }
 
-        // Lets clean the responses, since it can trigger the assertion
-        // when server is checked.
+        // Lets clean the mock web response, since the api call has already been disposed when
+        // the activity's on-destroy is called above. This prevent error about un-consumed responses.
         server.clean()
     }
 

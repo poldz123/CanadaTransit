@@ -47,27 +47,26 @@ open class BaseServerTest {
         server.reset()
         // Restore the plugins to be synchronize
         // and wont run on different threads
-        restorePlugins()
+        enableSynchronousTasks()
     }
 
     @After
     open fun teardown(){
         // Reset the plugins after each test cases to restore
         // it to being non-synchronous again
-        resetPlugins()
+        disableSynchronousTasks()
         // Check the server that all of the responses are consumed
         server.check()
     }
 
-    fun restorePlugins() {
+    fun enableSynchronousTasks() {
         RxJavaPlugins.setNewThreadSchedulerHandler { _ -> Schedulers.trampoline() }
         RxJavaPlugins.setComputationSchedulerHandler { _ -> Schedulers.trampoline() }
         RxJavaPlugins.setIoSchedulerHandler { _ -> Schedulers.trampoline() }
-        RxAndroidPlugins.setMainThreadSchedulerHandler { _ -> Schedulers.trampoline() }
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { _ -> Schedulers.trampoline() }
     }
 
-    fun resetPlugins() {
+    fun disableSynchronousTasks() {
         RxJavaPlugins.reset()
         RxAndroidPlugins.reset()
     }
