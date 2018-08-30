@@ -2,15 +2,12 @@ package com.rodolfonavalon.canadatransit.transit
 
 import android.app.Activity
 import android.os.Bundle
-import com.rodolfonavalon.canadatransit.BaseServerTest
+import com.rodolfonavalon.canadatransit.BaseMockServerTest
 import com.rodolfonavalon.canadatransit.BuildConfig
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.TestScheduler
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
@@ -23,7 +20,7 @@ import kotlin.test.*
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE,
         constants = BuildConfig::class)
-class TransitLandApiTest : BaseServerTest() {
+class TransitLandApiTestMock : BaseMockServerTest() {
 
     override fun setup() {
         super.setup()
@@ -35,13 +32,9 @@ class TransitLandApiTest : BaseServerTest() {
         val controller = Robolectric.buildActivity(Activity::class.java).create().start()
         val activity = controller.get()
 
-        val testScheduler = TestScheduler()
-        RxJavaPlugins.setNewThreadSchedulerHandler { _ -> testScheduler }
-        RxJavaPlugins.setComputationSchedulerHandler { _ -> testScheduler }
-        RxJavaPlugins.setIoSchedulerHandler { _ -> testScheduler }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { testScheduler }
+        synchronousTasks.enableTestSchedulerTasks()
 
-        // Adds a delay to the response to properly test the activity lifecycle
+        // Adds a delay to the response to properly test the activity lifecycle of the mock-server
         server.addResponseBody("/api/v1/operators", "{}")
         server.addResponseBody("/api/v1/feeds", "{}")
         server.addResponseBody("/api/v1/feed_versions/test", "{}")
@@ -73,7 +66,7 @@ class TransitLandApiTest : BaseServerTest() {
         disposables.forEach { disposable -> assertTrue(disposable.isDisposed) }
 
         // Lets clean the mock web response, since the api call has already been disposed when
-        // the activity's on-destroy is called above. This prevent error about un-consumed responses.
+        // the activity's on-destroy is called above. This prevent error about unconsumed responses.
         server.clean()
     }
 
@@ -119,7 +112,7 @@ class TransitLandApiTest : BaseServerTest() {
             })
 
             assertNull(testOperatorFeedError, "Error has occurred when retrieving operator feeds: $testOperatorFeedError")
-            assertEquals(testOperatorFeeds.count(), 1)
+            assertEquals(1, testOperatorFeeds.count())
             assertOperatorFeeds(testOperatorFeeds, oneStopId, operatorId)
         }
     }

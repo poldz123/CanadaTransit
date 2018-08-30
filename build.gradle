@@ -13,8 +13,8 @@ buildscript {
     ext.versionName = "1.0"
 
     // Community Library
-    ext.retrofitLibraryVersion = "2.3.0"
-    ext.okhttpLibraryVersion = "3.8.0"
+    ext.retrofitLibraryVersion = "2.4.0"
+    ext.okhttpLibraryVersion = "3.11.0"
     ext.timberLibraryVersion = "4.5.1"
     ext.rxKotlinLibraryVersion = "2.2.0"
     ext.rxAndroidLibraryVersion = "2.1.0"

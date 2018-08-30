@@ -1,13 +1,8 @@
 package com.rodolfonavalon.canadatransit
 
+import com.rodolfonavalon.canadatransit.rule.SynchronousTestRule
 import com.rodolfonavalon.canadatransit.util.CustomMockWebServer
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
-import org.junit.After
-import org.junit.AfterClass
-import org.junit.Before
-import org.junit.BeforeClass
+import org.junit.*
 
 /**
  * Base class for testing with the mock server. This is mainly used for
@@ -21,7 +16,10 @@ import org.junit.BeforeClass
  * IMPORTANT: That during [setup] the URL endpoint from the mock server
  * should be used by the API class as the base URL.
  */
-open class BaseServerTest {
+open class BaseMockServerTest {
+
+    @get:Rule
+    val synchronousTasks = SynchronousTestRule()
 
     companion object {
         @JvmField
@@ -45,29 +43,11 @@ open class BaseServerTest {
         // Reset the server per test cases, this
         // to have a clean slate on it
         server.reset()
-        // Restore the plugins to be synchronize
-        // and wont run on different threads
-        enableSynchronousTasks()
     }
 
     @After
     open fun teardown(){
-        // Reset the plugins after each test cases to restore
-        // it to being non-synchronous again
-        disableSynchronousTasks()
         // Check the server that all of the responses are consumed
         server.check()
-    }
-
-    fun enableSynchronousTasks() {
-        RxJavaPlugins.setNewThreadSchedulerHandler { _ -> Schedulers.trampoline() }
-        RxJavaPlugins.setComputationSchedulerHandler { _ -> Schedulers.trampoline() }
-        RxJavaPlugins.setIoSchedulerHandler { _ -> Schedulers.trampoline() }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { _ -> Schedulers.trampoline() }
-    }
-
-    fun disableSynchronousTasks() {
-        RxJavaPlugins.reset()
-        RxAndroidPlugins.reset()
     }
 }
