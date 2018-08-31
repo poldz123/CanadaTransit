@@ -17,6 +17,17 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        defaultConfig {
+
+            kapt {
+                arguments {
+                    // This is the location of the generated schemas for the Room database and
+                    // must be added to version control but removed from APK.
+                    arg("room.schemaLocation", "$project.projectDir/schemas".toString())
+                }
+            }
+        }
     }
 
     sourceSets {

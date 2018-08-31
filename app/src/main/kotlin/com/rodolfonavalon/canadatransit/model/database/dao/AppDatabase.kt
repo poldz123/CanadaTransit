@@ -8,10 +8,10 @@ import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersi
 import com.rodolfonavalon.canadatransit.model.database.dao.transit.TransitLandDao
 
 @Database(entities = [
-        Operator::class,
-        OperatorFeed::class,
-        OperatorFeedVersion::class
-], version = 1)
+            Operator::class,
+            OperatorFeed::class,
+            OperatorFeedVersion::class
+        ], version = 1)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun transitLandDao(): TransitLandDao
 }
