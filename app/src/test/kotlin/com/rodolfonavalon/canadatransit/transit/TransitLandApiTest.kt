@@ -20,7 +20,7 @@ import kotlin.test.*
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE,
         constants = BuildConfig::class)
-class TransitLandApiTestMock : BaseMockServerTest() {
+class TransitLandApiTest : BaseMockServerTest() {
 
     override fun setup() {
         super.setup()

@@ -22,7 +22,7 @@ import retrofit2.Response
                 onDelete = ForeignKey.CASCADE)
         ])
 @TypeConverters(TransitLandConverter::class)
-class OperatorFeedVersion(
+data class OperatorFeedVersion(
         @PrimaryKey
         @field:Json(name ="sha1") val sha1: String,
         @field:Json(name ="feed") val feedOneStopId: String,
@@ -34,16 +34,11 @@ class OperatorFeedVersion(
         @field:Json(name ="imported_at") val importedAt: DateTime,
         @field:Json(name ="created_at") val createdAt: DateTime,
         @field:Json(name ="updated_at") val updatedAt: DateTime,
-        @field:Json(name ="feed_version_imports_url") val feedVersionImportsUrl: String,
         @field:Json(name ="import_status") val importStatus: String,
         @field:Json(name ="url") val url: String,
         @field:Json(name ="download_url") val downloadUrl: String,
-        @field:Json(name ="feedvalidator_url") val feedValidatorUrl: String,
         @field:Json(name ="import_level") val importLevel: Int,
-        @field:Json(name ="is_active_feed_version") val isActiveFeedVersion: Boolean,
-        @field:Json(name ="feed_version_infos") val feedVersionInfos: List<Int>,
-        @field:Json(name ="feed_version_imports") val feedVersionImports: List<Int>,
-        @field:Json(name ="changesets_imported_from_this_feed_version") val changesetImportedFromThisFeedVersion: List<Int>
+        @field:Json(name ="is_active_feed_version") val isActiveFeedVersion: Boolean
 ): Transferable.Downloadable {
 
         override fun transferObservable(): Observable<Response<ResponseBody>> {

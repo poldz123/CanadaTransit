@@ -28,25 +28,13 @@ data class OperatorFeed(
         @field:Json(name ="updated_at") val updatedAt: DateTime,
         @field:Json(name ="url") val url: String,
         @field:Json(name ="feed_format") val feedFormat: String,
-        @field:Json(name ="license_use_without_attribution") val licenseUseWithoutAttribution: String?,
-        @field:Json(name ="license_create_derived_product") val licenseCreatedDerivedProduct: String?,
-        @field:Json(name ="license_redistribute") val licenseRedistribute: String?,
-        @field:Json(name ="license_name") val licenseName: String?,
-        @field:Json(name ="license_url") val licenseUrl: String?,
-        @field:Json(name ="license_attribution_text") val licenseAttributionText: String?,
         @field:Json(name ="last_fetched_at") val lastFetchAt: DateTime,
         @field:Json(name ="last_imported_at") val lastImportedAt: DateTime,
         @field:Json(name ="import_status") val importStatus: String,
-        @field:Json(name ="active_feed_version") val activeFeedVersion: String?,
-        @field:Json(name ="feed_versions_url") val feedVersionUrl: String,
-        @field:Json(name ="feed_versions_count") val feedVersionCount: Int,
-        @field:Json(name ="feed_versions") val feedVersion: List<String>
+        @field:Json(name ="active_feed_version") val activeFeedVersion: String,
+        @field:Json(name ="feed_versions_url") val feedVersionUrl: String
 )
 
-class OperatorInFeed(
-        @field:Json(name ="gtfs_agency_id") val gtfsAgencyId: String?,
-        @field:Json(name ="operator_onestop_id") val operatorOneStopId: String,
-        @field:Json(name ="feed_onestop_id") val feedOneStopId: String,
-        @field:Json(name ="operator_url") val operatorUrl: String,
-        @field:Json(name ="feed_url") val feedUrl: String
+data class OperatorInFeed(
+        @field:Json(name ="operator_onestop_id") val operatorOneStopId: String
 )
