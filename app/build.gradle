@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
-apply from: 'jacoco-plugin.gradle'
+apply from: '../plugins/jacoco-plugin.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
