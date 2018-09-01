@@ -61,6 +61,7 @@ object FileUtil {
      */
     fun availableSystemMemory(): Long = availableDiskMemory(Environment.getRootDirectory().absolutePath)
 
+    @Suppress("MagicNumber")
     private fun availableDiskMemory(memoryFileAbsolutePath: String): Long {
         val statFs = StatFs(memoryFileAbsolutePath)
         val availableBlocks = statFs.availableBlocksLong

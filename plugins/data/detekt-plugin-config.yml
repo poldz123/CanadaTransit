@@ -417,7 +417,7 @@ style:
     active: false
   MaxLineLength:
     active: true
-    maxLineLength: 120
+    maxLineLength: 200
     excludePackageStatements: false
     excludeImportStatements: false
     excludeCommentStatements: false
@@ -480,4 +480,4 @@ style:
     active: false
   WildcardImport:
     active: true
-    excludeImports: 'java.util.*,kotlinx.android.synthetic.*'
+    excludeImports: 'java.util.*,kotlinx.android.synthetic.*,android.arch.persistence.room.*,retrofit2.http.*'
