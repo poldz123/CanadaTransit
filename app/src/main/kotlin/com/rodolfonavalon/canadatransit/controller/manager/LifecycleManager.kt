@@ -81,9 +81,9 @@ class LifecycleManager private constructor(): Application.ActivityLifecycleCallb
          */
         fun watchActivity(activity: Activity, callback: LifecycleCallback) {
             // If the activity already exist before then just attach the callback
-            for ((itemActivity, itemCallbacks) in instance.lifecycleItems) {
-                if (itemActivity === activity) {
-                    itemCallbacks.add(callback)
+            for (lifecycle in instance.lifecycleItems) {
+                if (lifecycle.activity === activity) {
+                    lifecycle.callbacks.add(callback)
                     return
                 }
             }

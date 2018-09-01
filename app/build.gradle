@@ -64,7 +64,6 @@ android {
     }
 
     buildTypes {
-
         debug {
             testCoverageEnabled true
         }
@@ -76,13 +75,6 @@ android {
     }
 
     testOptions {
-        execution 'ANDROID_TEST_ORCHESTRATOR'
-        animationsDisabled true
-
-        unitTests {
-            includeAndroidResources = true
-        }
-
         unitTests.all {
             // Apply the gradle logs which the custom logger will configure
             testLogging {

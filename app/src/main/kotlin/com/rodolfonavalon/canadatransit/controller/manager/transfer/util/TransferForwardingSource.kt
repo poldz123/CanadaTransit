@@ -12,7 +12,7 @@ import java.io.File
 class TransferForwardingSource(source: Source,
                                private val totalBytesToRead: Long,
                                private val emitter: ObservableEmitter<TransferForwardingProperty>): ForwardingSource(source) {
-    var currentBytesRead: Long = 0L
+    private var currentBytesRead: Long = 0L
 
     override fun read(sink: Buffer, byteCount: Long): Long {
         // Read the next chunk of data

@@ -59,7 +59,7 @@ interface Transferable {
     /**
      * Retrieves the tracking id of which can be used as the file name of the transferred
      * file. This serves as the tracking id for the [TransferManager] which tracks
-     * the transfer within the manager.
+     * the currently being transferred within the manager.
      *
      * @return The id of the entity
      */
