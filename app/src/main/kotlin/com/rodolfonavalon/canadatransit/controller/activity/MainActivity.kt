@@ -36,8 +36,6 @@ class MainActivity : AppCompatActivity() {
         // Retrieve the first operator feed within the operator, we do not want other
         // feeds since most of them are identical.
         val operatorFeed = operatorFeeds.first()
-        DebugUtil.assertTrue(operatorFeed.activeFeedVersion != null, "Operator feed does not have an active feed: ${operatorFeed.feedOneStopId}")
-
         // TODO: save the operator and operator feed version
 //        TransitLandApi.retrieveOperatorFeedVersion(operatorFeed, ::onOperatorFeedVersionRetreived, ::onError)
     }

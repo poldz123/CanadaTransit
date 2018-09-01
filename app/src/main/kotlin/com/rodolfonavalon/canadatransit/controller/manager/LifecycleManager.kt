@@ -123,6 +123,7 @@ class LifecycleManager private constructor(): Application.ActivityLifecycleCallb
          * @param activity the activity to signal for life cycle callbacks
          * @param stage the stage of the activity life cycle
          */
+        @Suppress("NestedBlockDepth")
         private fun signalActivity(activity: Activity, stage: LifecycleStage) {
             for ((itemActivity, itemCallbacks) in instance.lifecycleItems) {
                 if (itemActivity === activity) {
