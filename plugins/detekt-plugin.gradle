@@ -4,7 +4,7 @@ detekt {
     version = "$detektVersion"
     defaultProfile {
         input = file("$project.projectDir/app/src/main/kotlin")
-        output = file("$project.projectDir/app/build/reports/detekt")
+        output = file("$project.projectDir/app/build/reports/staticAnalysisTests/detekt")
         config = file("$project.projectDir/plugins/data/detekt-plugin-config.yml")
         filters = ".*/resources/.*,.*/build/.*"
     }
