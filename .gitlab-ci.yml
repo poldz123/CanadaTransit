@@ -13,6 +13,7 @@ stages: [ "Tests" ]
     name: "Unit-$CI_COMMIT_SHA-$CI_COMMIT_REF_NAME"
     paths:
       - app/build/reports/tests
+      - app/build/reports/jacoco
     expire_in: 1 week
 
 "Static Analysis Tests":
