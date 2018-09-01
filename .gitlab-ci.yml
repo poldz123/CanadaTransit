@@ -8,3 +8,7 @@ stages: [ "Tests" ]
   tags: [ "android", "unit-test" ]
   stage: "Tests"
   script: "scripts/unit-test.sh"
+  artifacts:
+    paths:
+      - app/build/reports/tests
+  expires_in: 1 week
