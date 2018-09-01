@@ -83,7 +83,7 @@ android {
             includeAndroidResources = true
         }
 
-        unitTests.all {1
+        unitTests.all {
             // Apply the gradle logs which the custom logger will configure
             testLogging {
                 events "passed", "skipped", "failed", "standardOut", "standardError"

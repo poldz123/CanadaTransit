@@ -5,10 +5,15 @@ jacoco {
     reportsDir = file("${project.buildDir}/reports/jacoco")
 }
 
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
 // Configured how the jacoco will create the code coverage. This customization will trigger the unit and integration tests
 // that will generate a merge code coverage.
 // TODO Must run the emulator first before starting this task
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+// TODO Add the ui test coverage: 'createDebugCoverageReport' and "${project.buildDir}/outputs/code-coverage/connected/*.ec"
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     reports {
         xml.enabled = true
         html.enabled = true
@@ -20,7 +25,10 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
             '**/BuildConfig.*',
             '**/Manifest*.*',
             '**/*Test*.*',
+            '**/*Activity*.*',
             '**/*$[0-9].*',
+            '**/*$ViewBinder*.*',
+            '**/*$InjectAdapter*.*',
             'android/**/*.*'
     ]
     def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
@@ -28,7 +36,15 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree])
     executionData = files(
-            "${project.buildDir}/jacoco/testDebugUnitTest.exec",
-            "${project.buildDir}/outputs/code-coverage/connected/*.ec"
+            "${project.buildDir}/jacoco/testDebugUnitTest.exec"
     )
+
+    doLast {
+        // Display the total coverage for the CI to parse it and when it
+        // parsed the CI will generate a badge for the coverage.
+        def jacocoHtmlIndexFile = new File(reports.html.destination, "index.html")
+        jacocoHtmlIndexFile.eachLine { line ->
+            println line
+        }
+    }
 }
