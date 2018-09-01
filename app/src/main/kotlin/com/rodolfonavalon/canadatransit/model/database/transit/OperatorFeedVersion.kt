@@ -54,7 +54,7 @@ data class OperatorFeedVersion(
         }
 
         override fun download() {
-            // TODO: Transfer Manager download
+            // TODO Transfer Manager download
             TransferManager.download(this)
         }
 }

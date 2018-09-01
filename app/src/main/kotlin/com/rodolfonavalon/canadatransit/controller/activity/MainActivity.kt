@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.rodolfonavalon.canadatransit.R
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
-import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         // Retrieve the first operator feed within the operator, we do not want other
         // feeds since most of them are identical.
         val operatorFeed = operatorFeeds.first()
-        // TODO: save the operator and operator feed version
+        // TODO save the operator and operator feed version
 //        TransitLandApi.retrieveOperatorFeedVersion(operatorFeed, ::onOperatorFeedVersionRetreived, ::onError)
     }
 

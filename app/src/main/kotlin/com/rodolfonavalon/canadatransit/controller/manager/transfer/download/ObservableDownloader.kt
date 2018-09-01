@@ -106,7 +106,7 @@ class ObservableDownloader(private val transferManager: TransferManager, private
     override fun onProgress(property: TransferForwardingProperty) {
         DebugUtil.assertMainThread()
         DebugUtil.assertFalse(property.transferred, "Entity progress is triggered where it was already transferred")
-        // TODO: Need to implement the feed progress
+        // TODO Need to implement the feed progress
     }
 
     override fun onDownload(file: File?) {

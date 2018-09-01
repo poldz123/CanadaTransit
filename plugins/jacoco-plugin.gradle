@@ -7,7 +7,7 @@ jacoco {
 
 // Configured how the jacoco will create the code coverage. This customization will trigger the unit and integration tests
 // that will generate a merge code coverage.
-// TODO: Must run the emulator first before starting this task
+// TODO Must run the emulator first before starting this task
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
     reports {
         xml.enabled = true

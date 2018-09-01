@@ -25,7 +25,7 @@ class CanadaTransitApplication : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         } else {
-            // TODO: Release timber
+            // TODO Release timber
         }
     }
 
