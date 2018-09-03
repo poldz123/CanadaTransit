@@ -1,6 +1,7 @@
 package com.rodolfonavalon.canadatransit.controller.manager.transfer
 
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.util.TransferForwardingProperty
+import com.rodolfonavalon.canadatransit.controller.util.queue.Task
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -9,31 +10,16 @@ import java.io.File
 /**
  * TODO: Transfer
  */
-interface Transfer {
-    /**
-     * TODO: onStart
-     */
-    fun onStart()
-
+interface TransferTask: Task {
     /**
      * TODO: onProgress
      */
     fun onProgress(property: TransferForwardingProperty)
-
     /**
-     * TODO: onCancel
+     *
+     * TODO: DownloadTransferTask
      */
-    fun onCancel()
-
-    /**
-     * TODO: onError
-     */
-    fun onError(error: Throwable)
-
-    /**
-     * TODO: DownloadTransfer
-     */
-    interface DownloadTransfer: Transfer {
+    interface DownloadTransferTask: TransferTask {
 
         /**
          * TODO: onDownload

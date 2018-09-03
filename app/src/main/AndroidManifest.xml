@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".controller.service.TransitTransferService" />
+        <service android:name=".controller.service.TransferService" />
+        <service android:name=".controller.service.UpdateService" />
     </application>
 
 </manifest>

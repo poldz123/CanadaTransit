@@ -3,9 +3,8 @@ package com.rodolfonavalon.canadatransit.controller.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 
-class TransitTransferService: Service() {
+class TransferService: Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null

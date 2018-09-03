@@ -1,8 +1,8 @@
 package com.rodolfonavalon.canadatransit.controller.manager.transfer.download
 
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
-import com.rodolfonavalon.canadatransit.controller.manager.transfer.Transfer
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferManager
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferTask
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.Transferable
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.util.TransferForwardingProperty
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.util.TransferForwardingSource
@@ -27,7 +27,7 @@ import java.io.IOException
  *
  * //TODO: Do not download when it already exist in the download directory
  */
-class ObservableDownloader(private val transferManager: TransferManager, private val entity: Transferable): Transfer.DownloadTransfer {
+class ObservableDownloader(private val transferManager: TransferManager, private val entity: Transferable): TransferTask.DownloadTransferTask {
     var disposable: Disposable? = null
     var downloadedFile: File? = null
 
