@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.controller.manager.transfer.download
+package com.rodolfonavalon.canadatransit.controller.manager.transfer.task
 
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferManager
@@ -20,14 +20,14 @@ import java.io.File
 import java.io.IOException
 
 /**
- * ObservableDownloader
+ * ObservableDownloaderTask
  *
  * This should return an object that derived from [Transferable] which will be used
  * to download the file from the web.
  *
  * //TODO: Do not download when it already exist in the download directory
  */
-class ObservableDownloader(private val transferManager: TransferManager, private val entity: Transferable): TransferTask.DownloadTransferTask {
+class ObservableDownloaderTask(private val transferManager: TransferManager, private val entity: Transferable.Downloadable): TransferTask.DownloadTransferTask {
     var disposable: Disposable? = null
     var downloadedFile: File? = null
 
@@ -100,7 +100,7 @@ class ObservableDownloader(private val transferManager: TransferManager, private
     override fun onError(error: Throwable) {
         Timber.e(error, "Download entity has FAILED")
         onCancel()
-        transferManager.failure(entity.transferTrackingId())
+        transferManager.failure(entity.trackingId())
     }
 
     override fun onProgress(property: TransferForwardingProperty) {
@@ -113,6 +113,6 @@ class ObservableDownloader(private val transferManager: TransferManager, private
         Timber.v("Entity download has been SUCCESSFUL")
         DebugUtil.assertMainThread()
         DebugUtil.assertTrue(file != null, "Entity file is null")
-        transferManager.success(entity.transferTrackingId())
+        transferManager.success(entity.trackingId())
     }
 }

@@ -41,12 +41,12 @@ data class OperatorFeedVersion(
         @field:Json(name ="is_active_feed_version") val isActiveFeedVersion: Boolean
 ): Transferable.Downloadable {
 
-        override fun transferObservable(): Observable<Response<ResponseBody>> {
-            return TransitLandApi.downloadOperatorFeed(this)
+        override fun trackingId(): String {
+            return sha1
         }
 
-        override fun transferTrackingId(): String {
-            return sha1
+        override fun transferObservable(): Observable<Response<ResponseBody>> {
+            return TransitLandApi.downloadOperatorFeed(this)
         }
 
         override fun transferDirectoryPath(): String {

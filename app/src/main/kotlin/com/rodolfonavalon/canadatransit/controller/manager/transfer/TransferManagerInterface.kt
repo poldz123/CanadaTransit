@@ -1,6 +1,7 @@
 package com.rodolfonavalon.canadatransit.controller.manager.transfer
 
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.util.TransferForwardingProperty
+import com.rodolfonavalon.canadatransit.controller.util.queue.Action
 import com.rodolfonavalon.canadatransit.controller.util.queue.Task
 import io.reactivex.Observable
 import okhttp3.ResponseBody
@@ -31,7 +32,7 @@ interface TransferTask: Task {
 /**
  * TODO: Transferable
  */
-interface Transferable {
+interface Transferable: Action {
 
     /**
      * Retrieves the download observable where it can be transferred. The Rx-Observable must
@@ -41,15 +42,6 @@ interface Transferable {
      * @return The observable response api where the entity must be transferred
      */
     fun transferObservable(): Observable<Response<ResponseBody>>
-
-    /**
-     * Retrieves the tracking id of which can be used as the file name of the transferred
-     * file. This serves as the tracking id for the [TransferManager] which tracks
-     * the currently being transferred within the manager.
-     *
-     * @return The id of the entity
-     */
-    fun transferTrackingId(): String
 
     /**
      * Retrieves the directory path where the file will be transferred. This must
@@ -70,3 +62,4 @@ interface Transferable {
         fun download()
     }
 }
+

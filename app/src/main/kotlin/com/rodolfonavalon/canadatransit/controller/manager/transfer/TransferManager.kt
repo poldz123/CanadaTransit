@@ -1,6 +1,6 @@
 package com.rodolfonavalon.canadatransit.controller.manager.transfer
 
-import com.rodolfonavalon.canadatransit.controller.manager.transfer.download.ObservableDownloader
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.task.ObservableDownloaderTask
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
 
 /**
@@ -16,7 +16,7 @@ class TransferManager private constructor(): AbstractQueueTask<TransferTask>() {
         private val instance: TransferManager = TransferManager()
 
         fun download(downloadable: Transferable.Downloadable) {
-            instance.add(downloadable.transferTrackingId(), ObservableDownloader(instance, downloadable))
+            instance.add(downloadable.trackingId(), ObservableDownloaderTask(instance, downloadable))
         }
     }
 }
