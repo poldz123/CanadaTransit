@@ -5,7 +5,7 @@ interface Task {
     /**
      * TODO: onStart
      */
-    fun onStart()
+    fun onStart(trackingId: String)
 
     /**
      * TODO: onCancel

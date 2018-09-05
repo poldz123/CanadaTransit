@@ -31,9 +31,9 @@ class ObservableDownloaderTask(private val transferManager: TransferManager, pri
         AbstractTransferTask<Downloadable>(transferManager, entity) {
     var downloadedFile: File? = null
 
-    override fun onStart() {
+    override fun onStart(trackingId: String) {
+        super.onStart(trackingId)
         Timber.v("Download entity has STARTED")
-        DebugUtil.assertMainThread()
         this.disposable = entity.transferObservable()
                 .observeOn(Schedulers.io())
                 .flatMap(::observableOnDownload)
@@ -88,6 +88,6 @@ class ObservableDownloaderTask(private val transferManager: TransferManager, pri
         Timber.v("Entity download has been SUCCESSFUL")
         DebugUtil.assertMainThread()
         DebugUtil.assertTrue(downloadedFile != null, "Entity file is null")
-        transferManager.success(entity.trackingId())
+        transferManager.success()
     }
 }

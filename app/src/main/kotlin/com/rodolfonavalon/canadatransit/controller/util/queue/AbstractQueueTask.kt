@@ -97,7 +97,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         // Initialize the active transfer and then trigger it to start.
         activeTrackingId = key
         activeTask = value
-        activeTask!!.onStart()
+        activeTask!!.onStart(activeTrackingId!!)
     }
 
     override fun start() {
@@ -110,19 +110,19 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         next()
     }
 
-    fun success(trackingId: String) {
-        DebugUtil.assertTrue(trackingId == activeTrackingId, "Tracking ID did not match. EXPECTED: $trackingId CURRENT: $activeTrackingId")
+    fun success() {
+        DebugUtil.assertTrue(activeTrackingId != null, "Active tracking id is NULL.")
         Timber.d("Transferring data is a SUCCESS for tracking-id: $activeTrackingId")
         assert()
-        onSuccess(trackingId)
+        onSuccess(activeTrackingId!!)
         next()
     }
 
-    fun failure(trackingId: String) {
-        DebugUtil.assertTrue(trackingId == activeTrackingId, "Tracking ID did not match. EXPECTED: $trackingId CURRENT: $activeTrackingId")
+    fun failure() {
+        DebugUtil.assertTrue(activeTrackingId != null, "Active tracking id is NULL.")
         Timber.d("Transferring data is a FAILURE for tracking-id: $activeTrackingId")
         assert()
-        onFailure(trackingId)
+        onFailure(activeTrackingId!!)
         next()
     }
 

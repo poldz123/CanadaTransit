@@ -11,6 +11,12 @@ import timber.log.Timber
 
 abstract class AbstractTransferTask<T: Transferable>(private val transferManager: TransferManager, private val transferable: T): TransferTask {
     var disposable: Disposable? = null
+    var trackingId: String = ""
+
+    override fun onStart(trackingId: String) {
+        DebugUtil.assertMainThread()
+        this.trackingId = trackingId
+    }
 
     override fun onCancel() {
         DebugUtil.assertMainThread()
@@ -27,7 +33,7 @@ abstract class AbstractTransferTask<T: Transferable>(private val transferManager
         // Error means that we are cancelling the task
         onCancel()
         // Trigger a failure task within the manager
-        transferManager.failure(transferable.trackingId())
+        transferManager.failure()
     }
 
     override fun onProgress(property: TransferForwardingProperty) {

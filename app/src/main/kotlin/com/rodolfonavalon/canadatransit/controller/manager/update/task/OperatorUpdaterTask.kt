@@ -9,18 +9,18 @@ import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import timber.log.Timber
 
-class OperatorUpdaterTask(private val updateManager: UpdateManager, private val trackingId: String):
-        AbstractUpdateTask(updateManager, trackingId) {
+class OperatorUpdaterTask(private val updateManager: UpdateManager):
+        AbstractUpdateTask(updateManager) {
 
-    override fun onStart() {
-        DebugUtil.assertMainThread()
+    override fun onStart(trackingId: String) {
+        super.onStart(trackingId)
         this.disposable = TransitLandApi.retrieveOperators(::onOperatorsReceived, ::onError)
     }
 
     private fun onOperatorsReceived(operators: List<Operator>) {
         if (operators.isEmpty()) {
             Timber.d("No operators was found, this could mean that the API has a BUG.")
-            updateManager.success(trackingId)
+            updateManager.success()
             return
         }
 
@@ -36,6 +36,6 @@ class OperatorUpdaterTask(private val updateManager: UpdateManager, private val 
     private fun onOperatorsSaved(rowIds: List<Long>) {
         DebugUtil.assertTrue(rowIds.isNotEmpty(), "There are no operators being saved on a successful database transaction: $trackingId")
         Timber.d("Successfully saved ${rowIds.count()} operators")
-        updateManager.success(trackingId)
+        updateManager.success()
     }
 }

@@ -6,8 +6,14 @@ import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
-abstract class AbstractUpdateTask(private val updateManager: UpdateManager, private val trackingId: String): UpdateTask {
+abstract class AbstractUpdateTask(private val updateManager: UpdateManager): UpdateTask {
     var disposable: Disposable? = null
+    var trackingId: String = ""
+
+    override fun onStart(trackingId: String) {
+        DebugUtil.assertMainThread()
+        this.trackingId = trackingId
+    }
 
     override fun onCancel() {
         DebugUtil.assertMainThread()
@@ -22,6 +28,6 @@ abstract class AbstractUpdateTask(private val updateManager: UpdateManager, priv
         // Error means that we are cancelling the task
         onCancel()
         // Trigger a failure task within the manager
-        updateManager.failure(trackingId)
+        updateManager.failure()
     }
 }
