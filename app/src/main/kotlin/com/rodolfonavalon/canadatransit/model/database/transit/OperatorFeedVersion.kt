@@ -1,6 +1,7 @@
 package com.rodolfonavalon.canadatransit.model.database.transit
 
 import android.arch.persistence.room.*
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.Downloadable
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferManager
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.Transferable
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
@@ -39,7 +40,7 @@ data class OperatorFeedVersion(
         @field:Json(name ="download_url") val downloadUrl: String,
         @field:Json(name ="import_level") val importLevel: Int,
         @field:Json(name ="is_active_feed_version") val isActiveFeedVersion: Boolean
-): Transferable.Downloadable {
+): Downloadable {
 
         override fun trackingId(): String {
             return sha1

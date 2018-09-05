@@ -11,7 +11,9 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
     private var activeTask: T? = null
     private var activeTrackingId: String? = null
 
-    abstract fun complete()
+    abstract fun onSuccess(trackingId: String)
+    abstract fun onFailure(trackingId: String)
+    abstract fun onComplete()
 
     override fun add(trackingId: String, task: T) {
         if (queueKey.contains(trackingId) && queueMap.contains(trackingId)) {
@@ -82,7 +84,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         activeTrackingId = null
         // Empty queue key and map means that the manager is done
         if (isEmpty()) {
-            complete()
+            onComplete()
             return
         }
         assert()
@@ -112,6 +114,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         DebugUtil.assertTrue(trackingId == activeTrackingId, "Tracking ID did not match. EXPECTED: $trackingId CURRENT: $activeTrackingId")
         Timber.d("Transferring data is a SUCCESS for tracking-id: $activeTrackingId")
         assert()
+        onSuccess(trackingId)
         next()
     }
 
@@ -119,6 +122,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         DebugUtil.assertTrue(trackingId == activeTrackingId, "Tracking ID did not match. EXPECTED: $trackingId CURRENT: $activeTrackingId")
         Timber.d("Transferring data is a FAILURE for tracking-id: $activeTrackingId")
         assert()
+        onFailure(trackingId)
         next()
     }
 

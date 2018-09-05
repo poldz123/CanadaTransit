@@ -1,16 +1,16 @@
 package com.rodolfonavalon.canadatransit.controller.manager.transfer.task
 
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.Downloadable
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferManager
-import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferTask
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.Transferable
+import com.rodolfonavalon.canadatransit.controller.manager.transfer.util.AbstractTransferTask
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.util.TransferForwardingProperty
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.util.TransferForwardingSource
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.FileUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import okio.Okio
@@ -27,8 +27,8 @@ import java.io.IOException
  *
  * //TODO: Do not download when it already exist in the download directory
  */
-class ObservableDownloaderTask(private val transferManager: TransferManager, private val entity: Transferable.Downloadable): TransferTask.DownloadTransferTask {
-    var disposable: Disposable? = null
+class ObservableDownloaderTask(private val transferManager: TransferManager, private val entity: Downloadable):
+        AbstractTransferTask<Downloadable>(transferManager, entity) {
     var downloadedFile: File? = null
 
     override fun onStart() {
@@ -85,34 +85,9 @@ class ObservableDownloaderTask(private val transferManager: TransferManager, pri
     }
 
     private fun observableOnComplete() {
-        onDownload(downloadedFile)
-    }
-
-    override fun onCancel() {
-        DebugUtil.assertMainThread()
-        Timber.d("Download entity has been CANCELLED")
-        // delete the temp file if exist
-        FileUtil.createFile(CanadaTransitApplication.appContext, entity).delete()
-        // Dispose the retrofit call
-        disposable?.dispose()
-    }
-
-    override fun onError(error: Throwable) {
-        Timber.e(error, "Download entity has FAILED")
-        onCancel()
-        transferManager.failure(entity.trackingId())
-    }
-
-    override fun onProgress(property: TransferForwardingProperty) {
-        DebugUtil.assertMainThread()
-        DebugUtil.assertFalse(property.transferred, "Entity progress is triggered where it was already transferred")
-        // TODO Need to implement the feed progress
-    }
-
-    override fun onDownload(file: File?) {
         Timber.v("Entity download has been SUCCESSFUL")
         DebugUtil.assertMainThread()
-        DebugUtil.assertTrue(file != null, "Entity file is null")
+        DebugUtil.assertTrue(downloadedFile != null, "Entity file is null")
         transferManager.success(entity.trackingId())
     }
 }

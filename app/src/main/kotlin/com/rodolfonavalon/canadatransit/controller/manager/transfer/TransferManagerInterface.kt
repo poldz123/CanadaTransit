@@ -6,7 +6,6 @@ import com.rodolfonavalon.canadatransit.controller.util.queue.Task
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response
-import java.io.File
 
 /**
  * TODO: Transfer
@@ -16,17 +15,6 @@ interface TransferTask: Task {
      * TODO: onProgress
      */
     fun onProgress(property: TransferForwardingProperty)
-    /**
-     *
-     * TODO: DownloadTransferTask
-     */
-    interface DownloadTransferTask: TransferTask {
-
-        /**
-         * TODO: onDownload
-         */
-        fun onDownload(file: File?)
-    }
 }
 
 /**
@@ -51,15 +39,15 @@ interface Transferable: Action {
      * @return The directory path where the entiry will be transferred
      */
     fun transferDirectoryPath(): String
+}
 
+/**
+ * TODO: Downloadable
+ */
+interface Downloadable: Transferable {
     /**
-     * TODO: Downloadable
+     * TODO: download
      */
-    interface Downloadable: Transferable {
-        /**
-         * TODO: download
-         */
-        fun download()
-    }
+    fun download()
 }
 

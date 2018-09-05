@@ -19,9 +19,9 @@ object FileUtil {
      */
     fun createFile(context: Context, transferable: Transferable, temporary: Boolean = false): File {
         DebugUtil.assertTrue(transferable.transferDirectoryPath().isNotEmpty(), "Entity's directory path is empty")
-        DebugUtil.assertTrue(transferable.transferTrackingId().isNotEmpty(), "Entity's id is empty")
+        DebugUtil.assertTrue(transferable.trackingId().isNotEmpty(), "Entity's id is empty")
         val suffix = if (temporary) TEMP_FILE_NAME_SUFFIX else ""
-        val fileName = transferable.transferTrackingId() + suffix
+        val fileName = transferable.trackingId() + suffix
         // TODO Change the directory as internal
         return File(createExternalDirectoryFile(transferable.transferDirectoryPath()), fileName)
     }
