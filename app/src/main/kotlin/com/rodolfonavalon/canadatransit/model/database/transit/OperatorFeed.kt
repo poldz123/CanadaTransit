@@ -1,6 +1,7 @@
 package com.rodolfonavalon.canadatransit.model.database.transit
 
 import android.arch.persistence.room.*
+import com.rodolfonavalon.canadatransit.controller.manager.update.Updatable
 import com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter.OperatorFeedForeignKey
 import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
 import com.squareup.moshi.Json
@@ -33,7 +34,16 @@ data class OperatorFeed(
         @field:Json(name ="import_status") val importStatus: String,
         @field:Json(name ="active_feed_version") val activeFeedVersion: String,
         @field:Json(name ="feed_versions_url") val feedVersionUrl: String
-)
+): Updatable {
+
+    override fun trackingId(): String {
+        return feedOneStopId
+    }
+
+    override fun update() {
+
+    }
+}
 
 data class OperatorInFeed(
         @field:Json(name ="operator_onestop_id") val operatorOneStopId: String

@@ -4,6 +4,7 @@ import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.arch.persistence.room.TypeConverters
+import com.rodolfonavalon.canadatransit.controller.manager.update.Updatable
 import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
 import com.squareup.moshi.Json
 import org.joda.time.DateTime
@@ -27,7 +28,16 @@ data class Operator(
 
         @Embedded
         @field:Json(name ="tags") val tags: Tags
-)
+): Updatable {
+
+        override fun trackingId(): String {
+            return operatorOneStopId
+        }
+
+        override fun update() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+}
 
 data class Tags(
         @field:Json(name ="agency_id") val agencyId: String,

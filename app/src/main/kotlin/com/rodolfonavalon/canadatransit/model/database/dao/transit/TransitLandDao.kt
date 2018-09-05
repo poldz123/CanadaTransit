@@ -31,6 +31,9 @@ interface TransitLandDao {
     fun insertOperators(vararg operators: Operator): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertOperators(operator: List<Operator>): List<Long>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOperatorFeeds(vararg operatorFeeds: OperatorFeed): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
