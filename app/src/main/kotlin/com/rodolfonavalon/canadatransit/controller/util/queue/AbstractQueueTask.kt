@@ -26,7 +26,6 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         // will only start when the manager has completed other queues.
         queueKey.add(trackingId)
         queueMap[trackingId] = task
-        start()
     }
 
     override fun get(trackingId: String): T? {

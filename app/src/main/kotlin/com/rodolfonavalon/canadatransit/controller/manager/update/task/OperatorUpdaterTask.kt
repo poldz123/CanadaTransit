@@ -1,6 +1,5 @@
 package com.rodolfonavalon.canadatransit.controller.manager.update.task
 
-import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.manager.update.util.AbstractUpdateTask
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
@@ -14,6 +13,7 @@ class OperatorUpdaterTask(private val updateManager: UpdateManager):
 
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
+        Timber.d("Retrieving operators...")
         this.disposable = TransitLandApi.retrieveOperators(::onOperatorsReceived, ::onError)
     }
 
@@ -24,12 +24,11 @@ class OperatorUpdaterTask(private val updateManager: UpdateManager):
             return
         }
 
-        val dao = CanadaTransitApplication.appDatabase.transitLandDao()
         Timber.d("Saving ${operators.count()} operator...")
         DatabaseUtil.insert({
             DebugUtil.assertWorkerThread()
             // Trigger to insert the operators in the background thread.
-            dao.insertOperators(operators)
+            updateManager.transitLandDao.insertOperators(operators)
         }, ::onOperatorsSaved, ::onError)
     }
 

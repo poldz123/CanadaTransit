@@ -3,6 +3,7 @@ package com.rodolfonavalon.canadatransit.controller.activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.rodolfonavalon.canadatransit.R
+import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
@@ -15,7 +16,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        TransitLandApi.retrieveOperators(::onOperatorsRetrieved, ::onError)
+        UpdateManager.updateOperators()
+
+//        TransitLandApi.retrieveOperators(::onOperatorsRetrieved, ::onError)
     }
 
     fun onOperatorsRetrieved(operators: List<Operator>) {
