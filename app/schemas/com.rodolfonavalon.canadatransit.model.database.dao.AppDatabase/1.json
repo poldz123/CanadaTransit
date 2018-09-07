@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9c44cc59956b5ae2bf25ea049b6cb3e9",
+    "identityHash": "11a67054b29a437912588cc8213d68df",
     "entities": [
       {
         "tableName": "Operator",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operatorOneStopId` TEXT NOT NULL, `name` TEXT NOT NULL, `website` TEXT NOT NULL, `country` TEXT NOT NULL, `state` TEXT NOT NULL, `timezone` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `metro` TEXT, `shortName` TEXT, `representedInFeedOneStopIds` TEXT NOT NULL, `agencyId` TEXT NOT NULL, `agencyLang` TEXT NOT NULL, `agencyPhone` TEXT NOT NULL, PRIMARY KEY(`operatorOneStopId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operatorOneStopId` TEXT NOT NULL, `name` TEXT NOT NULL, `state` TEXT NOT NULL, `timezone` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `country` TEXT, `website` TEXT, `metro` TEXT, `shortName` TEXT, `representedInFeedOneStopIds` TEXT NOT NULL, `agencyId` TEXT, `agencyLang` TEXT, `agencyPhone` TEXT, PRIMARY KEY(`operatorOneStopId`))",
         "fields": [
           {
             "fieldPath": "operatorOneStopId",
@@ -17,18 +17,6 @@
           {
             "fieldPath": "name",
             "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "website",
-            "columnName": "website",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "country",
-            "columnName": "country",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -57,6 +45,18 @@
             "notNull": true
           },
           {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "website",
+            "columnName": "website",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "metro",
             "columnName": "metro",
             "affinity": "TEXT",
@@ -78,19 +78,19 @@
             "fieldPath": "tags.agencyId",
             "columnName": "agencyId",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "tags.agencyLang",
             "columnName": "agencyLang",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "tags.agencyPhone",
             "columnName": "agencyPhone",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -347,7 +347,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"9c44cc59956b5ae2bf25ea049b6cb3e9\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"11a67054b29a437912588cc8213d68df\")"
     ]
   }
 }

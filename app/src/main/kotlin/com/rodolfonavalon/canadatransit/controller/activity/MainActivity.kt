@@ -3,11 +3,15 @@ package com.rodolfonavalon.canadatransit.controller.activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.rodolfonavalon.canadatransit.R
+import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
+import com.rodolfonavalon.canadatransit.controller.util.DatabaseUtil
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
+import org.joda.time.DateTime
+import org.joda.time.format.ISODateTimeFormat
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +19,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val dao = CanadaTransitApplication.appDatabase.transitLandDao()
+//        DatabaseUtil.query(dao.loadOperators(), { operators ->
+//            Timber.d("Operators: ${operators.count()}")
+//            for (operator in operators) {
+//                if (operator.operatorOneStopId == "o-f24-octranspo") {
+//                    Timber.d("Tags is null")
+//                }
+//            }
+//        }, ::onError)
 
         UpdateManager.updateOperators()
 

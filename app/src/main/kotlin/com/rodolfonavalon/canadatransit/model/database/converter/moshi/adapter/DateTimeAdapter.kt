@@ -18,12 +18,12 @@ class DateTimeAdapter {
         if (value.isNullOrEmpty()) {
             return null
         }
-        val formatter = ISODateTimeFormat.dateTimeParser()
+        val formatter = ISODateTimeFormat.dateTime()
         return formatter.parseDateTime(value)
     }
 
     @ToJson fun toJson(dateTime: DateTime): String {
-        val formatter = ISODateTimeFormat.dateTimeParser()
+        val formatter = ISODateTimeFormat.dateTime()
         return formatter.print(DateTime(dateTime))
     }
 }

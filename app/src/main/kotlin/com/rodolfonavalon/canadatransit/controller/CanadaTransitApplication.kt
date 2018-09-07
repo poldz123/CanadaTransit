@@ -20,7 +20,9 @@ class CanadaTransitApplication : Application() {
         // Initialize the global application context
         appContext = applicationContext
         // Initialize the database
-        appDatabase = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DATABASE_NAME).build()
+        appDatabase = Room.databaseBuilder(applicationContext, AppDatabase::class.java, DATABASE_NAME)
+                .fallbackToDestructiveMigration() // TODO REMOVE
+                .build()
         // Initialize the Timber for both DEBUG and RELEASE Tree
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

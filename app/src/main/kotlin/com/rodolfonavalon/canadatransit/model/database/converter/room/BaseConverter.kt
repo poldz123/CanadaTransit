@@ -9,11 +9,11 @@ open class BaseConverter {
 
     @TypeConverter
     fun dateTimeToString(value: DateTime): String
-            = ISODateTimeFormat.dateTimeParser().print(value)
+            = ISODateTimeFormat.dateTime().print(value)
 
     @TypeConverter
     fun stringToDateTime(value: String): DateTime
-            = ISODateTimeFormat.dateTimeParser().parseDateTime(value)
+            = ISODateTimeFormat.dateTime().parseDateTime(value)
 
     @TypeConverter
     fun listIntegerToString(value: List<Int>): String
