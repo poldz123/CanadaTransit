@@ -30,7 +30,11 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }, ::onError)
 
-        UpdateManager.updateOperators()
+        UpdateManager.updateOperators({ operators ->
+            Timber.d("Retrieved ${operators.count()} operators that was recently updated")
+        }, {
+            Timber.d("Failed to update operators")
+        })
 
 //        TransitLandApi.retrieveOperators(::onOperatorsRetrieved, ::onError)
     }

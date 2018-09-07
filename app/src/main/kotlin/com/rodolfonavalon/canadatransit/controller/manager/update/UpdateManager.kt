@@ -20,7 +20,7 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
         EVERYTHING
     }
 
-    var onUpdateCompleteListener: OnUpdateCompleteListener? = null
+    var onUpdateManagerCompleteListener: OnUpdateManagerCompleteListener? = null
 
     val transitLandDao: TransitLandDao by lazy {
         CanadaTransitApplication.appDatabase.transitLandDao()
@@ -36,17 +36,18 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
     }
 
     override fun onComplete() {
-        onUpdateCompleteListener?.invoke()
+        onUpdateManagerCompleteListener?.invoke()
     }
 
     companion object {
         private val instance: UpdateManager = UpdateManager()
 
-        fun updateOperators(): String {
+        fun updateOperators(onSuccess: OnSuccessUpdateTaskListener<List<Operator>>? = null,
+                            onFailure: OnFailureUpdateTaskListener? = null): String {
             // Todo - This updates the operator, we do not care if it have a flag
             // that needs to be updated. All operators are updated by default every time.
             val trackingId = generateTrackingId()
-            instance.add(trackingId, OperatorUpdaterTask(instance))
+            instance.add(trackingId, OperatorUpdaterTask(instance, onSuccess, onFailure))
             startService()
             return trackingId
         }
@@ -80,8 +81,8 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
          * start the manager. This is to be able to process the task in the background even
          * if the application has already been destroyed.
          */
-        fun startManager(onUpdateCompleteListener: OnUpdateCompleteListener? = null) {
-            instance.onUpdateCompleteListener = onUpdateCompleteListener
+        fun startManager(onUpdateManagerCompleteListener: OnUpdateManagerCompleteListener? = null) {
+            instance.onUpdateManagerCompleteListener = onUpdateManagerCompleteListener
             instance.start()
         }
 

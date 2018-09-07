@@ -1,5 +1,7 @@
 package com.rodolfonavalon.canadatransit.controller.manager.update.task
 
+import com.rodolfonavalon.canadatransit.controller.manager.update.OnFailureUpdateTaskListener
+import com.rodolfonavalon.canadatransit.controller.manager.update.OnSuccessUpdateTaskListener
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.manager.update.util.AbstractUpdateTask
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
@@ -8,8 +10,10 @@ import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import timber.log.Timber
 
-class OperatorUpdaterTask(private val updateManager: UpdateManager):
-        AbstractUpdateTask(updateManager) {
+class OperatorUpdaterTask(updateManager: UpdateManager,
+                          onSuccess: OnSuccessUpdateTaskListener<List<Operator>>? = null,
+                          onFailure: OnFailureUpdateTaskListener? = null):
+        AbstractUpdateTask(updateManager, onSuccess, onFailure) {
 
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
@@ -20,21 +24,24 @@ class OperatorUpdaterTask(private val updateManager: UpdateManager):
     private fun onOperatorsReceived(operators: List<Operator>) {
         if (operators.isEmpty()) {
             Timber.d("No operators was found, this could mean that the API has a BUG.")
-            updateManager.success()
+            onOperatorsSaved(operators)
             return
         }
 
-        Timber.d("Saving ${operators.count()} operator...")
+        Timber.d("Saving ${operators.count()} operators...")
         DatabaseUtil.insert({
             DebugUtil.assertWorkerThread()
             // Trigger to insert the operators in the background thread.
-            updateManager.transitLandDao.insertOperators(operators)
-        }, ::onOperatorsSaved, ::onError)
+            this.updateManager.transitLandDao.insertOperators(operators)
+        }, { rowIds ->
+            DebugUtil.assertTrue(rowIds.isNotEmpty(), "There are no operators being saved on a successful database transaction: $trackingId")
+            onOperatorsSaved(operators)
+        }, ::onError)
     }
 
-    private fun onOperatorsSaved(rowIds: List<Long>) {
-        DebugUtil.assertTrue(rowIds.isNotEmpty(), "There are no operators being saved on a successful database transaction: $trackingId")
-        Timber.d("Successfully saved ${rowIds.count()} operators")
-        updateManager.success()
+    private fun onOperatorsSaved(operators: List<Operator>) {
+        Timber.d("Successfully saved ${operators.count()} operators")
+        this.onSuccess?.invoke(operators)
+        this.updateManager.success()
     }
 }

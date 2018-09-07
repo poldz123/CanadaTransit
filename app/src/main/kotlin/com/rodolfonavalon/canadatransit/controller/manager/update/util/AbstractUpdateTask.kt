@@ -1,12 +1,17 @@
 package com.rodolfonavalon.canadatransit.controller.manager.update.util
 
+import com.rodolfonavalon.canadatransit.controller.manager.update.OnFailureUpdateTaskListener
+import com.rodolfonavalon.canadatransit.controller.manager.update.OnSuccessUpdateTaskListener
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateTask
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
+import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
-abstract class AbstractUpdateTask(private val updateManager: UpdateManager): UpdateTask {
+abstract class AbstractUpdateTask(val updateManager: UpdateManager,
+                                  val onSuccess: OnSuccessUpdateTaskListener<List<Operator>>? = null,
+                                  private val onFailure: OnFailureUpdateTaskListener? = null): UpdateTask {
     var disposable: Disposable? = null
     var trackingId: String = ""
 
@@ -27,6 +32,8 @@ abstract class AbstractUpdateTask(private val updateManager: UpdateManager): Upd
         Timber.e(error, "AbstractUpdateTask has FAILED: $trackingId")
         // Error means that we are cancelling the task
         onCancel()
+        // Trigger the failure callback to the caller
+        onFailure?.invoke()
         // Trigger a failure task within the manager
         updateManager.failure()
     }
