@@ -15,39 +15,35 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-abstract class TransitApi<API> {
-    /**
-     * API endpoint of the target transit
-     */
-    protected abstract val apiUrl: String
-
-    /**
-     * API class that holds the endpoint interface for the target transit
-     */
-    protected abstract val apiClass: Class<API>
-
-    /**
-     * API test endpoint of the target transit
-     */
-    @VisibleForTesting(otherwise = PRIVATE)
-    var apiTestUrl: String? = null
+abstract class TransitApi<API: Any>(apiUrl: String, val apiClass: Class<API>) {
 
     /**
      *  Retrieves the [Retrofit] instance, that handles the api networking and
      *  properly converts the json as an object model.
      */
-    protected val retrofitInstance: API by lazy {
-        val baseUrl = apiTestUrl ?: apiUrl
+    lateinit var retrofitInstance: API
+
+    init {
+        initializeRetrofit(apiUrl)
+    }
+
+    /**
+     * Initialized the [Retrofit] api instance with a valid url
+     * that points to the API. This is used also in test to re-initialized
+     * the API url every test cases.
+     */
+    @VisibleForTesting(otherwise = PRIVATE)
+    fun initializeRetrofit(apiUrl: String) {
         val moshi = Moshi.Builder()
                 .add(DateTimeAdapter())
                 .add(OperatorFeedForeignKeyAdapter())
                 .build()
         val retrofit = Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(apiUrl)
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
-        retrofit.create(apiClass)
+        retrofitInstance = retrofit.create(apiClass)
     }
 
     /**

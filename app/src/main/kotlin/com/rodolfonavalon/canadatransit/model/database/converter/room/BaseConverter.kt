@@ -13,7 +13,7 @@ open class BaseConverter {
 
     @TypeConverter
     fun stringToDateTime(value: String): DateTime
-            = ISODateTimeFormat.dateTime().parseDateTime(value)
+            = ISODateTimeFormat.dateTimeParser().parseDateTime(value)
 
     @TypeConverter
     fun listIntegerToString(value: List<Int>): String

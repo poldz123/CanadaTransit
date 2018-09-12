@@ -7,6 +7,8 @@ import android.os.Looper
  */
 object DebugUtil {
 
+    private var isDisabledBackgroundCheck = false
+
     /**
      * assertFalse
      */
@@ -32,16 +34,29 @@ object DebugUtil {
      * assertMainThread
      */
     fun assertMainThread() {
-        assertTrue(Looper.myLooper() == Looper.getMainLooper(),
+        if (!isDisabledBackgroundCheck) {
+            assertTrue(Looper.myLooper() == Looper.getMainLooper(),
                 "Method should be executed within the Main Thread!!")
+        }
     }
 
     /**
      * assertWorkerThread
      */
     fun assertWorkerThread() {
-        assertFalse(Looper.myLooper() == Looper.getMainLooper(),
-                "Method should be executed within the Worker Thread!!")
+        if (!isDisabledBackgroundCheck) {
+            assertFalse(Looper.myLooper() == Looper.getMainLooper(),
+                    "Method should be executed within the Worker Thread!!")
+        }
+    }
+
+    /**
+     * This is to disable the main and background threads assertion. This is
+     * used by the JVM unit tests to prevent assertion since the unit tests
+     * always run in the main thread.
+     */
+    fun disableBackgroundChecks() {
+        isDisabledBackgroundCheck = true
     }
 
     private fun assert(value: Boolean, message: String? = null) {

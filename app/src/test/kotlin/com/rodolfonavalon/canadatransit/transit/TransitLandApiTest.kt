@@ -24,7 +24,7 @@ class TransitLandApiTest : BaseMockServerTest() {
 
     override fun setup() {
         super.setup()
-        TransitLandApi.apiTestUrl = server.url("/api/v1/").toString()
+        TransitLandApi.initializeRetrofit(server.url("/api/v1/").toString())
     }
 
     @Test

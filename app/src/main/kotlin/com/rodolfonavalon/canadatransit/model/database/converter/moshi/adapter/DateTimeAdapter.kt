@@ -18,7 +18,7 @@ class DateTimeAdapter {
         if (value.isNullOrEmpty()) {
             return null
         }
-        val formatter = ISODateTimeFormat.dateTime()
+        val formatter = ISODateTimeFormat.dateTimeParser()
         return formatter.parseDateTime(value)
     }
 

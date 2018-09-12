@@ -22,12 +22,12 @@ open class BaseMockServerTest {
     val synchronousTasks = SynchronousTestRule()
 
     companion object {
-        @JvmField
-        val server: CustomMockWebServer = CustomMockWebServer()
+        lateinit var server: CustomMockWebServer
 
         @BeforeClass
         @JvmStatic
         fun setupClass() {
+            server = CustomMockWebServer()
             server.start()
         }
 

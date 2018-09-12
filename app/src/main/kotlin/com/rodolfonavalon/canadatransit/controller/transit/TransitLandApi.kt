@@ -30,7 +30,18 @@ interface TransitLandApi {
     @GET @Streaming
     fun downloadFeed(@Url url: String): Observable<Response<ResponseBody>>
 
-    companion object: TransitApi<TransitLandApi>() {
+    companion object: TransitApi<TransitLandApi>(
+
+            /**
+             * API endpoint for the bus transits (http://transit.land)
+             */
+            apiUrl = "http://transit.land/api/v1/",
+
+            /**
+             * API class that holds the endpoint interface for the target transit
+             */
+            apiClass = TransitLandApi::class.java
+            ) {
         /**
          * The country to retrieve bus operators (http://transit.land)
          */
@@ -40,16 +51,6 @@ interface TransitLandApi {
          * The max pagination data objects (http://transit.land)
          */
         private const val API_PAGINATION_PER_PAGE = 50
-
-        /**
-         * API endpoint for the bus transits (http://transit.land)
-         */
-        override val apiUrl: String = "http://transit.land/api/v1/"
-
-        /**
-         * API class that holds the endpoint interface for the target transit
-         */
-        override val apiClass: Class<TransitLandApi> = TransitLandApi::class.java
 
         /**
          *  Retrieves all buses [Operator] of the selected country: [API_COUNTRY]
