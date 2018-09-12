@@ -6,6 +6,7 @@ import com.rodolfonavalon.canadatransit.controller.manager.update.task.OperatorU
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService.Companion.ACTION_START_UPDATE_MANAGER
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
+import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTask
 import com.rodolfonavalon.canadatransit.model.database.dao.transit.TransitLandDao
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
@@ -20,7 +21,7 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
         EVERYTHING
     }
 
-    var onUpdateManagerCompleteListener: OnUpdateManagerCompleteListener? = null
+    private var onUpdateManagerCompleteListener: OnUpdateManagerCompleteListener? = null
 
     val transitLandDao: TransitLandDao by lazy {
         CanadaTransitApplication.appDatabase.transitLandDao()
@@ -40,7 +41,7 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
     }
 
     companion object {
-        private val instance: UpdateManager = UpdateManager()
+    private val instance: UpdateManager = UpdateManager()
 
         fun updateOperators(onSuccess: OnSuccessUpdateTaskListener<List<Operator>>? = null,
                             onFailure: OnFailureUpdateTaskListener? = null): String {
@@ -77,13 +78,25 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
         }
 
         /**
-         * This triggers the manager to start the task processes, only the service can
-         * start the manager. This is to be able to process the task in the background even
-         * if the application has already been destroyed.
+         * Retrieves the instance of the [QueueTask] which is the instance of the [UpdateManager], this
+         * is to encapsulate the manager.
          */
-        fun startManager(onUpdateManagerCompleteListener: OnUpdateManagerCompleteListener? = null) {
+        fun manager(): QueueTask<UpdateTask> {
+            return instance
+        }
+
+        /**
+         * This triggers the manager to start the tasks which only the service can. This is
+         * to be able to process the tasks in the background even if the application has
+         * already been destroyed.
+         */
+        fun startTasks(onUpdateManagerCompleteListener: OnUpdateManagerCompleteListener? = null) {
             instance.onUpdateManagerCompleteListener = onUpdateManagerCompleteListener
             instance.start()
+        }
+
+        fun stopTasks() {
+            // TODO stop the tasks
         }
 
         private fun startService() {

@@ -21,7 +21,7 @@ class UpdateService: Service() {
         // update in the background even if the application has already been destroyed.
         val isStartUpdateManager = intent.getBooleanExtra(ACTION_START_UPDATE_MANAGER, false)
         if (isStartUpdateManager) {
-            UpdateManager.startManager(::onUpdateManagerComplete)
+            UpdateManager.startTasks(::onUpdateManagerComplete)
         }
 
         return START_NOT_STICKY
@@ -33,6 +33,8 @@ class UpdateService: Service() {
 
     companion object {
 
+        // This an an action within the service that will trigger the update manager
+        // to start its queued tasks.
         const val ACTION_START_UPDATE_MANAGER = "ACTION_START_UPDATE_MANAGER"
     }
 }
