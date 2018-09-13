@@ -42,6 +42,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
             '**/*$[0-9].*',
             '**/*$ViewBinder*.*',
             '**/*$InjectAdapter*.*',
+            '**/DebugUtil*.*',
             'android/**/*.*'
     ]
     def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)

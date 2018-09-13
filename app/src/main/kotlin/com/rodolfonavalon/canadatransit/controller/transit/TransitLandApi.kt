@@ -30,7 +30,7 @@ interface TransitLandApi {
     @GET @Streaming
     fun downloadFeed(@Url url: String): Observable<Response<ResponseBody>>
 
-    companion object: TransitApi<TransitLandApi>(
+    companion object: AbstractTransitApi<TransitLandApi>(
 
             /**
              * API endpoint for the bus transits (http://transit.land)

@@ -1,5 +1,7 @@
 package com.rodolfonavalon.canadatransit.controller.util.queue
 
+import android.support.annotation.VisibleForTesting
+import android.support.annotation.VisibleForTesting.PRIVATE
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import timber.log.Timber
 import java.util.*
@@ -16,7 +18,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
     abstract fun onComplete()
 
     override fun add(trackingId: String, task: T) {
-        if (queueKey.contains(trackingId) && queueMap.contains(trackingId)) {
+        if (queueKey.contains(trackingId)) {
             Timber.d("Transfer is already in progress with tracking-id: $trackingId")
             return
         }
@@ -33,31 +35,25 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         if (isEmpty()) {
             return null
         }
-        if (queueMap[trackingId] != null) {
-            return queueMap[trackingId]
-        }
-        if (isBusy() && activeTrackingId == trackingId) {
-            return activeTask
-        }
-        return null
+        return queueMap[trackingId]
     }
 
-    override fun remove(trackingId: String) {
-        if (!queueKey.contains(trackingId) && !queueMap.contains(trackingId)) {
+    override fun remove(trackingId: String): Boolean {
+        if (!queueKey.contains(trackingId)) {
             Timber.d("Transfer does not exist with tracking-id: $trackingId")
-            return
+            return false
         }
         assert()
+        queueKey.remove(trackingId)
+        queueMap.remove(trackingId)
         // Whenever we remove a transfer object we also check that it is transferring so
         // the manager can trigger a cancel to the active transfer to properly dispose the
         // network call or even remove the temporary files.
         if (activeTrackingId == trackingId) {
             DebugUtil.assertTrue(activeTask != null, "Active transfer is null, did you initialized it!?")
             activeTask!!.onCancel()
-        } else {
-            queueKey.remove(trackingId)
-            queueMap.remove(trackingId)
         }
+        return true
     }
 
     override fun clear() {
@@ -129,7 +125,10 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         DebugUtil.assertTrue(queueMap.isEmpty() == queueKey.isEmpty(), "Key and Map transfer has different size, this could mean that some transfers are not consumed!")
     }
 
-    fun isEmpty(): Boolean = queueKey.isEmpty() && queueMap.isEmpty() && !isBusy()
+    fun isEmpty(): Boolean = queueKey.isEmpty() && queueMap.isEmpty()
 
-    fun isBusy(): Boolean = (activeTask != null && activeTrackingId != null)
+    fun isBusy(): Boolean = activeTask != null && activeTrackingId != null
+
+    @VisibleForTesting(otherwise = PRIVATE)
+    fun numTasks(): Int = queueKey.count()
 }

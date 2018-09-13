@@ -15,7 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-abstract class TransitApi<API: Any>(apiUrl: String, val apiClass: Class<API>) {
+abstract class AbstractTransitApi<API: Any>(apiUrl: String, val apiClass: Class<API>) {
 
     /**
      *  Retrieves the [Retrofit] instance, that handles the api networking and
@@ -61,9 +61,6 @@ abstract class TransitApi<API: Any>(apiUrl: String, val apiClass: Class<API>) {
      *  @throws [IllegalArgumentException] if the feeds is empty
      */
     protected fun <FEED, OBSERVER> retrieveListObject(feeds: List<FEED>, observer: (FEED) -> Observable<OBSERVER>): Observable<OBSERVER> {
-        if (feeds.isEmpty()) {
-            throw IllegalArgumentException("Feeds list is empty.")
-        }
         // Return the result with chaining of the observable list feed
         return observer.invoke(feeds.first())
                 .concatMap { operatorFeed ->
@@ -85,9 +82,6 @@ abstract class TransitApi<API: Any>(apiUrl: String, val apiClass: Class<API>) {
      *  @throws [IllegalArgumentException] if per page is an invalid value
      */
     protected fun <OBSERVER: MetaResponse> retrievePaginatedObject(perPage: Int, observer: (Int, Int) -> Observable<OBSERVER>): Observable<OBSERVER> {
-        if (perPage <= 0) {
-            throw IllegalArgumentException("Per page is not valid: $perPage")
-        }
         // Recursion makes everything easier to do the paginated observable objects
         fun retrievePaginatedObject(offset: Int): Observable<OBSERVER> {
             return observer.invoke(offset, perPage).concatMap { metaResponse ->
