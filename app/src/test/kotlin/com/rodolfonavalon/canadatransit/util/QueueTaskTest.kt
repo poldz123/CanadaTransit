@@ -87,6 +87,7 @@ class QueueTaskTest {
         val isRemoved = queueTask.remove(testTask.trackingId)
         assertTrue(isRemoved)
         assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
         assertEquals(0, queueTask.numTasks())
     }
 
@@ -100,6 +101,7 @@ class QueueTaskTest {
         val isRemoved = queueTask.remove(testTask.trackingId)
         assertTrue(isRemoved)
         assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
         assertEquals(0, queueTask.numTasks())
     }
 
@@ -112,6 +114,7 @@ class QueueTaskTest {
         val isRemoved = queueTask.remove("UNKNOWN")
         assertFalse(isRemoved)
         assertFalse(queueTask.isEmpty())
+        assertTrue(queueTask.isBusy())
         assertEquals(1, queueTask.numTasks())
     }
 
@@ -129,6 +132,7 @@ class QueueTaskTest {
             assertEquals(numTasks - numCurrentRemoved, queueTask.numTasks())
         }
         assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
         assertEquals(0, queueTask.numTasks())
     }
 
@@ -139,6 +143,7 @@ class QueueTaskTest {
         createMultipleTasks(queueTask, true)
         queueTask.clear()
         assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
         assertEquals(0, queueTask.numTasks())
 
         val testTasks = createMultipleTasks(queueTask, true)
@@ -146,6 +151,7 @@ class QueueTaskTest {
         queueTask.start()
         queueTask.clear()
         assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
         assertEquals(0, queueTask.numTasks())
     }
 
