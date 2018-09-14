@@ -155,6 +155,58 @@ class QueueTaskTest {
         assertEquals(0, queueTask.numTasks())
     }
 
+    @Test
+    fun testStartTask() {
+        val queueTask = TestQueueTask()
+
+        // Test starting the manager while there are no tasks added
+        queueTask.start()
+        assertFalse(queueTask.isBusy())
+
+        // Now start the manager with task on it
+        val testTask = createSingleTask(queueTask, true)
+        testTask.preventAutoComplete = true
+        queueTask.start()
+        assertTrue(queueTask.isBusy)
+
+        // If the manager has already started, it cannot start a new
+        // task all over again.
+        for (i in 1..20) {
+            queueTask.start()
+        }
+        assertEquals(1, queueTask.numTasks())
+    }
+
+    @Test
+    fun testNextTask() {
+        val queueTask = TestQueueTask()
+
+        val testTasks = createMultipleTasks(queueTask, true)
+        val totalTasks = testTasks.count()
+        for (testTask in testTasks) {
+            // Prevent all of the tasks from being automatically finished
+            testTask.second.preventAutoComplete = true
+        }
+        queueTask.start()
+        assertEquals(totalTasks, queueTask.numTasks())
+
+        // Trigger the manager for next task to be processed, this will test
+        // the tasks being complete one by one until all are finished
+        for (i in 1..totalTasks) {
+            queueTask.next()
+            assertEquals(totalTasks - i, queueTask.numTasks())
+        }
+        assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
+
+        // Calling managers's next for an empty tasks will just ignore start tasks
+        for (i in 1..20) {
+            queueTask.next()
+        }
+        assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
+    }
+
     private fun createSingleTask(queueTask: TestQueueTask, addToQueue: Boolean = false): TestTask {
         val testTaskTrackingId = "1"
         val testTask = TestTask(testTaskTrackingId, queueTask)
@@ -201,11 +253,19 @@ class TestTask(val trackingId: String, val queueTask: TestQueueTask): Task {
 
     var preventAutoComplete = false
 
+    fun triggerTaskSuccess() {
+        queueTask.success()
+    }
+
+    fun triggerTaskFailure() {
+        queueTask.failure()
+    }
+
     override fun onStart(trackingId: String) {
         isStarting = true
 
         if (!preventAutoComplete) {
-            queueTask.success()
+            triggerTaskSuccess()
         }
     }
 
@@ -216,6 +276,6 @@ class TestTask(val trackingId: String, val queueTask: TestQueueTask): Task {
     override fun onError(error: Throwable) {
         isFailed = true
         onCancel()
-        queueTask.failure()
+        triggerTaskFailure()
     }
 }
