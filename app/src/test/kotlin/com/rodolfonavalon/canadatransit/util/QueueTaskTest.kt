@@ -207,6 +207,75 @@ class QueueTaskTest {
         assertFalse(queueTask.isBusy())
     }
 
+    @Test
+    fun testSuccessfulTask() {
+        val queueTask = TestQueueTask()
+
+        val testTask = createSingleTask(queueTask, true)
+        testTask.preventAutoComplete = true
+        queueTask.start()
+
+        // Test the manager for a successful task
+        queueTask.success()
+        assertEquals(queueTask.lastSuccessfulTrackingId, testTask.trackingId)
+        assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
+    }
+
+    @Test
+    fun testSuccessfulMultipleTasks() {
+        val queueTask = TestQueueTask()
+
+        val testTasks = createMultipleTasks(queueTask, true)
+        for (testTask in testTasks) {
+            // Prevent all of the tasks from being automatically finished
+            testTask.second.preventAutoComplete = true
+        }
+        queueTask.start()
+
+        // Test the manager for a successful tasks
+        for (testTask in testTasks) {
+            queueTask.success()
+            assertEquals(queueTask.lastSuccessfulTrackingId, testTask.trackingId)
+        }
+        assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
+    }
+
+    @Test
+    fun testFailedTask() {
+        val queueTask = TestQueueTask()
+
+        val testTask = createSingleTask(queueTask, true)
+        testTask.preventAutoComplete = true
+        queueTask.start()
+
+        // Test the manager for a successful task
+        queueTask.failure()
+        assertEquals(queueTask.lastFailedTrackingId, testTask.trackingId)
+        assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
+    }
+
+    fun testFailedMultipleTasks() {
+        val queueTask = TestQueueTask()
+
+        val testTasks = createMultipleTasks(queueTask, true)
+        for (testTask in testTasks) {
+            // Prevent all of the tasks from being automatically finished
+            testTask.second.preventAutoComplete = true
+        }
+        queueTask.start()
+
+        // Test the manager for a successful tasks
+        for (testTask in testTasks) {
+            queueTask.failure()
+            assertEquals(queueTask.lastFailedTrackingId, testTask.trackingId)
+        }
+        assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
+    }
+
     private fun createSingleTask(queueTask: TestQueueTask, addToQueue: Boolean = false): TestTask {
         val testTaskTrackingId = "1"
         val testTask = TestTask(testTaskTrackingId, queueTask)
@@ -232,12 +301,15 @@ class QueueTaskTest {
 
 class TestQueueTask: AbstractQueueTask<TestTask>() {
 
-    override fun onSuccess(trackingId: String) {
+    var lastSuccessfulTrackingId = ""
+    var lastFailedTrackingId = ""
 
+    override fun onSuccess(trackingId: String) {
+        lastSuccessfulTrackingId = trackingId
     }
 
     override fun onFailure(trackingId: String) {
-
+        lastFailedTrackingId = trackingId
     }
 
     override fun onComplete() {
@@ -250,22 +322,24 @@ class TestTask(val trackingId: String, val queueTask: TestQueueTask): Task {
     var isStarting = false
     var isCancelled = false
     var isFailed = false
+    var isSuccess = false
 
     var preventAutoComplete = false
 
-    fun triggerTaskSuccess() {
+    fun triggerSuccess() {
+        isSuccess = true
         queueTask.success()
     }
 
-    fun triggerTaskFailure() {
+    fun triggerFailure() {
+        isFailed = true
         queueTask.failure()
     }
 
     override fun onStart(trackingId: String) {
         isStarting = true
-
         if (!preventAutoComplete) {
-            triggerTaskSuccess()
+            triggerSuccess()
         }
     }
 
@@ -274,8 +348,7 @@ class TestTask(val trackingId: String, val queueTask: TestQueueTask): Task {
     }
 
     override fun onError(error: Throwable) {
-        isFailed = true
         onCancel()
-        triggerTaskFailure()
+        triggerFailure()
     }
 }
