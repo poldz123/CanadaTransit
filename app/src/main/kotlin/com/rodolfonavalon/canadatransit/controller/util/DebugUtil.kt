@@ -24,9 +24,23 @@ object DebugUtil {
     }
 
     /**
+     * assertNull
+     */
+    fun <T>assertNull(assertion: T, message: String? = null) {
+        assert(assertion == null, message)
+    }
+
+    /**
+     * assertNull
+     */
+    fun <T>assertNotNull(assertion: T, message: String? = null) {
+        assert(assertion != null, message)
+    }
+
+    /**
      * assertEqual
      */
-    fun assertEqual(first: Any, second: Any, message: String? = null) {
+    fun <F, S>assertEqual(first: F, second: S, message: String? = null) {
         assert(first === second, message)
     }
 

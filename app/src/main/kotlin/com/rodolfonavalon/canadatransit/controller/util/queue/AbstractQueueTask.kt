@@ -3,6 +3,7 @@ package com.rodolfonavalon.canadatransit.controller.util.queue
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.VisibleForTesting.PRIVATE
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
+import com.rodolfonavalon.canadatransit.controller.util.extension.safeLet
 import timber.log.Timber
 import java.util.*
 
@@ -47,12 +48,11 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         // Whenever we remove a transfer object we also check that it is transferring so
         // the manager can trigger a cancel to the active transfer to properly dispose the
         // network call or even remove the temporary files.
-        if (activeTrackingId == trackingId) {
-            DebugUtil.assertTrue(activeTask != null, "Active transfer is null, did you initialized it!?")
-            activeTask!!.onCancel()
+        activeTask?.let { task ->
+            task.onCancel()
             // When a task is active it should call failure to execute the next task or finish the manager.
             failure()
-        } else {
+        } ?: run {
             queueKey.remove(trackingId)
             queueMap.remove(trackingId)
             // Make sure that onFailure is called
@@ -86,19 +86,19 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         }
 
         // Second Stage
-        if (activeTrackingId != null) {
-            remove(activeTrackingId!!)
+        activeTrackingId?.let { trackingId ->
+            remove(trackingId)
         }
     }
 
     override fun next() {
         // Make sure to reset the data of the active transfer and remove
         // it from the queue for the next transfer
-        if (activeTrackingId != null && activeTask != null) {
+        activeTrackingId?.let { trackingId ->
             val removedTrackingId = queueKey.poll()
-            val removedTransfer = queueMap.remove(activeTrackingId!!)
-            DebugUtil.assertTrue(removedTrackingId == activeTrackingId, "Tracking ID did not match. EXPECTED: $removedTrackingId CURRENT: $activeTrackingId")
-            DebugUtil.assertTrue(removedTransfer == activeTask, "Transfer OBJECT did not match.")
+            val removedTransfer = queueMap.remove(trackingId)
+            DebugUtil.assertEqual(removedTrackingId, trackingId, "Tracking ID did not match. EXPECTED: $removedTrackingId CURRENT: $activeTrackingId")
+            DebugUtil.assertEqual(removedTransfer, activeTask, "Transfer OBJECT did not match.")
         }
         activeTask = null
         activeTrackingId = null
@@ -110,14 +110,13 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         assert()
         // Retrieve the key and value for the next transfer, this will
         // not remove the key from the list of keys.
-        val key = queueKey.peek()
-        val value = queueMap[key]
-        // Make sure to debug the key and value that it exist
-        DebugUtil.assertTrue(value != null, "Transfer was not found within map for key: $key!")
-        // Initialize the active transfer and then trigger it to start.
-        activeTrackingId = key
-        activeTask = value
-        activeTask!!.onStart(activeTrackingId!!)
+        safeLet(queueKey.peek(), queueMap[queueKey.peek()]) { key, task ->
+            // Initialize the active transfer
+            activeTrackingId = key
+            activeTask = task
+            // Trigger the task to start
+            task.onStart(key)
+        }
     }
 
     override fun start() {
@@ -131,23 +130,27 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
     }
 
     fun success() {
-        DebugUtil.assertTrue(activeTrackingId != null, "Active tracking id is NULL.")
+        DebugUtil.assertNotNull(activeTrackingId, "Active tracking id is NULL.")
         Timber.d("Transferring data is a SUCCESS for tracking-id: $activeTrackingId")
-        assert()
-        onSuccess(activeTrackingId!!)
-        next()
+        activeTrackingId?.let { trackingId ->
+            assert()
+            onSuccess(trackingId)
+            next()
+        }
     }
 
     fun failure() {
-        DebugUtil.assertTrue(activeTrackingId != null, "Active tracking id is NULL.")
+        DebugUtil.assertNotNull(activeTrackingId, "Active tracking id is NULL.")
         Timber.d("Transferring data is a FAILURE for tracking-id: $activeTrackingId")
-        assert()
-        onFailure(activeTrackingId!!)
-        next()
+        activeTrackingId?.let { trackingId ->
+            assert()
+            onFailure(trackingId)
+            next()
+        }
     }
 
     private fun assert() {
-        DebugUtil.assertTrue(queueMap.isEmpty() == queueKey.isEmpty(), "Key and Map transfer has different size, this could mean that some transfers are not consumed!")
+        DebugUtil.assertEqual(queueMap.isEmpty(), queueKey.isEmpty(), "Key and Map transfer has different size, this could mean that some transfers are not consumed!")
     }
 
     fun isEmpty(): Boolean = queueKey.isEmpty() && queueMap.isEmpty()
