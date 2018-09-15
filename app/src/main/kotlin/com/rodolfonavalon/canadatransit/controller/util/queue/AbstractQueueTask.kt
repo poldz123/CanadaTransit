@@ -44,26 +44,51 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
             return false
         }
         assert()
-        queueKey.remove(trackingId)
-        queueMap.remove(trackingId)
         // Whenever we remove a transfer object we also check that it is transferring so
         // the manager can trigger a cancel to the active transfer to properly dispose the
         // network call or even remove the temporary files.
         if (activeTrackingId == trackingId) {
             DebugUtil.assertTrue(activeTask != null, "Active transfer is null, did you initialized it!?")
             activeTask!!.onCancel()
+            // When a task is active it should call failure to execute the next task or finish the manager.
+            failure()
+        } else {
+            queueKey.remove(trackingId)
+            queueMap.remove(trackingId)
+            // Make sure that onFailure is called
+            onFailure(trackingId)
         }
         return true
     }
 
     override fun clear() {
         assert()
-        // Clear the key and map of the transfer objects
-        queueMap.clear()
-        queueKey.clear()
-        // Cancel the active transfer since remove all of the
-        // transfer wont trigger cancel on it.
-        activeTask?.onCancel()
+
+        // Clearing the task should only remove the task that are not yet running.
+        //  - First stage:
+        //      Remove all of the idle tasks except the active task .
+        //  - Second stage:
+        //      Call remove for the active task
+
+        // First Stage
+        val iterator = queueKey.iterator()
+        while (iterator.hasNext()) {
+            val key = iterator.next()
+            // Active task should not be removed
+            if (isBusy() && activeTrackingId == key) {
+                continue
+            }
+            // Remove the key and task in the queue
+            iterator.remove()
+            queueMap.remove(key)
+            // Make sure that onFailure is called
+            onFailure(key)
+        }
+
+        // Second Stage
+        if (activeTrackingId != null) {
+            remove(activeTrackingId!!)
+        }
     }
 
     override fun next() {

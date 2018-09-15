@@ -114,7 +114,6 @@ class QueueTaskTest {
         val isRemoved = queueTask.remove("UNKNOWN")
         assertFalse(isRemoved)
         assertFalse(queueTask.isEmpty())
-        assertTrue(queueTask.isBusy())
         assertEquals(1, queueTask.numTasks())
     }
 
@@ -167,7 +166,7 @@ class QueueTaskTest {
         val testTask = createSingleTask(queueTask, true)
         testTask.preventAutoComplete = true
         queueTask.start()
-        assertTrue(queueTask.isBusy)
+        assertTrue(queueTask.isBusy())
 
         // If the manager has already started, it cannot start a new
         // task all over again.
@@ -236,7 +235,7 @@ class QueueTaskTest {
         // Test the manager for a successful tasks
         for (testTask in testTasks) {
             queueTask.success()
-            assertEquals(queueTask.lastSuccessfulTrackingId, testTask.trackingId)
+            assertEquals(queueTask.lastSuccessfulTrackingId, testTask.first)
         }
         assertTrue(queueTask.isEmpty())
         assertFalse(queueTask.isBusy())
@@ -270,7 +269,7 @@ class QueueTaskTest {
         // Test the manager for a successful tasks
         for (testTask in testTasks) {
             queueTask.failure()
-            assertEquals(queueTask.lastFailedTrackingId, testTask.trackingId)
+            assertEquals(queueTask.lastFailedTrackingId, testTask.first)
         }
         assertTrue(queueTask.isEmpty())
         assertFalse(queueTask.isBusy())
