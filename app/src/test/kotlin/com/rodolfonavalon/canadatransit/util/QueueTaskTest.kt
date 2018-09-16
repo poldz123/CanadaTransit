@@ -311,7 +311,11 @@ class TestQueueTask: AbstractQueueTask<TestTask>() {
         lastFailedTrackingId = trackingId
     }
 
-    override fun onComplete() {
+    override fun onStart() {
+
+    }
+
+    override fun onFinish() {
 
     }
 }

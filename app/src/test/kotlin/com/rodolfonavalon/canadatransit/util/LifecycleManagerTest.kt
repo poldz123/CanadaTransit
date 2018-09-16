@@ -2,6 +2,7 @@ package com.rodolfonavalon.canadatransit.util
 
 import android.app.Activity
 import android.os.Bundle
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleCallback
 import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -161,6 +162,28 @@ class LifecycleManagerTest {
         LifecycleManager.ignoreActivity(activity)
         // Test that the activity is detached
         callAllControllerActivityLifecycle(controller)
+    }
+
+    @Test
+    fun testMustNotRegisterActivityCallbackAgain() {
+        val controller = Robolectric.buildActivity(Activity::class.java).create().start()
+        val activity = controller.get()
+
+        var alreadyCalled = false
+        val callback: LifecycleCallback = {
+            if (alreadyCalled) {
+                fail("Callback is called multiple times")
+            } else {
+                alreadyCalled = true
+                false
+            }
+        }
+
+        // Attach the activity
+        LifecycleManager.watchActivity(activity, callback)
+        LifecycleManager.watchActivity(activity, callback)
+        // Test that the activity is detached
+        callControllerActivityLifecycle(RESUMED, controller)
     }
 
     private fun callControllerActivityLifecycle(stage: LifecycleManager.LifecycleStage, controller: ActivityController<Activity>) {

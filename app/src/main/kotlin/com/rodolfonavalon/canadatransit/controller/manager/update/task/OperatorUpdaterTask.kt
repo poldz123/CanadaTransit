@@ -1,8 +1,8 @@
 package com.rodolfonavalon.canadatransit.controller.manager.update.task
 
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
-import com.rodolfonavalon.canadatransit.controller.manager.update.OnFailureUpdateTaskListener
-import com.rodolfonavalon.canadatransit.controller.manager.update.OnSuccessUpdateTaskListener
+import com.rodolfonavalon.canadatransit.controller.manager.update.OnFailureTaskListener
+import com.rodolfonavalon.canadatransit.controller.manager.update.OnSuccessTaskListener
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.manager.update.util.AbstractUpdateTask
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
@@ -12,8 +12,8 @@ import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import timber.log.Timber
 
 class OperatorUpdaterTask(updateManager: UpdateManager,
-                          onSuccess: OnSuccessUpdateTaskListener<List<Operator>>? = null,
-                          onFailure: OnFailureUpdateTaskListener? = null):
+                          onSuccess: OnSuccessTaskListener<List<Operator>>? = null,
+                          onFailure: OnFailureTaskListener? = null):
         AbstractUpdateTask(updateManager, onSuccess, onFailure) {
 
     override fun onStart(trackingId: String) {
@@ -33,8 +33,7 @@ class OperatorUpdaterTask(updateManager: UpdateManager,
 
         Timber.d("Saving ${operators.count()} operators...")
         DatabaseUtil.insert({
-            DebugUtil.assertWorkerThread()
-            // Trigger to insert the operators in the background thread.
+             // Trigger to insert the operators in the background thread.
             dao.insert(operators)
         }, { rowIds ->
             DebugUtil.assertTrue(rowIds.isNotEmpty(), "There are no operators being saved on a successful database transaction: $trackingId")

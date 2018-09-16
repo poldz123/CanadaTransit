@@ -1,7 +1,7 @@
 package com.rodolfonavalon.canadatransit.controller.manager.update.util
 
-import com.rodolfonavalon.canadatransit.controller.manager.update.OnFailureUpdateTaskListener
-import com.rodolfonavalon.canadatransit.controller.manager.update.OnSuccessUpdateTaskListener
+import com.rodolfonavalon.canadatransit.controller.manager.update.OnFailureTaskListener
+import com.rodolfonavalon.canadatransit.controller.manager.update.OnSuccessTaskListener
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateTask
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
@@ -10,8 +10,8 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
 abstract class AbstractUpdateTask(val updateManager: UpdateManager,
-                                  val onSuccess: OnSuccessUpdateTaskListener<List<Operator>>? = null,
-                                  private val onFailure: OnFailureUpdateTaskListener? = null): UpdateTask {
+                                  val onSuccess: OnSuccessTaskListener<List<Operator>>? = null,
+                                  private val onFailure: OnFailureTaskListener? = null): UpdateTask {
     var disposable: Disposable? = null
     var trackingId: String = ""
 

@@ -20,7 +20,8 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
         EVERYTHING
     }
 
-    private var onUpdateManagerCompleteListener: OnUpdateManagerCompleteListener? = null
+    private var onFinishManagerListener: OnFinishManagerListener? = null
+    private var onStartManagerListener: OnStartManagerListener? = null
 
     override fun onSuccess(trackingId: String) {
 
@@ -30,19 +31,31 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
 
     }
 
-    override fun onComplete() {
-        onUpdateManagerCompleteListener?.invoke()
+    override fun onStart() {
+        onStartManagerListener?.invoke()
+    }
+
+    override fun onFinish() {
+        onFinishManagerListener?.invoke()
+    }
+
+    fun addStartListener(callback: OnStartManagerListener) {
+
+    }
+
+    fun addFinishListener(callback: OnFinishManagerListener) {
+
     }
 
     companion object {
     private val instance: UpdateManager = UpdateManager()
 
-        fun updateOperators(onSuccess: OnSuccessUpdateTaskListener<List<Operator>>? = null,
-                            onFailure: OnFailureUpdateTaskListener? = null): String {
+        fun updateOperators(success: OnSuccessTaskListener<List<Operator>>? = null,
+                            failure: OnFailureTaskListener? = null): String {
             // Todo - This updates the operator, we do not care if it have a flag
             // that needs to be updated. All operators are updated by default every time.
             val trackingId = generateTrackingId()
-            instance.add(trackingId, OperatorUpdaterTask(instance, onSuccess, onFailure))
+            instance.add(trackingId, OperatorUpdaterTask(instance, success, failure))
             startService()
             return trackingId
         }
@@ -84,13 +97,13 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
          * to be able to process the tasks in the background even if the application has
          * already been destroyed.
          */
-        fun startTasks(onUpdateManagerCompleteListener: OnUpdateManagerCompleteListener? = null) {
-            instance.onUpdateManagerCompleteListener = onUpdateManagerCompleteListener
+        fun startTasks(OnFinishManagerListener: OnFinishManagerListener? = null) {
+            instance.onFinishManagerListener = OnFinishManagerListener
             instance.start()
         }
 
         fun stopTasks() {
-            // TODO stop the tasks
+            // TODO stop the tasks which means cancel all task
         }
 
         private fun startService() {

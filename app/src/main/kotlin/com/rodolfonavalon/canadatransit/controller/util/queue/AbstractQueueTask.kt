@@ -2,6 +2,8 @@ package com.rodolfonavalon.canadatransit.controller.util.queue
 
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.VisibleForTesting.PRIVATE
+import com.rodolfonavalon.canadatransit.controller.manager.update.OnFinishManagerListener
+import com.rodolfonavalon.canadatransit.controller.manager.update.OnStartManagerListener
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.extension.safeLet
 import timber.log.Timber
@@ -14,9 +16,13 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
     private var activeTask: T? = null
     private var activeTrackingId: String? = null
 
+    private val onStartListeners = mutableListOf<OnStartManagerListener>()
+    private val onFinishListeners = mutableListOf<OnFinishManagerListener>()
+
     abstract fun onSuccess(trackingId: String)
     abstract fun onFailure(trackingId: String)
-    abstract fun onComplete()
+    abstract fun onStart()
+    abstract fun onFinish()
 
     override fun add(trackingId: String, task: T) {
         if (queueKey.contains(trackingId)) {
@@ -104,7 +110,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         activeTrackingId = null
         // Empty queue key and map means that the manager is done
         if (isEmpty()) {
-            onComplete()
+            onFinish()
             return
         }
         assert()
@@ -125,8 +131,16 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
             return
         }
         Timber.d("Preparing to start the transfer manager.")
+        onStart()
         assert()
         next()
+    }
+
+    fun listener(
+            onStart: OnStartManagerListener? = null,
+            onFinish: OnFinishManagerListener? = null
+    ) {
+
     }
 
     fun success() {

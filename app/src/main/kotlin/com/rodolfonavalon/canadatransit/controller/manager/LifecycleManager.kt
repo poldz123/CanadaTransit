@@ -3,6 +3,7 @@ package com.rodolfonavalon.canadatransit.controller.manager
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import timber.log.Timber
 
 /**
  * Callback method when an activity has triggered its life cycle.
@@ -83,7 +84,13 @@ class LifecycleManager private constructor(): Application.ActivityLifecycleCallb
             // If the activity already exist before then just attach the callback
             for (lifecycle in instance.lifecycleItems) {
                 if (lifecycle.activity === activity) {
-                    lifecycle.callbacks.add(callback)
+                    for (lifecycleCallback in lifecycle.callbacks) {
+                        if (lifecycleCallback != callback) {
+                            lifecycle.callbacks.add(callback)
+                            return
+                        }
+                    }
+                    Timber.v("Callback was added already, Skipping...")
                     return
                 }
             }
