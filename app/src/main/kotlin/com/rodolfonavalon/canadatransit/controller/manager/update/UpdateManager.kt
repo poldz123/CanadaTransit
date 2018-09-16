@@ -7,7 +7,6 @@ import com.rodolfonavalon.canadatransit.controller.service.UpdateService
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService.Companion.ACTION_START_UPDATE_MANAGER
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTask
-import com.rodolfonavalon.canadatransit.model.database.dao.transit.TransitLandDao
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import java.util.*
@@ -22,11 +21,6 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
     }
 
     private var onUpdateManagerCompleteListener: OnUpdateManagerCompleteListener? = null
-
-    val transitLandDao: TransitLandDao by lazy {
-        CanadaTransitApplication.appDatabase.transitLandDao()
-    }
-
 
     override fun onSuccess(trackingId: String) {
 

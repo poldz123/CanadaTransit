@@ -7,7 +7,7 @@ import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.DatabaseUtil
-import com.rodolfonavalon.canadatransit.model.database.dao.transit.TransitLandDao
+import com.rodolfonavalon.canadatransit.model.database.dao.transit.OperatorDao
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -20,12 +20,12 @@ import timber.log.Timber
         application = JvmCanadaTransitApplication::class)
 class UpdateManagerTest: BaseMockServerTest() {
 
-    private lateinit var transitLandDao: TransitLandDao
+    private lateinit var operatorDao: OperatorDao
 
     override fun setup() {
         super.setup()
         TransitLandApi.initializeRetrofit(server.url("/api/v1/").toString())
-        transitLandDao = CanadaTransitApplication.appDatabase.transitLandDao()
+        operatorDao = CanadaTransitApplication.appDatabase.operatorDao()
     }
 
     @Test
@@ -36,7 +36,7 @@ class UpdateManagerTest: BaseMockServerTest() {
         UpdateManager.updateOperators()
         UpdateManager.startTasks()
 
-        DatabaseUtil.query(transitLandDao.loadOperators(), { operators ->
+        DatabaseUtil.query(operatorDao.load(), { operators ->
             Timber.d("sdfdfs")
         }, {
             Timber.d("sdfsdf")

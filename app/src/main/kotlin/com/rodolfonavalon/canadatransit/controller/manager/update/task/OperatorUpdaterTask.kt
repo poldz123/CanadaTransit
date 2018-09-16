@@ -1,5 +1,6 @@
 package com.rodolfonavalon.canadatransit.controller.manager.update.task
 
+import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.update.OnFailureUpdateTaskListener
 import com.rodolfonavalon.canadatransit.controller.manager.update.OnSuccessUpdateTaskListener
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
@@ -28,11 +29,13 @@ class OperatorUpdaterTask(updateManager: UpdateManager,
             return
         }
 
+        val dao = CanadaTransitApplication.appDatabase.operatorDao()
+
         Timber.d("Saving ${operators.count()} operators...")
         DatabaseUtil.insert({
             DebugUtil.assertWorkerThread()
             // Trigger to insert the operators in the background thread.
-            this.updateManager.transitLandDao.insertOperators(operators)
+            dao.insert(operators)
         }, { rowIds ->
             DebugUtil.assertTrue(rowIds.isNotEmpty(), "There are no operators being saved on a successful database transaction: $trackingId")
             onOperatorsSaved(operators)

@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val dao = CanadaTransitApplication.appDatabase.transitLandDao()
 //        DatabaseUtil.query(dao.loadOperators(), { operators ->
 //            Timber.d("Operators: ${operators.count()}")
 //            for (operator in operators) {
