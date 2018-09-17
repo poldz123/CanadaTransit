@@ -29,7 +29,7 @@ class UpdateManagerTest: BaseMockServerTest() {
     }
 
     @Test
-    fun testUpdateOperators() {
+    fun testUpdateOperators_dataConsistency() {
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page1")
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page2")
 

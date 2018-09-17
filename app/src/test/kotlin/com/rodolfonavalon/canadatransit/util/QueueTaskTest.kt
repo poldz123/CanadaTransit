@@ -13,7 +13,7 @@ import kotlin.test.*
 class QueueTaskTest {
 
     @Test
-    fun testAddTask() {
+    fun testAdd_singleTask() {
         val queueTask = TestQueueTask()
 
         val testTask = createSingleTask(queueTask, true)
@@ -28,7 +28,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testAddMultipleTasks() {
+    fun testAdd_multipleTask() {
         val queueTask = TestQueueTask()
 
         val testTasks = createMultipleTasks(queueTask, true)
@@ -43,7 +43,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testGetTask() {
+    fun testGet_singleTask() {
         val queueTask = TestQueueTask()
 
         val testTask = createSingleTask(queueTask, true)
@@ -53,7 +53,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testGetNullTask() {
+    fun testGet_nullTask() {
         val queueTask = TestQueueTask()
 
         // Retrieved a task when the queue is empty
@@ -68,7 +68,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testGetMultipleTasks() {
+    fun testGet_multipleTask() {
         val queueTask = TestQueueTask()
 
         val testTasks = createMultipleTasks(queueTask, true)
@@ -80,7 +80,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testRemoveTask() {
+    fun testRemove_singleTask() {
         val queueTask = TestQueueTask()
 
         val testTask = createSingleTask(queueTask, true)
@@ -92,7 +92,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testRemoveCurrentTask() {
+    fun testRemove_currentTask() {
         val queueTask = TestQueueTask()
 
         val testTask = createSingleTask(queueTask, true)
@@ -106,7 +106,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testRemoveUnknownTask() {
+    fun testRemove_unknownTask() {
         val queueTask = TestQueueTask()
 
         createSingleTask(queueTask, true)
@@ -118,7 +118,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testRemoveMultipleTasks() {
+    fun testRemove_multipleTask() {
         val queueTask = TestQueueTask()
 
         val testTasks = createMultipleTasks(queueTask, true)
@@ -136,7 +136,26 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testClearMultipleTasks() {
+    fun testClear_singleTask() {
+        val queueTask = TestQueueTask()
+
+        createSingleTask(queueTask, true)
+        queueTask.clear()
+        assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
+        assertEquals(0, queueTask.numTasks())
+
+        val testTasks = createSingleTask(queueTask, true)
+        testTasks.preventAutoComplete = true
+        queueTask.start()
+        queueTask.clear()
+        assertTrue(queueTask.isEmpty())
+        assertFalse(queueTask.isBusy())
+        assertEquals(0, queueTask.numTasks())
+    }
+
+    @Test
+    fun testClear_multipleTask() {
         val queueTask = TestQueueTask()
 
         createMultipleTasks(queueTask, true)
@@ -155,7 +174,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testStartTask() {
+    fun testStart_task() {
         val queueTask = TestQueueTask()
 
         // Test starting the manager while there are no tasks added
@@ -177,7 +196,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testNextTask() {
+    fun testNext_task() {
         val queueTask = TestQueueTask()
 
         val testTasks = createMultipleTasks(queueTask, true)
@@ -207,7 +226,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testSuccessfulTask() {
+    fun testSuccess_singleTask() {
         val queueTask = TestQueueTask()
 
         val testTask = createSingleTask(queueTask, true)
@@ -222,7 +241,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testSuccessfulMultipleTasks() {
+    fun testSuccess_multipleTask() {
         val queueTask = TestQueueTask()
 
         val testTasks = createMultipleTasks(queueTask, true)
@@ -242,7 +261,7 @@ class QueueTaskTest {
     }
 
     @Test
-    fun testFailedTask() {
+    fun testFailure_singleTask() {
         val queueTask = TestQueueTask()
 
         val testTask = createSingleTask(queueTask, true)
@@ -256,7 +275,8 @@ class QueueTaskTest {
         assertFalse(queueTask.isBusy())
     }
 
-    fun testFailedMultipleTasks() {
+    @Test
+    fun testFailure_multipleTask() {
         val queueTask = TestQueueTask()
 
         val testTasks = createMultipleTasks(queueTask, true)

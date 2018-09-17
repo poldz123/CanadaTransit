@@ -27,7 +27,7 @@ import kotlin.test.fail
 class LifecycleManagerTest {
 
     @Test
-    fun testActivityWatched() {
+    fun testWatchActivity_single() {
         val controller = Robolectric.buildActivity(Activity::class.java).create().start()
         val activity = controller.get()
 
@@ -55,7 +55,7 @@ class LifecycleManagerTest {
     }
 
     @Test
-    fun testActivityMultipleWatched() {
+    fun testWatchActivity_multiple() {
         val controllers = mutableListOf<Pair<LifecycleManager.LifecycleStage, ActivityController<Activity>>>()
         for (i in 1..20) {
             controllers.add(Pair(CREATED, Robolectric.buildActivity(Activity::class.java).create().start()))
@@ -77,16 +77,18 @@ class LifecycleManagerTest {
         )
         // Lets test the activity and controller in random.
         fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) +  start
-        for (i in 1 until 100) {
+        for (i in 1 until controllers.count() * testStages.count()) {
             val controllerIndex = (0..controllers.count()).random()
             val stageIndex = (0..(testStages.count())).random()
+            // Since the controller's stage is initialized to CREATED, each test should change its expected
+            // stage randomly. But still having the same activity being watched.
             controllers[controllerIndex] = Pair(testStages[stageIndex], controllers[controllerIndex].second)
             callControllerActivityLifecycle(testStages[stageIndex], controllers[controllerIndex].second)
         }
     }
 
     @Test
-    fun testActivityWatchAutoRemove() {
+    fun testWatchActivity_autoRemoveCallback() {
         val controller = Robolectric.buildActivity(Activity::class.java).create().start()
         val activity = controller.get()
 
@@ -106,7 +108,29 @@ class LifecycleManagerTest {
     }
 
     @Test
-    fun testActivityIgnored() {
+    fun testWatchActivity_preventCallbackDuplication() {
+        val controller = Robolectric.buildActivity(Activity::class.java).create().start()
+        val activity = controller.get()
+
+        var alreadyCalled = false
+        val callback: LifecycleCallback = {
+            if (alreadyCalled) {
+                fail("Callback is called multiple times")
+            } else {
+                alreadyCalled = true
+                false
+            }
+        }
+
+        // Attach the activity
+        LifecycleManager.watchActivity(activity, callback)
+        LifecycleManager.watchActivity(activity, callback)
+        // Test that the activity is detached
+        callControllerActivityLifecycle(RESUMED, controller)
+    }
+
+    @Test
+    fun testIgnoreActivity_single() {
         val controller = Robolectric.buildActivity(Activity::class.java).create().start()
         val activity = controller.get()
 
@@ -121,7 +145,7 @@ class LifecycleManagerTest {
     }
 
     @Test
-    fun testActivityMultipleIgnored() {
+    fun testIgnoreActivity_multiple() {
         val controllers = mutableListOf<ActivityController<Activity>>()
         // Attach the activities
         for (i in 1..20) {
@@ -142,7 +166,7 @@ class LifecycleManagerTest {
     }
 
     @Test
-    fun testActivityIgnoreAutoRemove() {
+    fun testIgnoreActivity_afterAutoRemoveCallback() {
         val controller = Robolectric.buildActivity(Activity::class.java).create().start()
         val activity = controller.get()
 
@@ -158,32 +182,13 @@ class LifecycleManagerTest {
             // watch the activity only once
             true
         }
+        // After calling the lifecycle, it should auto removed the
+        // callback since it returns true.
+        callControllerActivityLifecycle(PAUSED, controller)
         // Detach the activity
         LifecycleManager.ignoreActivity(activity)
         // Test that the activity is detached
         callAllControllerActivityLifecycle(controller)
-    }
-
-    @Test
-    fun testMustNotRegisterActivityCallbackAgain() {
-        val controller = Robolectric.buildActivity(Activity::class.java).create().start()
-        val activity = controller.get()
-
-        var alreadyCalled = false
-        val callback: LifecycleCallback = {
-            if (alreadyCalled) {
-                fail("Callback is called multiple times")
-            } else {
-                alreadyCalled = true
-                false
-            }
-        }
-
-        // Attach the activity
-        LifecycleManager.watchActivity(activity, callback)
-        LifecycleManager.watchActivity(activity, callback)
-        // Test that the activity is detached
-        callControllerActivityLifecycle(RESUMED, controller)
     }
 
     private fun callControllerActivityLifecycle(stage: LifecycleManager.LifecycleStage, controller: ActivityController<Activity>) {
