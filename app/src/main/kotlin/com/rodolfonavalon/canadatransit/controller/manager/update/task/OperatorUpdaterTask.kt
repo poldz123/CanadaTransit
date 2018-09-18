@@ -1,13 +1,13 @@
 package com.rodolfonavalon.canadatransit.controller.manager.update.task
 
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
-import com.rodolfonavalon.canadatransit.controller.manager.update.OnFailureTaskListener
-import com.rodolfonavalon.canadatransit.controller.manager.update.OnSuccessTaskListener
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.manager.update.util.AbstractUpdateTask
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.DatabaseUtil
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
+import com.rodolfonavalon.canadatransit.controller.util.queue.OnFailureTaskListener
+import com.rodolfonavalon.canadatransit.controller.util.queue.OnSuccessTaskListener
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import timber.log.Timber
 
@@ -29,6 +29,7 @@ class OperatorUpdaterTask(updateManager: UpdateManager,
             return
         }
 
+        // TODO This can use the extension for operator dao and base dao
         val dao = CanadaTransitApplication.appDatabase.operatorDao()
 
         Timber.d("Saving ${operators.count()} operators...")

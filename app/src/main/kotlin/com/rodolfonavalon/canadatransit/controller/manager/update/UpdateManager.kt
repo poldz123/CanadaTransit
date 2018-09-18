@@ -5,59 +5,25 @@ import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.update.task.OperatorUpdaterTask
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService.Companion.ACTION_START_UPDATE_MANAGER
+import com.rodolfonavalon.canadatransit.controller.util.extension.uuid
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
+import com.rodolfonavalon.canadatransit.controller.util.queue.OnFailureTaskListener
+import com.rodolfonavalon.canadatransit.controller.util.queue.OnSuccessTaskListener
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTask
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
-import java.util.*
 
 class UpdateManager: AbstractQueueTask<UpdateTask>() {
 
-    private enum class UpdateCommand {
-        OPERATOR,
-        OPERATOR_FEED,
-        OPERATOR_FEED_VERSION,
-        EVERYTHING
-    }
-
-    private var onFinishManagerListener: OnFinishManagerListener? = null
-    private var onStartManagerListener: OnStartManagerListener? = null
-
-    override fun onSuccess(trackingId: String) {
-
-    }
-
-    override fun onFailure(trackingId: String) {
-
-    }
-
-    override fun onStart() {
-        onStartManagerListener?.invoke()
-    }
-
-    override fun onFinish() {
-        onFinishManagerListener?.invoke()
-    }
-
-    fun addStartListener(callback: OnStartManagerListener) {
-
-    }
-
-    fun addFinishListener(callback: OnFinishManagerListener) {
-
-    }
-
     companion object {
-    private val instance: UpdateManager = UpdateManager()
+        private val instance: UpdateManager = UpdateManager()
 
         fun updateOperators(success: OnSuccessTaskListener<List<Operator>>? = null,
-                            failure: OnFailureTaskListener? = null): String {
+                            failure: OnFailureTaskListener? = null) {
             // Todo - This updates the operator, we do not care if it have a flag
             // that needs to be updated. All operators are updated by default every time.
-            val trackingId = generateTrackingId()
-            instance.add(trackingId, OperatorUpdaterTask(instance, success, failure))
-            startService()
-            return trackingId
+            instance.add(uuid(), OperatorUpdaterTask(instance, success, failure))
+            start()
         }
 
         fun updateOperatorFeeds() {
@@ -97,24 +63,11 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
          * to be able to process the tasks in the background even if the application has
          * already been destroyed.
          */
-        fun startTasks(OnFinishManagerListener: OnFinishManagerListener? = null) {
-            instance.onFinishManagerListener = OnFinishManagerListener
-            instance.start()
-        }
-
-        fun stopTasks() {
-            // TODO stop the tasks which means cancel all task
-        }
-
-        private fun startService() {
+        private fun start() {
             val context = CanadaTransitApplication.appContext
             val service = Intent(context, UpdateService::class.java)
             service.putExtra(ACTION_START_UPDATE_MANAGER, true)
             context.startService(service)
-        }
-
-        private fun generateTrackingId(): String {
-            return UUID.randomUUID().toString()
         }
     }
 }

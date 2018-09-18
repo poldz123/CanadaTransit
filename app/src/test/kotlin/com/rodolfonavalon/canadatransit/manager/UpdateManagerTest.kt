@@ -34,7 +34,7 @@ class UpdateManagerTest: BaseMockServerTest() {
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page2")
 
         UpdateManager.updateOperators()
-        UpdateManager.startTasks()
+        UpdateManager.manager().start()
 
         DatabaseUtil.query(operatorDao.load(), { operators ->
             Timber.d("sdfdfs")

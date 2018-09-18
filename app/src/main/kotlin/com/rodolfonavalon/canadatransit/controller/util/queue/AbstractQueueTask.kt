@@ -2,8 +2,6 @@ package com.rodolfonavalon.canadatransit.controller.util.queue
 
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.VisibleForTesting.PRIVATE
-import com.rodolfonavalon.canadatransit.controller.manager.update.OnFinishManagerListener
-import com.rodolfonavalon.canadatransit.controller.manager.update.OnStartManagerListener
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.extension.safeLet
 import timber.log.Timber
@@ -16,13 +14,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
     private var activeTask: T? = null
     private var activeTrackingId: String? = null
 
-    private val onStartListeners = mutableListOf<OnStartManagerListener>()
-    private val onFinishListeners = mutableListOf<OnFinishManagerListener>()
-
-    abstract fun onSuccess(trackingId: String)
-    abstract fun onFailure(trackingId: String)
-    abstract fun onStart()
-    abstract fun onFinish()
+    override var listener: QueueTaskListener? = null
 
     override fun add(trackingId: String, task: T) {
         if (queueKey.contains(trackingId)) {
@@ -62,7 +54,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
             queueKey.remove(trackingId)
             queueMap.remove(trackingId)
             // Make sure that onFailure is called
-            onFailure(trackingId)
+            listener?.onFailure(trackingId)
         }
         return true
     }
@@ -88,7 +80,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
             iterator.remove()
             queueMap.remove(key)
             // Make sure that onFailure is called
-            onFailure(key)
+            listener?.onFailure(key)
         }
 
         // Second Stage
@@ -110,7 +102,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         activeTrackingId = null
         // Empty queue key and map means that the manager is done
         if (isEmpty()) {
-            onFinish()
+            listener?.onFinish()
             return
         }
         assert()
@@ -131,16 +123,9 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
             return
         }
         Timber.d("Preparing to start the transfer manager.")
-        onStart()
+        listener?.onStart()
         assert()
         next()
-    }
-
-    fun listener(
-            onStart: OnStartManagerListener? = null,
-            onFinish: OnFinishManagerListener? = null
-    ) {
-
     }
 
     fun success() {
@@ -148,7 +133,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         Timber.d("Transferring data is a SUCCESS for tracking-id: $activeTrackingId")
         activeTrackingId?.let { trackingId ->
             assert()
-            onSuccess(trackingId)
+            listener?.onSuccess(trackingId)
             next()
         }
     }
@@ -158,11 +143,12 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         Timber.d("Transferring data is a FAILURE for tracking-id: $activeTrackingId")
         activeTrackingId?.let { trackingId ->
             assert()
-            onFailure(trackingId)
+            listener?.onFailure(trackingId)
             next()
         }
     }
 
+    // TODO Remove??
     private fun assert() {
         DebugUtil.assertEqual(queueMap.isEmpty(), queueKey.isEmpty(), "Key and Map transfer has different size, this could mean that some transfers are not consumed!")
     }

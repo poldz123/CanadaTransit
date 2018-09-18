@@ -1,6 +1,7 @@
 package com.rodolfonavalon.canadatransit.util
 
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
+import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTaskListener
 import com.rodolfonavalon.canadatransit.controller.util.queue.Task
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -318,10 +319,14 @@ class QueueTaskTest {
     }
 }
 
-class TestQueueTask: AbstractQueueTask<TestTask>() {
+class TestQueueTask: AbstractQueueTask<TestTask>(), QueueTaskListener {
 
     var lastSuccessfulTrackingId = ""
     var lastFailedTrackingId = ""
+
+    init {
+        this.listener = this
+    }
 
     override fun onSuccess(trackingId: String) {
         lastSuccessfulTrackingId = trackingId
