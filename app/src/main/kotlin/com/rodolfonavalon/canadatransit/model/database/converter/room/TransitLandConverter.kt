@@ -1,16 +1,17 @@
 package com.rodolfonavalon.canadatransit.model.database.converter.room
 
 import android.arch.persistence.room.TypeConverter
-import com.rodolfonavalon.canadatransit.controller.util.MoshiUtil
+import com.rodolfonavalon.canadatransit.controller.util.extension.fromJson
+import com.rodolfonavalon.canadatransit.controller.util.extension.toJson
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorInFeed
 
 class TransitLandConverter: BaseConverter() {
 
     @TypeConverter
-    fun listOperatorInFeedToString(value: List<OperatorInFeed>): String
-            = MoshiUtil.toJson(value)
+    fun listOperatorInFeedToJson(value: List<OperatorInFeed>): String
+            = value.toJson()
 
     @TypeConverter
-    fun stringToListOperatorInFeed(value: String): List<OperatorInFeed>
-            = MoshiUtil.fromJson(value, OperatorInFeed::class.java)
+    fun jsonToListOperatorInFeed(value: String): List<OperatorInFeed>
+            = value.fromJson(OperatorInFeed::class.java)
 }

@@ -1,10 +1,11 @@
 package com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter
 
+import com.rodolfonavalon.canadatransit.controller.util.extension.fromJson
+import com.rodolfonavalon.canadatransit.controller.util.extension.toJson
 import com.squareup.moshi.FromJson
 import org.joda.time.DateTime
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.ToJson
-import org.joda.time.format.ISODateTimeFormat
 
 /**
  * This is the [Moshi] converter for the [DateTime] that serialize and deserialize from the
@@ -13,17 +14,12 @@ import org.joda.time.format.ISODateTimeFormat
 class DateTimeAdapter {
 
     @FromJson fun fromJson(value: String?): DateTime? {
-        // Returns null when the json value for date is null or empty,
+        // Returns null when the json value for date is null,
         // this could mean that the server spits out wrong data.
-        if (value.isNullOrEmpty()) {
-            return null
-        }
-        val formatter = ISODateTimeFormat.dateTimeParser()
-        return formatter.parseDateTime(value)
+        return value?.fromJson()
     }
 
     @ToJson fun toJson(dateTime: DateTime): String {
-        val formatter = ISODateTimeFormat.dateTime()
-        return formatter.print(DateTime(dateTime))
+        return dateTime.toJson()
     }
 }

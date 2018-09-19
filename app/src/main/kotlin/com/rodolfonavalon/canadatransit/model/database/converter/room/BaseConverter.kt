@@ -1,33 +1,33 @@
 package com.rodolfonavalon.canadatransit.model.database.converter.room
 
 import android.arch.persistence.room.TypeConverter
-import com.rodolfonavalon.canadatransit.controller.util.MoshiUtil
+import com.rodolfonavalon.canadatransit.controller.util.extension.fromJson
+import com.rodolfonavalon.canadatransit.controller.util.extension.toJson
 import org.joda.time.DateTime
-import org.joda.time.format.ISODateTimeFormat
 
 open class BaseConverter {
 
     @TypeConverter
-    fun dateTimeToString(value: DateTime): String
-            = ISODateTimeFormat.dateTime().print(value)
+    fun dateTimeToJson(value: DateTime): String
+            = value.toJson()
 
     @TypeConverter
-    fun stringToDateTime(value: String): DateTime
-            = ISODateTimeFormat.dateTimeParser().parseDateTime(value)
+    fun jsonToDateTime(value: String): DateTime
+            = value.fromJson()
 
     @TypeConverter
-    fun listIntegerToString(value: List<Int>): String
-            = MoshiUtil.toJson(value)
+    fun jsonToListInteger(value: String): List<Int>
+            = value.fromJson(Int::class.java)
 
     @TypeConverter
-    fun stringToListInteger(value: String): List<Int>
-            = MoshiUtil.fromJson(value, Int::class.java)
+    fun listIntegerToJson(value: List<Int>): String
+            = value.toJson()
 
     @TypeConverter
-    fun stringToListStrings(value: String): List<String>
-            = MoshiUtil.fromJson(value, String::class.java)
+    fun jsonToListStrings(value: String): List<String>
+            = value.fromJson(String::class.java)
 
     @TypeConverter
-    fun listStringsToString(value: List<String>): String
-            = MoshiUtil.toJson(value)
+    fun listStringsToJson(value: List<String>): String
+            = value.toJson()
 }

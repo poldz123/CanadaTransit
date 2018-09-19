@@ -12,8 +12,8 @@ import io.reactivex.schedulers.Schedulers
  * @param block the block runnable that should emit the result from the query
  * @return The [Maybe] observable with the result of the query
  */
-inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT> DAO.dbQuery(crossinline block: DAO.() -> RESULT): Maybe<RESULT> {
-    return Maybe.fromCallable { block(this) }
+inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT> DAO.dbQuery(crossinline block: DAO.() -> Maybe<RESULT>): Maybe<RESULT> {
+    return block(this)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 }
@@ -25,8 +25,8 @@ inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT> DAO.dbQuery(crossinline blo
  * @param block the block runnable that should emit the result from the delete
  * @return The [Maybe] observable with the result of the delete
  */
-inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT> DAO.dbDelete(crossinline block: DAO.() -> RESULT): Maybe<RESULT> {
-    return Maybe.fromCallable { block(this) }
+inline fun <DAO: BaseDao<MODEL>, MODEL: Any> DAO.dbDelete(crossinline block: DAO.() -> Int): Maybe<Int> {
+    return createDbObservable { block(this) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 }
@@ -38,8 +38,8 @@ inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT> DAO.dbDelete(crossinline bl
  * @param block the block runnable that should emit the result from the insert
  * @return The [Maybe] observable with the result of the insert
  */
-inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT> DAO.dbInsert(crossinline block: DAO.() -> RESULT): Maybe<RESULT> {
-    return Maybe.fromCallable { block(this) }
+inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT: List<Long>> DAO.dbInsert(crossinline block: DAO.() -> RESULT): Maybe<RESULT> {
+    return createDbObservable { block(this) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 }
@@ -51,9 +51,25 @@ inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT> DAO.dbInsert(crossinline bl
  * @param block the block runnable that should emit the result from the update
  * @return The [Maybe] observable with the result of the updates
  */
-inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT> DAO.dbUpdate(crossinline block: DAO.() -> RESULT): Maybe<RESULT> {
-    return Maybe.fromCallable { block(this) }
+inline fun <DAO: BaseDao<MODEL>, MODEL: Any> DAO.dbUpdate(crossinline block: DAO.() -> Int): Maybe<Int> {
+    return createDbObservable { block(this) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+}
+
+/**
+ * Creates an maybe observable for the runnable block, this is to prevent type inference which
+ * could not find the type of the object due to complete callback nature of the reactive observable.
+ *
+ * @param block the block runnable that should emit the result from the update
+ */
+fun <RESULT> createDbObservable(block: () -> RESULT): Maybe<RESULT> {
+    return Maybe.create { observer ->
+        try {
+            observer.onSuccess(block())
+        } catch (ex: Exception) {
+            observer.onError(ex)
+        }
+    }
 }
 
