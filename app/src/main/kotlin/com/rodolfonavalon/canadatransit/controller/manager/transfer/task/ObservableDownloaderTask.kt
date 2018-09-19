@@ -10,6 +10,7 @@ import com.rodolfonavalon.canadatransit.controller.manager.transfer.util.Transfe
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.FileUtil
 import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
@@ -31,8 +32,8 @@ class ObservableDownloaderTask(private val transferManager: TransferManager, pri
         AbstractTransferTask<Downloadable>(transferManager, entity) {
     var downloadedFile: File? = null
 
-    override fun onStart(trackingId: String) {
-        super.onStart(trackingId)
+    override fun onStart(trackingId: String, callbackObserver: Observer<Any>) {
+        super.onStart(trackingId, callbackObserver)
         Timber.v("Download entity has STARTED")
         this.disposable = entity.transferObservable()
                 .observeOn(Schedulers.io())

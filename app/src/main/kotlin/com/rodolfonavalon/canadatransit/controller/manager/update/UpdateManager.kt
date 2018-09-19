@@ -12,18 +12,20 @@ import com.rodolfonavalon.canadatransit.controller.util.queue.OnSuccessTaskListe
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTask
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import io.reactivex.Observable
+import io.reactivex.subjects.ReplaySubject
 
 class UpdateManager: AbstractQueueTask<UpdateTask>() {
 
     companion object {
         private val instance: UpdateManager = UpdateManager()
 
-        fun updateOperators(success: OnSuccessTaskListener<List<Operator>>? = null,
-                            failure: OnFailureTaskListener? = null) {
+        fun updateOperators(): Observable<out List<Operator>> {
             // Todo - This updates the operator, we do not care if it have a flag
             // that needs to be updated. All operators are updated by default every time.
-            instance.add(uuid(), OperatorUpdaterTask(instance, success, failure))
+            val observable = instance.add(uuid(), OperatorUpdaterTask(instance))
             start()
+            return observable.cast(arrayListOf<Operator>()::class.java)
         }
 
         fun updateOperatorFeeds() {

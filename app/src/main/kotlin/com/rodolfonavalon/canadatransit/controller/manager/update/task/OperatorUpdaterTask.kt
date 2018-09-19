@@ -6,18 +6,16 @@ import com.rodolfonavalon.canadatransit.controller.manager.update.util.AbstractU
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbInsert
-import com.rodolfonavalon.canadatransit.controller.util.queue.OnFailureTaskListener
-import com.rodolfonavalon.canadatransit.controller.util.queue.OnSuccessTaskListener
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
+import io.reactivex.Observer
+import io.reactivex.subjects.ReplaySubject
 import timber.log.Timber
 
-class OperatorUpdaterTask(updateManager: UpdateManager,
-                          onSuccess: OnSuccessTaskListener<List<Operator>>? = null,
-                          onFailure: OnFailureTaskListener? = null):
-        AbstractUpdateTask(updateManager, onSuccess, onFailure) {
+class OperatorUpdaterTask(updateManager: UpdateManager):
+        AbstractUpdateTask(updateManager) {
 
-    override fun onStart(trackingId: String) {
-        super.onStart(trackingId)
+    override fun onStart(trackingId: String, callbackObservable: Observer<Any>) {
+        super.onStart(trackingId, callbackObservable)
         Timber.d("Retrieving operators...")
         this.disposable = TransitLandApi.retrieveOperators(::onOperatorsReceived, ::onError)
     }
@@ -41,7 +39,7 @@ class OperatorUpdaterTask(updateManager: UpdateManager,
 
     private fun onOperatorsSaved(operators: List<Operator>) {
         Timber.d("Successfully saved ${operators.count()} operators")
-        this.onSuccess?.invoke(operators)
+        this.callback.onNext(operators)
         this.updateManager.success()
     }
 }

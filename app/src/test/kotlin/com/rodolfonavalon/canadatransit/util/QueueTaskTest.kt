@@ -3,6 +3,8 @@ package com.rodolfonavalon.canadatransit.util
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTaskListener
 import com.rodolfonavalon.canadatransit.controller.util.queue.Task
+import io.reactivex.Observer
+import io.reactivex.subjects.ReplaySubject
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -364,7 +366,7 @@ class TestTask(val trackingId: String, val queueTask: TestQueueTask): Task {
         queueTask.failure()
     }
 
-    override fun onStart(trackingId: String) {
+    override fun onStart(trackingId: String, callbackObserver: Observer<Any>) {
         isStarting = true
         if (!preventAutoComplete) {
             triggerSuccess()

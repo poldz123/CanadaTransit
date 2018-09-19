@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import timber.log.Timber
+import kotlin.test.fail
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE,
@@ -33,7 +34,12 @@ class UpdateManagerTest: BaseMockServerTest() {
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page1")
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page2")
 
-        UpdateManager.updateOperators()
+        UpdateManager.updateOperators().subscribe({
+            Timber.d("Success")
+        }, {
+            fail("Failed to update operators: $it")
+        })
+
         UpdateManager.manager().start()
 
         operatorDao.dbQuery {
@@ -41,7 +47,7 @@ class UpdateManagerTest: BaseMockServerTest() {
         }.subscribe({ operators ->
             Timber.d("sdfdfs")
         }, {
-            Timber.d("sdfsdf")
+            fail("Failed to query operators: $it")
         })
     }
 }

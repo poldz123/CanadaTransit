@@ -1,7 +1,8 @@
 package com.rodolfonavalon.canadatransit.model.database.converter.room
 
 import android.arch.persistence.room.TypeConverter
-import com.rodolfonavalon.canadatransit.controller.util.extension.fromJson
+import com.rodolfonavalon.canadatransit.controller.util.extension.fromJsonDateTime
+import com.rodolfonavalon.canadatransit.controller.util.extension.fromJsonList
 import com.rodolfonavalon.canadatransit.controller.util.extension.toJson
 import org.joda.time.DateTime
 
@@ -13,11 +14,11 @@ open class BaseConverter {
 
     @TypeConverter
     fun jsonToDateTime(value: String): DateTime
-            = value.fromJson()
+            = value.fromJsonDateTime()
 
     @TypeConverter
     fun jsonToListInteger(value: String): List<Int>
-            = value.fromJson(Int::class.java)
+            = value.fromJsonList()
 
     @TypeConverter
     fun listIntegerToJson(value: List<Int>): String
@@ -25,7 +26,7 @@ open class BaseConverter {
 
     @TypeConverter
     fun jsonToListStrings(value: String): List<String>
-            = value.fromJson(String::class.java)
+            = value.fromJsonList()
 
     @TypeConverter
     fun listStringsToJson(value: List<String>): String

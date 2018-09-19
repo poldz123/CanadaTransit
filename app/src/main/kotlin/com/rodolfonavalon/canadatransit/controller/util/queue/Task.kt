@@ -1,11 +1,13 @@
 package com.rodolfonavalon.canadatransit.controller.util.queue
 
+import io.reactivex.Observer
+
 interface Task {
 
     /**
      * TODO: onStart
      */
-    fun onStart(trackingId: String)
+    fun onStart(trackingId: String, callbackObserver: Observer<Any>)
 
     /**
      * TODO: onCancel

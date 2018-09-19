@@ -9,8 +9,8 @@ import org.joda.time.format.ISODateTimeFormat
 fun <T: Any> List<T>.toJson(): String
         = Moshi.Builder().build().adapter(List::class.java).nonNull().toJson(this)
 
-fun <T: Any> String.fromJson(valueClazz: Class<T>): List<T> {
-    val parameterizedType = Types.newParameterizedType(List::class.java, valueClazz)
+inline fun <reified T: Any> String.fromJsonList(): List<T> {
+    val parameterizedType = Types.newParameterizedType(List::class.java, T::class.java)
     val adapter: JsonAdapter<List<T>> = Moshi.Builder().build().adapter(parameterizedType)
     return adapter.nonNull().fromJson(this)!!
 }
@@ -18,5 +18,5 @@ fun <T: Any> String.fromJson(valueClazz: Class<T>): List<T> {
 fun DateTime.toJson(): String
         = ISODateTimeFormat.dateTime().print(this)
 
-fun String.fromJson(): DateTime
+fun String.fromJsonDateTime(): DateTime
         = ISODateTimeFormat.dateTimeParser().parseDateTime(this)

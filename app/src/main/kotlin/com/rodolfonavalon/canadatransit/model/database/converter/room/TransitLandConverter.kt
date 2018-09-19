@@ -1,7 +1,8 @@
 package com.rodolfonavalon.canadatransit.model.database.converter.room
 
 import android.arch.persistence.room.TypeConverter
-import com.rodolfonavalon.canadatransit.controller.util.extension.fromJson
+import com.rodolfonavalon.canadatransit.controller.util.extension.fromJsonDateTime
+import com.rodolfonavalon.canadatransit.controller.util.extension.fromJsonList
 import com.rodolfonavalon.canadatransit.controller.util.extension.toJson
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorInFeed
 
@@ -13,5 +14,5 @@ class TransitLandConverter: BaseConverter() {
 
     @TypeConverter
     fun jsonToListOperatorInFeed(value: String): List<OperatorInFeed>
-            = value.fromJson(OperatorInFeed::class.java)
+            = value.fromJsonList()
 }
