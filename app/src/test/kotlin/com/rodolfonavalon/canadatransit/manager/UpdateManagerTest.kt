@@ -6,7 +6,7 @@ import com.rodolfonavalon.canadatransit.JvmCanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
-import com.rodolfonavalon.canadatransit.controller.util.DatabaseUtil
+import com.rodolfonavalon.canadatransit.controller.util.extension.dbQuery
 import com.rodolfonavalon.canadatransit.model.database.dao.transit.OperatorDao
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,7 +36,9 @@ class UpdateManagerTest: BaseMockServerTest() {
         UpdateManager.updateOperators()
         UpdateManager.manager().start()
 
-        DatabaseUtil.query(operatorDao.load(), { operators ->
+        operatorDao.dbQuery {
+            operatorDao.load()
+        }.subscribe({ operators ->
             Timber.d("sdfdfs")
         }, {
             Timber.d("sdfsdf")

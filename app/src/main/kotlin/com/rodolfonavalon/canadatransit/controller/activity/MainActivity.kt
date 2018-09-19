@@ -3,15 +3,11 @@ package com.rodolfonavalon.canadatransit.controller.activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.rodolfonavalon.canadatransit.R
-import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
-import com.rodolfonavalon.canadatransit.controller.util.DatabaseUtil
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
-import org.joda.time.DateTime
-import org.joda.time.format.ISODateTimeFormat
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
