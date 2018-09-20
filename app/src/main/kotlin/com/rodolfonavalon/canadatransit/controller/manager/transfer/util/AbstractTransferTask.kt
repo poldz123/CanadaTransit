@@ -6,7 +6,6 @@ import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferTask
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.Transferable
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.FileUtil
-import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
@@ -14,7 +13,7 @@ abstract class AbstractTransferTask<T: Transferable>(private val transferManager
     var disposable: Disposable? = null
     var trackingId: String = ""
 
-    override fun onStart(trackingId: String, callbackObserver: Observer<Any>) {
+    override fun onStart(trackingId: String) {
         DebugUtil.assertMainThread()
         this.trackingId = trackingId
     }

@@ -366,7 +366,7 @@ class TestTask(val trackingId: String, val queueTask: TestQueueTask): Task {
         queueTask.failure()
     }
 
-    override fun onStart(trackingId: String, callbackObserver: Observer<Any>) {
+    override fun onStart(trackingId: String) {
         isStarting = true
         if (!preventAutoComplete) {
             triggerSuccess()

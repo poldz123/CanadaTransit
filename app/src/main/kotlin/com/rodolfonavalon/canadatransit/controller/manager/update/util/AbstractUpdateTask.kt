@@ -3,25 +3,24 @@ package com.rodolfonavalon.canadatransit.controller.manager.update.util
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateTask
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
-import com.rodolfonavalon.canadatransit.controller.util.queue.OnFailureTaskListener
-import com.rodolfonavalon.canadatransit.controller.util.queue.OnSuccessTaskListener
-import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import io.reactivex.Observable
-import io.reactivex.Observer
+import io.reactivex.Maybe
+import io.reactivex.MaybeObserver
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.ReplaySubject
 import timber.log.Timber
 
-abstract class AbstractUpdateTask(val updateManager: UpdateManager): UpdateTask {
+abstract class AbstractUpdateTask<T>(val updateManager: UpdateManager): Maybe<T>(), UpdateTask {
     var disposable: Disposable? = null
+    var observer: MaybeObserver<in T>? = null
 
     lateinit var trackingId: String
-    lateinit var callback: Observer<Any>
 
-    override fun onStart(trackingId: String, callbackObserver: Observer<Any>) {
+    override fun subscribeActual(observer: MaybeObserver<in T>?) {
+        this.observer = observer
+    }
+
+    override fun onStart(trackingId: String) {
         DebugUtil.assertMainThread()
         this.trackingId = trackingId
-        this.callback = callbackObserver
     }
 
     override fun onCancel() {

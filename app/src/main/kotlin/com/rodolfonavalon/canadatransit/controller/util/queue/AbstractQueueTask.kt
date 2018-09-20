@@ -4,26 +4,21 @@ import android.support.annotation.VisibleForTesting
 import android.support.annotation.VisibleForTesting.PRIVATE
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.extension.safeLet
-import io.reactivex.Observable
-import io.reactivex.subjects.ReplaySubject
 import timber.log.Timber
 import java.util.*
 
 abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
     private val queueKey = LinkedList<String>()
     private val queueTaskMap = HashMap<String, T>()
-    private val queueObservableMap = HashMap<String, Observable<Any>>()
 
     private var activeTask: T? = null
-    private var activeObservable: Observable<Any>? = null
     private var activeTrackingId: String? = null
 
     override var listener: QueueTaskListener? = null
 
-    override fun add(trackingId: String, task: T): Observable<Any?> {
+    override fun add(trackingId: String, task: T) {
         if (queueKey.contains(trackingId)) {
             Timber.d("Transfer is already in progress with tracking-id: $trackingId")
-            return queueObservableMap[trackingId]!!
         }
         assert()
         // Add the tracking-id to the key and the transfer object to the map
@@ -31,8 +26,6 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         // will only start when the manager has completed other queues.
         queueKey.add(trackingId)
         queueTaskMap[trackingId] = task
-        queueObservableMap[trackingId] = ReplaySubject.create(1)
-        return queueObservableMap[trackingId]!!
     }
 
     override fun get(trackingId: String): T? {
@@ -59,7 +52,6 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         } ?: run {
             queueKey.remove(trackingId)
             queueTaskMap.remove(trackingId)
-            queueObservableMap.remove(trackingId)
             // Make sure that onFailure is called
             listener?.onFailure(trackingId)
         }
@@ -86,7 +78,6 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
             // Remove the key and task in the queue
             iterator.remove()
             queueTaskMap.remove(key)
-            queueObservableMap.remove(key)
             // Make sure that onFailure is called
             listener?.onFailure(key)
         }
@@ -103,14 +94,11 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         activeTrackingId?.let { trackingId ->
             val removedTrackingId = queueKey.poll()
             val removedTransfer = queueTaskMap.remove(trackingId)
-            val removedObservable = queueObservableMap.remove(trackingId)
             DebugUtil.assertEqual(removedTrackingId, trackingId, "Tracking ID did not match. EXPECTED: $removedTrackingId CURRENT: $activeTrackingId")
             DebugUtil.assertEqual(removedTransfer, activeTask, "Transfer Task did not match.")
-            DebugUtil.assertEqual(removedObservable, activeObservable, "Transfer Observable did not match.")
         }
         activeTask = null
         activeTrackingId = null
-        activeObservable = null
         // Empty queue key and map means that the manager is done
         if (isEmpty()) {
             listener?.onFinish()
@@ -119,13 +107,12 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         assert()
         // Retrieve the key and value for the next transfer, this will
         // not remove the key from the list of keys.
-        safeLet(queueKey.peek(), queueTaskMap[queueKey.peek()], queueObservableMap[queueKey.peek()]) { key, task, observable ->
+        safeLet(queueKey.peek(), queueTaskMap[queueKey.peek()]) { key, task ->
             // Initialize the active transfer
             activeTrackingId = key
             activeTask = task
-            activeObservable = observable
             // Trigger the task to start
-            task.onStart(key, observable)
+            task.onStart(key)
         }
     }
 
@@ -165,9 +152,9 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         DebugUtil.assertEqual(queueTaskMap.isEmpty(), queueKey.isEmpty(), "Key and Map transfer has different size, this could mean that some transfers are not consumed!")
     }
 
-    fun isEmpty(): Boolean = queueKey.isEmpty() && queueTaskMap.isEmpty() && queueObservableMap.isEmpty()
+    fun isEmpty(): Boolean = queueKey.isEmpty() && queueTaskMap.isEmpty()
 
-    fun isBusy(): Boolean = activeTask != null && activeTrackingId != null && activeObservable != null
+    fun isBusy(): Boolean = activeTask != null && activeTrackingId != null
 
     @VisibleForTesting(otherwise = PRIVATE)
     fun numTasks(): Int = queueKey.count()

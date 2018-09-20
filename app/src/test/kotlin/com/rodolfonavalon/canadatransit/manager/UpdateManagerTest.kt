@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import timber.log.Timber
+import kotlin.test.assertTrue
 import kotlin.test.fail
 
 @RunWith(RobolectricTestRunner::class)
@@ -34,13 +35,15 @@ class UpdateManagerTest: BaseMockServerTest() {
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page1")
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page2")
 
+        var isSuccessCalled = false
         UpdateManager.updateOperators().subscribe({
-            Timber.d("Success")
+            isSuccessCalled = true
         }, {
             fail("Failed to update operators: $it")
         })
 
         UpdateManager.manager().start()
+        assertTrue(isSuccessCalled)
 
         operatorDao.dbQuery {
             operatorDao.load()

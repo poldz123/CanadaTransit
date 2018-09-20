@@ -7,25 +7,23 @@ import com.rodolfonavalon.canadatransit.controller.service.UpdateService
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService.Companion.ACTION_START_UPDATE_MANAGER
 import com.rodolfonavalon.canadatransit.controller.util.extension.uuid
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
-import com.rodolfonavalon.canadatransit.controller.util.queue.OnFailureTaskListener
-import com.rodolfonavalon.canadatransit.controller.util.queue.OnSuccessTaskListener
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTask
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
-import io.reactivex.Observable
-import io.reactivex.subjects.ReplaySubject
+import io.reactivex.Maybe
 
 class UpdateManager: AbstractQueueTask<UpdateTask>() {
 
     companion object {
         private val instance: UpdateManager = UpdateManager()
 
-        fun updateOperators(): Observable<out List<Operator>> {
+        fun updateOperators(): Maybe<List<Operator>> {
             // Todo - This updates the operator, we do not care if it have a flag
             // that needs to be updated. All operators are updated by default every time.
-            val observable = instance.add(uuid(), OperatorUpdaterTask(instance))
+            val operatorTask = OperatorUpdaterTask(instance)
+            instance.add(uuid(), operatorTask)
             start()
-            return observable.cast(arrayListOf<Operator>()::class.java)
+            return operatorTask
         }
 
         fun updateOperatorFeeds() {
