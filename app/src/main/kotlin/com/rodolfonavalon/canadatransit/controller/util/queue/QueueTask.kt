@@ -4,7 +4,7 @@ interface QueueTask<T> {
 	// Listener for the queue
     var listener: QueueTaskListener?
 
-    fun <R: T> add(trackingId: String, task: R): R
+    fun <R : T> add(trackingId: String, task: R): R
     fun remove(trackingId: String): Boolean
     fun get(trackingId: String): T?
     fun next()

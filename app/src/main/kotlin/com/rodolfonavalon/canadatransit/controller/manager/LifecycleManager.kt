@@ -17,7 +17,7 @@ typealias LifecycleCallback = (LifecycleManager.LifecycleStage) -> Boolean
  * pool of activities. Once the activity is registered it will call its life cycle callback
  * multiple times, until, either it is unregistered or when the activity is destroyed.
  */
-class LifecycleManager private constructor(): Application.ActivityLifecycleCallbacks {
+class LifecycleManager private constructor() : Application.ActivityLifecycleCallbacks {
 
     private val lifecycleItems = mutableListOf<LifecycleItem>()
 
@@ -36,7 +36,7 @@ class LifecycleManager private constructor(): Application.ActivityLifecycleCallb
         PAUSED, // onActivityPaused(Activity)
         STOPPED, // onActivityStopped(Activity)
         SAVED, // onActivitySaveInstanceState(Activity, Bundle)
-        DESTROYED   // onActivityDestroyed(Activity)
+        DESTROYED // onActivityDestroyed(Activity)
     }
 
     override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
@@ -152,4 +152,3 @@ class LifecycleManager private constructor(): Application.ActivityLifecycleCallb
         }
     }
 }
-

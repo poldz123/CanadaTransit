@@ -12,12 +12,12 @@ import com.rodolfonavalon.canadatransit.controller.util.FileUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.io.File
+import java.io.IOException
 import okhttp3.ResponseBody
 import okio.Okio
 import retrofit2.Response
 import timber.log.Timber
-import java.io.File
-import java.io.IOException
 
 /**
  * ObservableDownloaderTask
@@ -27,7 +27,7 @@ import java.io.IOException
  *
  * //TODO: Do not download when it already exist in the download directory
  */
-class ObservableDownloaderTask(private val transferManager: TransferManager, private val entity: Downloadable):
+class ObservableDownloaderTask(private val transferManager: TransferManager, private val entity: Downloadable) :
         AbstractTransferTask<Downloadable>(transferManager, entity) {
     var downloadedFile: File? = null
 

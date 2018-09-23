@@ -7,7 +7,7 @@ import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import io.reactivex.Maybe
 
 @Dao
-interface OperatorFeedDao: BaseDao<OperatorFeed> {
+interface OperatorFeedDao : BaseDao<OperatorFeed> {
 
     @Query("SELECT * FROM OperatorFeed WHERE feedOneStopId = :feedOneStopId")
     fun find(feedOneStopId: String): Maybe<OperatorFeed>

@@ -5,10 +5,10 @@ import android.support.annotation.VisibleForTesting.PRIVATE
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.extension.safeLet
 import com.rodolfonavalon.canadatransit.controller.util.queue.task.Task
-import timber.log.Timber
 import java.util.*
+import timber.log.Timber
 
-abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
+abstract class AbstractQueueTask<T : Task> : QueueTask<T> {
     private val queueKey = LinkedList<String>()
     private val queueTaskMap = HashMap<String, T>()
 
@@ -26,7 +26,7 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
 
     override var listener: QueueTaskListener? = null
 
-    override fun <R: T> add(trackingId: String, task: R): R {
+    override fun <R : T> add(trackingId: String, task: R): R {
         if (queueKey.contains(trackingId)) {
             Timber.d("Transfer is already in progress with tracking-id: $trackingId")
             return task
@@ -37,7 +37,6 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         // will only start when the manager has completed other queues.
         queueKey.add(trackingId)
         queueTaskMap[trackingId] = task
-
         if (startService) {
             onStartService()
         }

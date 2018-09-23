@@ -10,7 +10,7 @@ import retrofit2.Response
 /**
  * TODO: Transfer
  */
-interface TransferTask: Task {
+interface TransferTask : Task {
     /**
      * TODO: onProgress
      */
@@ -20,7 +20,7 @@ interface TransferTask: Task {
 /**
  * TODO: Transferable
  */
-interface Transferable: Action {
+interface Transferable : Action {
 
     /**
      * Retrieves the download observable where it can be transferred. The Rx-Observable must
@@ -44,10 +44,9 @@ interface Transferable: Action {
 /**
  * TODO: Downloadable
  */
-interface Downloadable: Transferable {
+interface Downloadable : Transferable {
     /**
      * TODO: download
      */
     fun download()
 }
-

@@ -14,7 +14,7 @@ import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersi
             OperatorFeed::class,
             OperatorFeedVersion::class
         ], version = 1)
-abstract class AppDatabase: RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
     abstract fun operatorDao(): OperatorDao
     abstract fun operatorFeedDao(): OperatorFeedDao
     abstract fun operatorFeedVersionDao(): OperatorFeedVersionDao

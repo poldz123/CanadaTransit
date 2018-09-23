@@ -3,9 +3,9 @@ package com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter
 import com.rodolfonavalon.canadatransit.controller.util.extension.fromJsonDateTime
 import com.rodolfonavalon.canadatransit.controller.util.extension.toJson
 import com.squareup.moshi.FromJson
-import org.joda.time.DateTime
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.ToJson
+import org.joda.time.DateTime
 
 /**
  * This is the [Moshi] converter for the [DateTime] that serialize and deserialize from the

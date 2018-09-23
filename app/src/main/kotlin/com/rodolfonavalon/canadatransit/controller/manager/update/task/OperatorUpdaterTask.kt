@@ -9,7 +9,7 @@ import com.rodolfonavalon.canadatransit.controller.util.extension.dbInsert
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import timber.log.Timber
 
-class OperatorUpdaterTask(updateManager: UpdateManager):
+class OperatorUpdaterTask(updateManager: UpdateManager) :
         AbstractUpdateTask<List<Operator>>(updateManager) {
 
     override fun onStart(trackingId: String) {

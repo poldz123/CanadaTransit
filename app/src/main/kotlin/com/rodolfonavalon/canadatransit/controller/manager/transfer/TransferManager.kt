@@ -6,7 +6,7 @@ import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
 /**
  * TODO: DownloadManager
  */
-class TransferManager private constructor(): AbstractQueueTask<TransferTask>() {
+class TransferManager private constructor() : AbstractQueueTask<TransferTask>() {
 
     override fun onStartService() {
         // TODO add service to start the manager
@@ -20,5 +20,3 @@ class TransferManager private constructor(): AbstractQueueTask<TransferTask>() {
         }
     }
 }
-
-

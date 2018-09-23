@@ -5,6 +5,6 @@ import com.rodolfonavalon.canadatransit.model.transit.Meta
 import com.squareup.moshi.Json
 
 class OperatorsResponse(
-        @field:Json(name ="operators") val operators: List<Operator>,
-        @field:Json(name ="meta") override val meta: Meta
-): MetaResponse()
+    @field:Json(name = "operators") val operators: List<Operator>,
+    @field:Json(name = "meta") override val meta: Meta
+) : MetaResponse()

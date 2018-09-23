@@ -6,17 +6,17 @@ import com.squareup.moshi.Types
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 
-fun <T: Any> List<T>.toJson(): String
-        = Moshi.Builder().build().adapter(List::class.java).nonNull().toJson(this)
+fun <T : Any> List<T>.toJson(): String =
+        Moshi.Builder().build().adapter(List::class.java).nonNull().toJson(this)
 
-inline fun <reified T: Any> String.fromJsonList(): List<T> {
+inline fun <reified T : Any> String.fromJsonList(): List<T> {
     val parameterizedType = Types.newParameterizedType(List::class.java, T::class.java)
     val adapter: JsonAdapter<List<T>> = Moshi.Builder().build().adapter(parameterizedType)
     return adapter.nonNull().fromJson(this)!!
 }
 
-fun DateTime.toJson(): String
-        = ISODateTimeFormat.dateTime().print(this)
+fun DateTime.toJson(): String =
+        ISODateTimeFormat.dateTime().print(this)
 
-fun String.fromJsonDateTime(): DateTime
-        = ISODateTimeFormat.dateTimeParser().parseDateTime(this)
+fun String.fromJsonDateTime(): DateTime =
+        ISODateTimeFormat.dateTimeParser().parseDateTime(this)

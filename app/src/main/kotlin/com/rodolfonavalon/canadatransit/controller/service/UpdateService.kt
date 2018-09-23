@@ -7,7 +7,7 @@ import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTaskListener
 import timber.log.Timber
 
-class UpdateService: Service(), QueueTaskListener {
+class UpdateService : Service(), QueueTaskListener {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -30,11 +30,9 @@ class UpdateService: Service(), QueueTaskListener {
     }
 
     override fun onSuccess(trackingId: String) {
-
     }
 
     override fun onFailure(trackingId: String) {
-
     }
 
     override fun onStart() {
@@ -52,4 +50,3 @@ class UpdateService: Service(), QueueTaskListener {
         const val ACTION_START_UPDATE_MANAGER = "ACTION_START_UPDATE_MANAGER"
     }
 }
-

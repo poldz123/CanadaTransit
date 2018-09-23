@@ -15,7 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-abstract class AbstractTransitApi<API: Any>(apiUrl: String, val apiClass: Class<API>) {
+abstract class AbstractTransitApi<API : Any>(apiUrl: String, val apiClass: Class<API>) {
 
     /**
      *  Retrieves the [Retrofit] instance, that handles the api networking and
@@ -81,7 +81,7 @@ abstract class AbstractTransitApi<API: Any>(apiUrl: String, val apiClass: Class<
      *  @param observer the lambda that execute the observer, Parameter: [0] -> Offset [1] -> Per page
      *  @throws [IllegalArgumentException] if per page is an invalid value
      */
-    protected fun <OBSERVER: MetaResponse> retrievePaginatedObject(perPage: Int, observer: (Int, Int) -> Observable<OBSERVER>): Observable<OBSERVER> {
+    protected fun <OBSERVER : MetaResponse> retrievePaginatedObject(perPage: Int, observer: (Int, Int) -> Observable<OBSERVER>): Observable<OBSERVER> {
         // Recursion makes everything easier to do the paginated observable objects
         fun retrievePaginatedObject(offset: Int): Observable<OBSERVER> {
             return observer.invoke(offset, perPage).concatMap { metaResponse ->

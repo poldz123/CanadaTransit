@@ -2,10 +2,10 @@ package com.rodolfonavalon.canadatransit.controller.util
 
 import android.content.Context
 import android.os.Environment
-import java.io.File
-import timber.log.Timber
 import android.os.StatFs
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.Transferable
+import java.io.File
+import timber.log.Timber
 
 /**
  * FileUtil
@@ -70,5 +70,4 @@ object FileUtil {
         Timber.d("Disk Memory left: %d MB", freeMemoryInMegabytes)
         return freeMemoryInMegabytes
     }
-
 }

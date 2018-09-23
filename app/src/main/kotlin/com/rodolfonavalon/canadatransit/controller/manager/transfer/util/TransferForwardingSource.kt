@@ -1,17 +1,19 @@
 package com.rodolfonavalon.canadatransit.controller.manager.transfer.util
 
 import io.reactivex.ObservableEmitter
+import java.io.File
 import okio.Buffer
 import okio.ForwardingSource
 import okio.Source
-import java.io.File
 
 /**
  * TODO: TransferForwardingSource
  */
-class TransferForwardingSource(source: Source,
-                               private val totalBytesToRead: Long,
-                               private val emitter: ObservableEmitter<TransferForwardingProperty>): ForwardingSource(source) {
+class TransferForwardingSource(
+    source: Source,
+    private val totalBytesToRead: Long,
+    private val emitter: ObservableEmitter<TransferForwardingProperty>
+) : ForwardingSource(source) {
     private var currentBytesRead: Long = 0L
 
     override fun read(sink: Buffer, byteCount: Long): Long {
@@ -37,7 +39,9 @@ class TransferForwardingSource(source: Source,
  * TODO: TransferForwardingProperty
  */
 
-data class TransferForwardingProperty(val progress: Float = 0f,
-                                      val filePath: String = "",
-                                      val transferred: Boolean = filePath != "",
-                                      val transferredFile: File = File(filePath))
+data class TransferForwardingProperty(
+    val progress: Float = 0f,
+    val filePath: String = "",
+    val transferred: Boolean = filePath != "",
+    val transferredFile: File = File(filePath)
+)

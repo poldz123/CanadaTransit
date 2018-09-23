@@ -9,26 +9,26 @@ import org.joda.time.DateTime
 open class BaseConverter {
 
     @TypeConverter
-    fun dateTimeToJson(value: DateTime): String
-            = value.toJson()
+    fun dateTimeToJson(value: DateTime): String =
+            value.toJson()
 
     @TypeConverter
-    fun jsonToDateTime(value: String): DateTime
-            = value.fromJsonDateTime()
+    fun jsonToDateTime(value: String): DateTime =
+            value.fromJsonDateTime()
 
     @TypeConverter
-    fun jsonToListInteger(value: String): List<Int>
-            = value.fromJsonList()
+    fun jsonToListInteger(value: String): List<Int> =
+            value.fromJsonList()
 
     @TypeConverter
-    fun listIntegerToJson(value: List<Int>): String
-            = value.toJson()
+    fun listIntegerToJson(value: List<Int>): String =
+            value.toJson()
 
     @TypeConverter
-    fun jsonToListStrings(value: String): List<String>
-            = value.fromJsonList()
+    fun jsonToListStrings(value: String): List<String> =
+            value.fromJsonList()
 
     @TypeConverter
-    fun listStringsToJson(value: List<String>): String
-            = value.toJson()
+    fun listStringsToJson(value: List<String>): String =
+            value.toJson()
 }

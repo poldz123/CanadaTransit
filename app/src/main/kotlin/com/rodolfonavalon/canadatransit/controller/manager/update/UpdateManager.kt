@@ -12,7 +12,7 @@ import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import io.reactivex.Maybe
 
-class UpdateManager: AbstractQueueTask<UpdateTask>() {
+class UpdateManager : AbstractQueueTask<UpdateTask>() {
 
     override fun onStartService() {
         val context = CanadaTransitApplication.appContext

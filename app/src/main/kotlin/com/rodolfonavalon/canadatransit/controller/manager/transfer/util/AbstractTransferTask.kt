@@ -9,7 +9,7 @@ import com.rodolfonavalon.canadatransit.controller.util.FileUtil
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
-abstract class AbstractTransferTask<T: Transferable>(private val transferManager: TransferManager, private val transferable: T): TransferTask {
+abstract class AbstractTransferTask<T : Transferable>(private val transferManager: TransferManager, private val transferable: T) : TransferTask {
     var disposable: Disposable? = null
     var trackingId: String = ""
 

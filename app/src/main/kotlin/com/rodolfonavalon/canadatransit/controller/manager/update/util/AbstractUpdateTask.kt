@@ -8,7 +8,7 @@ import io.reactivex.MaybeObserver
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
-abstract class AbstractUpdateTask<T>(val updateManager: UpdateManager): Maybe<T>(), UpdateTask {
+abstract class AbstractUpdateTask<T>(val updateManager: UpdateManager) : Maybe<T>(), UpdateTask {
     var disposable: Disposable? = null
     var observer: MaybeObserver<in T>? = null
 

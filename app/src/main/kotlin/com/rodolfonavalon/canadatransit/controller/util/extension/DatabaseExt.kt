@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
  * @param block the block runnable that should emit the result from the query
  * @return The [Maybe] observable with the result of the query
  */
-inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT> DAO.dbQuery(crossinline block: DAO.() -> Maybe<RESULT>): Maybe<RESULT> {
+inline fun <DAO : BaseDao<MODEL>, MODEL : Any, RESULT> DAO.dbQuery(crossinline block: DAO.() -> Maybe<RESULT>): Maybe<RESULT> {
     return block(this)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -25,7 +25,7 @@ inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT> DAO.dbQuery(crossinline blo
  * @param block the block runnable that should emit the result from the delete
  * @return The [Maybe] observable with the result of the delete
  */
-inline fun <DAO: BaseDao<MODEL>, MODEL: Any> DAO.dbDelete(crossinline block: DAO.() -> Int): Maybe<Int> {
+inline fun <DAO : BaseDao<MODEL>, MODEL : Any> DAO.dbDelete(crossinline block: DAO.() -> Int): Maybe<Int> {
     return createDbObservable { block(this) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -38,7 +38,7 @@ inline fun <DAO: BaseDao<MODEL>, MODEL: Any> DAO.dbDelete(crossinline block: DAO
  * @param block the block runnable that should emit the result from the insert
  * @return The [Maybe] observable with the result of the insert
  */
-inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT: List<Long>> DAO.dbInsert(crossinline block: DAO.() -> RESULT): Maybe<RESULT> {
+inline fun <DAO : BaseDao<MODEL>, MODEL : Any, RESULT : List<Long>> DAO.dbInsert(crossinline block: DAO.() -> RESULT): Maybe<RESULT> {
     return createDbObservable { block(this) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -51,7 +51,7 @@ inline fun <DAO: BaseDao<MODEL>, MODEL: Any, RESULT: List<Long>> DAO.dbInsert(cr
  * @param block the block runnable that should emit the result from the update
  * @return The [Maybe] observable with the result of the updates
  */
-inline fun <DAO: BaseDao<MODEL>, MODEL: Any> DAO.dbUpdate(crossinline block: DAO.() -> Int): Maybe<Int> {
+inline fun <DAO : BaseDao<MODEL>, MODEL : Any> DAO.dbUpdate(crossinline block: DAO.() -> Int): Maybe<Int> {
     return createDbObservable { block(this) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -72,4 +72,3 @@ fun <RESULT> createDbObservable(block: () -> RESULT): Maybe<RESULT> {
         }
     }
 }
-
