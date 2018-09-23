@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.controller.util.queue
+package com.rodolfonavalon.canadatransit.controller.util.queue.task
 
 interface Task {
 

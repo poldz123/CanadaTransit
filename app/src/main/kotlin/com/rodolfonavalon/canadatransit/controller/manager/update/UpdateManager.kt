@@ -14,16 +14,21 @@ import io.reactivex.Maybe
 
 class UpdateManager: AbstractQueueTask<UpdateTask>() {
 
+    override fun onStartService() {
+        val context = CanadaTransitApplication.appContext
+        val service = Intent(context, UpdateService::class.java)
+        service.putExtra(ACTION_START_UPDATE_MANAGER, true)
+        context.startService(service)
+    }
+
     companion object {
         private val instance: UpdateManager = UpdateManager()
 
+        // TODO change to replay
         fun updateOperators(): Maybe<List<Operator>> {
             // Todo - This updates the operator, we do not care if it have a flag
             // that needs to be updated. All operators are updated by default every time.
-            val operatorTask = OperatorUpdaterTask(instance)
-            instance.add(uuid(), operatorTask)
-            start()
-            return operatorTask
+            return instance.add(uuid(), OperatorUpdaterTask(instance))
         }
 
         fun updateOperatorFeeds() {
@@ -56,18 +61,6 @@ class UpdateManager: AbstractQueueTask<UpdateTask>() {
          */
         fun manager(): QueueTask<UpdateTask> {
             return instance
-        }
-
-        /**
-         * This triggers the manager to start the tasks which only the service can. This is
-         * to be able to process the tasks in the background even if the application has
-         * already been destroyed.
-         */
-        private fun start() {
-            val context = CanadaTransitApplication.appContext
-            val service = Intent(context, UpdateService::class.java)
-            service.putExtra(ACTION_START_UPDATE_MANAGER, true)
-            context.startService(service)
         }
     }
 }

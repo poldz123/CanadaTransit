@@ -4,6 +4,7 @@ import android.support.annotation.VisibleForTesting
 import android.support.annotation.VisibleForTesting.PRIVATE
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.extension.safeLet
+import com.rodolfonavalon.canadatransit.controller.util.queue.task.Task
 import timber.log.Timber
 import java.util.*
 
@@ -14,11 +15,21 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
     private var activeTask: T? = null
     private var activeTrackingId: String? = null
 
+    private var startService = false
+
+    /**
+     * This triggers the manager to start the tasks which only the service can. This is
+     * to be able to process the tasks in the background even if the application has
+     * already been destroyed.
+     */
+    abstract fun onStartService()
+
     override var listener: QueueTaskListener? = null
 
-    override fun add(trackingId: String, task: T) {
+    override fun <R: T> add(trackingId: String, task: R): R {
         if (queueKey.contains(trackingId)) {
             Timber.d("Transfer is already in progress with tracking-id: $trackingId")
+            return task
         }
         assert()
         // Add the tracking-id to the key and the transfer object to the map
@@ -26,6 +37,11 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
         // will only start when the manager has completed other queues.
         queueKey.add(trackingId)
         queueTaskMap[trackingId] = task
+
+        if (startService) {
+            onStartService()
+        }
+        return task
     }
 
     override fun get(trackingId: String): T? {
@@ -130,21 +146,17 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
     fun success() {
         DebugUtil.assertNotNull(activeTrackingId, "Active tracking id is NULL.")
         Timber.d("Transferring data is a SUCCESS for tracking-id: $activeTrackingId")
-        activeTrackingId?.let { trackingId ->
-            assert()
-            listener?.onSuccess(trackingId)
-            next()
-        }
+        assert()
+        safeLet(activeTrackingId) { trackingId -> listener?.onSuccess(trackingId) }
+        next()
     }
 
     fun failure() {
         DebugUtil.assertNotNull(activeTrackingId, "Active tracking id is NULL.")
         Timber.d("Transferring data is a FAILURE for tracking-id: $activeTrackingId")
-        activeTrackingId?.let { trackingId ->
-            assert()
-            listener?.onFailure(trackingId)
-            next()
-        }
+        assert()
+        safeLet(activeTrackingId) { trackingId -> listener?.onFailure(trackingId) }
+        next()
     }
 
     // TODO Remove??
@@ -158,4 +170,9 @@ abstract class AbstractQueueTask<T: Task>: QueueTask<T> {
 
     @VisibleForTesting(otherwise = PRIVATE)
     fun numTasks(): Int = queueKey.count()
+
+    @VisibleForTesting(otherwise = PRIVATE)
+    fun setStartService(enable: Boolean) {
+        this.startService = enable
+    }
 }

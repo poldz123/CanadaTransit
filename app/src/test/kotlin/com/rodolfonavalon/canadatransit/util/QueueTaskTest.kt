@@ -2,9 +2,7 @@ package com.rodolfonavalon.canadatransit.util
 
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTaskListener
-import com.rodolfonavalon.canadatransit.controller.util.queue.Task
-import io.reactivex.Observer
-import io.reactivex.subjects.ReplaySubject
+import com.rodolfonavalon.canadatransit.controller.util.queue.task.Task
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -298,6 +296,56 @@ class QueueTaskTest {
         assertFalse(queueTask.isBusy())
     }
 
+    @Test
+    fun testListener_successTask() {
+        val queueTaskWithListener = TestQueueTask()
+        val queueTaskWithoutListener = TestQueueTask(enableListener = false)
+        queueTaskWithoutListener.setStartService(true)
+
+        createSingleTask(queueTaskWithListener, true).preventAutoComplete = true
+        createSingleTask(queueTaskWithoutListener, true).preventAutoComplete = true
+        queueTaskWithListener.start()
+        queueTaskWithoutListener.start()
+
+        // Test the manager for a successful task
+        queueTaskWithListener.success()
+        queueTaskWithoutListener.success()
+
+        assertNotNull(queueTaskWithListener.lastSuccessfulTrackingId)
+        assertTrue(queueTaskWithListener.isStarted)
+        assertTrue(queueTaskWithListener.isFinished)
+
+        assertNull(queueTaskWithoutListener.lastSuccessfulTrackingId)
+        assertTrue(queueTaskWithoutListener.isServiceStarted)
+        assertFalse(queueTaskWithoutListener.isStarted)
+        assertFalse(queueTaskWithoutListener.isFinished)
+    }
+
+    @Test
+    fun testListener_failedTask() {
+        val queueTaskWithListener = TestQueueTask()
+        val queueTaskWithoutListener = TestQueueTask(enableListener = false)
+        queueTaskWithoutListener.setStartService(true)
+
+        createSingleTask(queueTaskWithListener, true).preventAutoComplete = true
+        createSingleTask(queueTaskWithoutListener, true).preventAutoComplete = true
+        queueTaskWithListener.start()
+        queueTaskWithoutListener.start()
+
+        // Test the manager for a successful task
+        queueTaskWithListener.failure()
+        queueTaskWithoutListener.failure()
+
+        assertNotNull(queueTaskWithListener.lastFailedTrackingId)
+        assertTrue(queueTaskWithListener.isStarted)
+        assertTrue(queueTaskWithListener.isFinished)
+
+        assertNull(queueTaskWithoutListener.lastFailedTrackingId)
+        assertTrue(queueTaskWithoutListener.isServiceStarted)
+        assertFalse(queueTaskWithoutListener.isStarted)
+        assertFalse(queueTaskWithoutListener.isFinished)
+    }
+
     private fun createSingleTask(queueTask: TestQueueTask, addToQueue: Boolean = false): TestTask {
         val testTaskTrackingId = "1"
         val testTask = TestTask(testTaskTrackingId, queueTask)
@@ -321,13 +369,25 @@ class QueueTaskTest {
     }
 }
 
-class TestQueueTask: AbstractQueueTask<TestTask>(), QueueTaskListener {
+class TestQueueTask: AbstractQueueTask<TestTask>, QueueTaskListener {
 
-    var lastSuccessfulTrackingId = ""
-    var lastFailedTrackingId = ""
+    var lastSuccessfulTrackingId: String? = null
+    var lastFailedTrackingId: String? = null
+    var isServiceStarted: Boolean = false
+    var isStarted: Boolean = false
+    var isFinished: Boolean = false
 
-    init {
-        this.listener = this
+    constructor(): this(true)
+
+    constructor(enableListener: Boolean) {
+        if (enableListener) {
+            this.listener = this
+        }
+        this.setStartService(false)
+    }
+
+    override fun onStartService() {
+        isServiceStarted = true
     }
 
     override fun onSuccess(trackingId: String) {
@@ -339,11 +399,11 @@ class TestQueueTask: AbstractQueueTask<TestTask>(), QueueTaskListener {
     }
 
     override fun onStart() {
-
+        isStarted = true
     }
 
     override fun onFinish() {
-
+        isFinished = true
     }
 }
 

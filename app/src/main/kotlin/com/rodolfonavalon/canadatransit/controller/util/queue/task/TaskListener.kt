@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.controller.util.queue
+package com.rodolfonavalon.canadatransit.controller.util.queue.task
 
 typealias OnSuccessTaskListener<T> = (T) -> Unit
 typealias OnFailureTaskListener = () -> Unit

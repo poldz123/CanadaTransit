@@ -1,8 +1,8 @@
 package com.rodolfonavalon.canadatransit.controller.manager.transfer
 
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.util.TransferForwardingProperty
-import com.rodolfonavalon.canadatransit.controller.util.queue.Action
-import com.rodolfonavalon.canadatransit.controller.util.queue.Task
+import com.rodolfonavalon.canadatransit.controller.util.queue.action.Action
+import com.rodolfonavalon.canadatransit.controller.util.queue.task.Task
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Response

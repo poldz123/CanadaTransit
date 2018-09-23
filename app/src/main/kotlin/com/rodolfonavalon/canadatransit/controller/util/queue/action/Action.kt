@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.controller.util.queue
+package com.rodolfonavalon.canadatransit.controller.util.queue.action
 
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferManager
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
