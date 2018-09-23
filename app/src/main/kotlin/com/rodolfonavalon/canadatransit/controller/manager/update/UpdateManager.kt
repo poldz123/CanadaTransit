@@ -26,8 +26,6 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
 
         // TODO change to replay
         fun updateOperators(): Maybe<List<Operator>> {
-            // Todo - This updates the operator, we do not care if it have a flag
-            // that needs to be updated. All operators are updated by default every time.
             return instance.add(uuid(), OperatorUpdaterTask(instance))
         }
 
