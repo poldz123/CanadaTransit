@@ -2,7 +2,7 @@ package com.rodolfonavalon.canadatransit.controller.manager.update
 
 import android.content.Intent
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
-import com.rodolfonavalon.canadatransit.controller.manager.update.task.OperatorUpdaterTask
+import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateOperatorTask
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService.Companion.ACTION_START_UPDATE_MANAGER
 import com.rodolfonavalon.canadatransit.controller.util.extension.uuid
@@ -24,9 +24,8 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
     companion object {
         private val instance: UpdateManager = UpdateManager()
 
-        // TODO change to replay
         fun updateOperators(): Maybe<List<Operator>> {
-            return instance.add(uuid(), OperatorUpdaterTask(instance))
+            return instance.add(uuid(), UpdateOperatorTask(instance))
         }
 
         fun updateOperatorFeeds() {
@@ -51,6 +50,10 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
 
         fun updateEverything() {
             // Todo - This updates everything, from operator, operator feeds, operator feed version.
+        }
+
+        fun update() {
+            updateOperators()
         }
 
         /**

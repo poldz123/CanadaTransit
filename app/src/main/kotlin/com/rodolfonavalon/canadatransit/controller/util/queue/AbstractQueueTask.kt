@@ -15,7 +15,7 @@ abstract class AbstractQueueTask<T : Task> : QueueTask<T> {
     private var activeTask: T? = null
     private var activeTrackingId: String? = null
 
-    private var startService = false
+    private var startService = true
 
     /**
      * This triggers the manager to start the tasks which only the service can. This is

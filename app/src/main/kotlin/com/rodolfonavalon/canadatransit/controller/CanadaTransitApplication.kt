@@ -3,6 +3,7 @@ package com.rodolfonavalon.canadatransit.controller
 import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 
 import com.rodolfonavalon.canadatransit.BuildConfig
 import com.rodolfonavalon.canadatransit.model.database.dao.AppDatabase
@@ -20,7 +21,7 @@ open class CanadaTransitApplication : Application() {
         // Initialize the global application context
         appContext = applicationContext
         // Initialize the database
-        appDatabase = when (isEnabledDatabaseOnMainThread) {
+        appDatabase = when (isEnableJVMTest) {
             true ->
                 Room.databaseBuilder(applicationContext, AppDatabase::class.java, DATABASE_NAME)
                     .allowMainThreadQueries()
@@ -48,14 +49,16 @@ open class CanadaTransitApplication : Application() {
 
         // This enables support the database to be queried in the main thread instead
         // in the background thread which is by default.
-        private var isEnabledDatabaseOnMainThread = false
+        private var isEnableJVMTest = false
 
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         fun enableDatabaseOnMainThread() {
-            isEnabledDatabaseOnMainThread = true
+            isEnableJVMTest = true
         }
 
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         fun disableDatabaseOnMainThread() {
-            isEnabledDatabaseOnMainThread = false
+            isEnableJVMTest = false
         }
     }
 }

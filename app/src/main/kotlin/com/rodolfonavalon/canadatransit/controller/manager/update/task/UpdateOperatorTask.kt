@@ -9,7 +9,7 @@ import com.rodolfonavalon.canadatransit.controller.util.queue.task.AbstractObser
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import timber.log.Timber
 
-class OperatorUpdaterTask(private val updateManager: UpdateManager) : AbstractObservableTask<List<Operator>>() {
+class UpdateOperatorTask(private val updateManager: UpdateManager) : AbstractObservableTask<List<Operator>>() {
 
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
@@ -36,6 +36,25 @@ class OperatorUpdaterTask(private val updateManager: UpdateManager) : AbstractOb
 
     private fun onOperatorsSaved(operators: List<Operator>) {
         Timber.d("Successfully saved ${operators.count()} operators")
+//
+//        // TODO: remove block
+//        val dao = CanadaTransitApplication.appDatabase.userOperatorsDao()
+//        for (operator in operators) {
+//            if (operator.operatorOneStopId == "o-f24-octranspo") {
+//                dao.dbInsert {
+//                    insert(UserOperators(operator.operatorOneStopId))
+//                }.subscribe {
+//                    Timber.d("o-f24-octranspo selected by the user")
+//                    dao.dbQuery {
+//                        load()
+//                    }.subscribe { data ->
+//                        Timber.d("Total user selected: ${data.count()}")
+//                    }
+//                }
+//                break
+//            }
+//        }
+
         this.observable.onNext(operators)
         this.observable.onComplete()
         updateManager.success()

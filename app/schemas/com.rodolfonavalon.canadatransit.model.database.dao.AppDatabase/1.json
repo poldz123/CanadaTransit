@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "11a67054b29a437912588cc8213d68df",
+    "identityHash": "2be276d13d8fbde92d06f253a1e5579f",
     "entities": [
       {
         "tableName": "Operator",
@@ -343,11 +343,58 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "UserOperators",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `operatorOneStopId` TEXT NOT NULL, FOREIGN KEY(`operatorOneStopId`) REFERENCES `Operator`(`operatorOneStopId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "operatorOneStopId",
+            "columnName": "operatorOneStopId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_UserOperators_operatorOneStopId",
+            "unique": true,
+            "columnNames": [
+              "operatorOneStopId"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_UserOperators_operatorOneStopId` ON `${TABLE_NAME}` (`operatorOneStopId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Operator",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "operatorOneStopId"
+            ],
+            "referencedColumns": [
+              "operatorOneStopId"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"11a67054b29a437912588cc8213d68df\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2be276d13d8fbde92d06f253a1e5579f\")"
     ]
   }
 }
