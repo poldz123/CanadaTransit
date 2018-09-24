@@ -19,7 +19,7 @@ import retrofit2.Response
                 ForeignKey(entity = OperatorFeed::class,
                 parentColumns = ["feedOneStopId"],
                 childColumns = ["feedOneStopId"],
-                onDelete = ForeignKey.CASCADE)
+                onUpdate = ForeignKey.CASCADE)
         ])
 @TypeConverters(TransitLandConverter::class)
 data class OperatorFeedVersion(

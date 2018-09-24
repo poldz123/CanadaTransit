@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2be276d13d8fbde92d06f253a1e5579f",
+    "identityHash": "a8284ea89d8adf4c219b3f81a37b37a2",
     "entities": [
       {
         "tableName": "Operator",
@@ -104,7 +104,7 @@
       },
       {
         "tableName": "OperatorFeed",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`feedOneStopId` TEXT NOT NULL, `operatorOneStopId` TEXT NOT NULL, `name` TEXT, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `url` TEXT NOT NULL, `feedFormat` TEXT NOT NULL, `lastFetchAt` TEXT NOT NULL, `lastImportedAt` TEXT NOT NULL, `importStatus` TEXT NOT NULL, `activeFeedVersion` TEXT NOT NULL, `feedVersionUrl` TEXT NOT NULL, PRIMARY KEY(`feedOneStopId`), FOREIGN KEY(`operatorOneStopId`) REFERENCES `Operator`(`operatorOneStopId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`feedOneStopId` TEXT NOT NULL, `operatorOneStopId` TEXT NOT NULL, `name` TEXT, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `url` TEXT NOT NULL, `feedFormat` TEXT NOT NULL, `lastFetchAt` TEXT NOT NULL, `lastImportedAt` TEXT NOT NULL, `importStatus` TEXT NOT NULL, `activeFeedVersion` TEXT NOT NULL, `feedVersionUrl` TEXT NOT NULL, PRIMARY KEY(`feedOneStopId`), FOREIGN KEY(`operatorOneStopId`) REFERENCES `Operator`(`operatorOneStopId`) ON UPDATE CASCADE ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "feedOneStopId",
@@ -206,8 +206,8 @@
         "foreignKeys": [
           {
             "table": "Operator",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
+            "onDelete": "NO ACTION",
+            "onUpdate": "CASCADE",
             "columns": [
               "operatorOneStopId"
             ],
@@ -219,7 +219,7 @@
       },
       {
         "tableName": "OperatorFeedVersion",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sha1` TEXT NOT NULL, `feedOneStopId` TEXT NOT NULL, `earliestCalendarDate` TEXT NOT NULL, `latestCalendarDate` TEXT NOT NULL, `md5` TEXT NOT NULL, `fetchedAt` TEXT NOT NULL, `importedAt` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `importStatus` TEXT NOT NULL, `url` TEXT NOT NULL, `downloadUrl` TEXT NOT NULL, `importLevel` INTEGER NOT NULL, `isActiveFeedVersion` INTEGER NOT NULL, PRIMARY KEY(`sha1`), FOREIGN KEY(`feedOneStopId`) REFERENCES `OperatorFeed`(`feedOneStopId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sha1` TEXT NOT NULL, `feedOneStopId` TEXT NOT NULL, `earliestCalendarDate` TEXT NOT NULL, `latestCalendarDate` TEXT NOT NULL, `md5` TEXT NOT NULL, `fetchedAt` TEXT NOT NULL, `importedAt` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `importStatus` TEXT NOT NULL, `url` TEXT NOT NULL, `downloadUrl` TEXT NOT NULL, `importLevel` INTEGER NOT NULL, `isActiveFeedVersion` INTEGER NOT NULL, PRIMARY KEY(`sha1`), FOREIGN KEY(`feedOneStopId`) REFERENCES `OperatorFeed`(`feedOneStopId`) ON UPDATE CASCADE ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "sha1",
@@ -333,8 +333,8 @@
         "foreignKeys": [
           {
             "table": "OperatorFeed",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
+            "onDelete": "NO ACTION",
+            "onUpdate": "CASCADE",
             "columns": [
               "feedOneStopId"
             ],
@@ -346,7 +346,7 @@
       },
       {
         "tableName": "UserOperators",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `operatorOneStopId` TEXT NOT NULL, FOREIGN KEY(`operatorOneStopId`) REFERENCES `Operator`(`operatorOneStopId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `operatorOneStopId` TEXT NOT NULL, FOREIGN KEY(`operatorOneStopId`) REFERENCES `Operator`(`operatorOneStopId`) ON UPDATE CASCADE ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -380,8 +380,8 @@
         "foreignKeys": [
           {
             "table": "Operator",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
+            "onDelete": "NO ACTION",
+            "onUpdate": "CASCADE",
             "columns": [
               "operatorOneStopId"
             ],
@@ -394,7 +394,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2be276d13d8fbde92d06f253a1e5579f\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"a8284ea89d8adf4c219b3f81a37b37a2\")"
     ]
   }
 }

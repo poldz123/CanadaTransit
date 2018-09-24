@@ -10,7 +10,7 @@ import com.rodolfonavalon.canadatransit.model.database.transit.Operator
             ForeignKey(entity = Operator::class,
                     parentColumns = ["operatorOneStopId"],
                     childColumns = ["operatorOneStopId"],
-                    onDelete = ForeignKey.CASCADE)
+                    onUpdate = ForeignKey.CASCADE)
         ])
 data class UserOperators(
         val operatorOneStopId: String

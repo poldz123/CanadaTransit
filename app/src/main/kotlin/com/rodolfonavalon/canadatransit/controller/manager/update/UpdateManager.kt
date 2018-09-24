@@ -2,6 +2,7 @@ package com.rodolfonavalon.canadatransit.controller.manager.update
 
 import android.content.Intent
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
+import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateOperatorFeedTask
 import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateOperatorTask
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService.Companion.ACTION_START_UPDATE_MANAGER
@@ -28,9 +29,8 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
             return instance.add(uuid(), UpdateOperatorTask(instance))
         }
 
-        fun updateOperatorFeeds() {
-            // Todo - This updates only when it has a flag that consider it to be updated.
-            // the flag is added when user selected a particular operator.
+        fun updateOperatorFeeds(): Maybe<List<OperatorFeed>> {
+            return instance.add(uuid(), UpdateOperatorFeedTask(instance))
         }
 
         fun updateOperatorFeed(operator: Operator) {
@@ -54,6 +54,7 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
 
         fun update() {
             updateOperators()
+            updateOperatorFeeds()
         }
 
         /**

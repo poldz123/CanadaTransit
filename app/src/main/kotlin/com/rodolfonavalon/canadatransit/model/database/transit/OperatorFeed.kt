@@ -15,7 +15,7 @@ import org.joda.time.DateTime
                 ForeignKey(entity = Operator::class,
                         parentColumns = ["operatorOneStopId"],
                         childColumns = ["operatorOneStopId"],
-                        onDelete = ForeignKey.CASCADE)
+                        onUpdate = ForeignKey.CASCADE)
         ])
 @TypeConverters(TransitLandConverter::class)
 data class OperatorFeed(

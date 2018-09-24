@@ -82,7 +82,19 @@ interface TransitLandApi {
          *  @param error the callback method when something went wrong during retrieval of the operator feeds
          */
         fun retrieveOperatorFeed(operator: Operator, success: (List<OperatorFeed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            val feedOneStopIds = operator.representedInFeedOneStopIds.joinToString(",")
+            return retrieveOperatorFeed(mutableListOf(operator), success, error)
+        }
+
+        /**
+         *  Retrieves all of the [OperatorFeed] for the given [Operator]
+         *
+         *  @param activity the activity to attached the life cycle for the disposable
+         *  @param operators the bus operators to retrieve the all of the feeds
+         *  @param success the callback method whenever the operator feeds has successfully retrieved
+         *  @param error the callback method when something went wrong during retrieval of the operator feeds
+         */
+        fun retrieveOperatorFeed(operators: List<Operator>, success: (List<OperatorFeed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+            val feedOneStopIds = operators.asSequence().map { it.representedInFeedOneStopIds.joinToString(",") }.joinToString(",")
             return TransitLandApi.retrofitInstance.feed(feedOneStopIds)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -100,8 +112,7 @@ interface TransitLandApi {
          *  @param error the callback method when something went wrong during retrieval of the operator feed version
          */
         fun retrieveOperatorFeedVersion(operatorFeed: OperatorFeed, success: (OperatorFeedVersion) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            DebugUtil.assertTrue(operatorFeed.activeFeedVersion != null, "Active feed version for operator feed is null: ${operatorFeed.feedOneStopId}")
-            return retrofitInstance.feedVersion(operatorFeed.activeFeedVersion!!)
+            return retrofitInstance.feedVersion(operatorFeed.activeFeedVersion)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(success, error)

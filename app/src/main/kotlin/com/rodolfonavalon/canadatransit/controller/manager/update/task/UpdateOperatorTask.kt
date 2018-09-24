@@ -23,38 +23,18 @@ class UpdateOperatorTask(private val updateManager: UpdateManager) : AbstractObs
             onOperatorsSaved(operators)
             return
         }
-
         Timber.d("Saving ${operators.count()} operators...")
         val dao = CanadaTransitApplication.appDatabase.operatorDao()
         dao.dbInsert {
             insert(operators)
         }.subscribe({ rowIds ->
-            DebugUtil.assertTrue(rowIds.isNotEmpty(), "There are no operators being saved on a successful database transaction: $trackingId")
+            DebugUtil.assertTrue(rowIds.isNotEmpty(), "Failed to save operators: $trackingId")
             onOperatorsSaved(operators)
         }, ::onError)
     }
 
     private fun onOperatorsSaved(operators: List<Operator>) {
         Timber.d("Successfully saved ${operators.count()} operators")
-//
-//        // TODO: remove block
-//        val dao = CanadaTransitApplication.appDatabase.userOperatorsDao()
-//        for (operator in operators) {
-//            if (operator.operatorOneStopId == "o-f24-octranspo") {
-//                dao.dbInsert {
-//                    insert(UserOperators(operator.operatorOneStopId))
-//                }.subscribe {
-//                    Timber.d("o-f24-octranspo selected by the user")
-//                    dao.dbQuery {
-//                        load()
-//                    }.subscribe { data ->
-//                        Timber.d("Total user selected: ${data.count()}")
-//                    }
-//                }
-//                break
-//            }
-//        }
-
         this.observable.onNext(operators)
         this.observable.onComplete()
         updateManager.success()

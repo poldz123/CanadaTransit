@@ -12,6 +12,9 @@ interface OperatorFeedDao : BaseDao<OperatorFeed> {
     @Query("SELECT * FROM OperatorFeed WHERE feedOneStopId = :feedOneStopId")
     fun find(feedOneStopId: String): Maybe<OperatorFeed>
 
+    @Query("SELECT * FROM OperatorFeed WHERE feedOneStopId IN (:feedOneStopIds)")
+    fun find(feedOneStopIds: List<String>): Maybe<List<OperatorFeed>>
+
     @Query("SELECT * FROM OperatorFeed")
     fun load(): Maybe<List<OperatorFeed>>
 
