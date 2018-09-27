@@ -1,7 +1,7 @@
 package com.rodolfonavalon.canadatransit.controller.util.queue
 
-import android.support.annotation.VisibleForTesting
-import android.support.annotation.VisibleForTesting.PRIVATE
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PRIVATE
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.extension.safeLet
 import com.rodolfonavalon.canadatransit.controller.util.queue.task.Task

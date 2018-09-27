@@ -2,12 +2,12 @@
 
 buildscript {
     // Gradle
-    ext.buildToolVersion = "27.0.3"
+    ext.buildToolVersion = "28.0.2"
 
     // Project
     ext.applicationId = "com.rodolfonavalon.canadatransit"
-    ext.compileSdkVersion = 27
-    ext.targetSdkVersion = 27
+    ext.compileSdkVersion = 28
+    ext.targetSdkVersion = 28
     ext.minSdkVersion = 21
     ext.versionCode = 1
     ext.versionName = "1.0"
@@ -23,23 +23,25 @@ buildscript {
     ext.jodaTimeAndroidLibraryVersion = "2.9.9"
 
     // Google Library
-    ext.googleSupportLibraryVersion = "27.1.1"
-    ext.googleContraintLayoutLibraryVersion = "1.1.2"
     ext.googlePlayServiceLibraryVersion = "15.0.1"
-    ext.googleRoomLibraryVersion = "1.1.1"
+    // AndroidX Google Library
+    ext.googleRoomLibraryVersion = "2.0.0-rc01"
+    ext.googleSupportLibraryVersion = "1.0.0"
+    ext.googleContraintLayoutLibraryVersion = "2.0.0-alpha2"
 
     // Test Library
     ext.junitLibraryVersion = "4.12"
-    ext.espressoLibraryVersion = "3.0.1"
     ext.jsr305LibraryVersion = "3.0.2"
-    ext.robolectricLibraryVersion = "3.8"
+    ext.robolectricLibraryVersion = "4.0-alpha-3"
     ext.mockitoLibraryVersion = "2.12.0"
-    ext.googleTestSupport = "1.0.2"
     ext.jacocoVersion = "0.8.2"
     ext.detektVersion = "1.0.0.RC8"
+    // AndroidX Test Library
+    ext.espressoLibraryVersion = "3.1.0-alpha4"
+    ext.googleTestSupport = "1.1.0-alpha4"
 
     // Tools Library
-    ext.kotlinVersion = "1.2.61"
+    ext.kotlinVersion = "1.2.71"
 
     repositories {
         google()
@@ -47,7 +49,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.android.tools.build:gradle:3.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jacoco:org.jacoco.core:$jacocoVersion"
         // NOTE: Do not place your application dependencies here; they belong

@@ -82,7 +82,7 @@ interface TransitLandApi {
          *  @param error the callback method when something went wrong during retrieval of the operator feeds
          */
         fun retrieveOperatorFeed(operator: Operator, success: (List<OperatorFeed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            return retrieveOperatorFeed(mutableListOf(operator), success, error)
+            return retrieveOperatorFeed(mutableListOf(operator), success, error, activity)
         }
 
         /**

@@ -1,6 +1,6 @@
 package com.rodolfonavalon.canadatransit.model.database.transit
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import com.rodolfonavalon.canadatransit.controller.manager.update.Updatable
 import com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter.OperatorFeedForeignKey
 import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter

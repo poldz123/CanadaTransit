@@ -19,8 +19,7 @@ import org.robolectric.annotation.Config
 import kotlin.test.*
 
 @RunWith(RobolectricTestRunner::class)
-@Config(manifest = Config.NONE,
-        constants = BuildConfig::class)
+@Config(manifest = Config.NONE)
 class TransitLandApiTest : BaseMockServerTest() {
 
     override fun setup() {

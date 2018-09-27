@@ -1,6 +1,6 @@
 package com.rodolfonavalon.canadatransit.model.database.dao
 
-import android.arch.persistence.room.*
+import androidx.room.*
 
 @Dao
 interface BaseDao<MODEL> {

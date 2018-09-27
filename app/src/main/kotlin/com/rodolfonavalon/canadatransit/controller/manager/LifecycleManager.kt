@@ -75,7 +75,7 @@ class LifecycleManager private constructor() : Application.ActivityLifecycleCall
          * Watches the activity and registers the life cycle that can trigger every [LifecycleStage].
          *
          * ATTENTION:  This wont remove the activity cycle callback until either the activity
-         * is destroyed or it is unregistered through [.ignoreActivity].
+         * is destroyed or it is unregistered through [ignoreActivity].
          *
          * @param activity the activity to listen for life cycle callbacks
          * @param callback the callback method whenever the activity triggered the life cycle callbacks
@@ -87,7 +87,7 @@ class LifecycleManager private constructor() : Application.ActivityLifecycleCall
                     for (lifecycleCallback in lifecycle.callbacks) {
                         if (lifecycleCallback != callback) {
                             lifecycle.callbacks.add(callback)
-                            return
+                            break
                         }
                     }
                     Timber.v("Callback was added already, Skipping...")

@@ -1,7 +1,7 @@
 package com.rodolfonavalon.canadatransit.model.database.dao.transit
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Query
+import androidx.room.Dao
+import androidx.room.Query
 import com.rodolfonavalon.canadatransit.model.database.dao.BaseDao
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import io.reactivex.Maybe

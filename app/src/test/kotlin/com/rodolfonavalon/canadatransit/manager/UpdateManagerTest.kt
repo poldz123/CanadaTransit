@@ -18,7 +18,6 @@ import kotlin.test.fail
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE,
-        constants = BuildConfig::class,
         application = JvmCanadaTransitApplication::class)
 class UpdateManagerTest: BaseMockServerTest() {
 

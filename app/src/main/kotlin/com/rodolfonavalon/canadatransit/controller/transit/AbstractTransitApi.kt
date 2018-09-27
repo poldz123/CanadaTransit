@@ -1,8 +1,8 @@
 package com.rodolfonavalon.canadatransit.controller.transit
 
 import android.app.Activity
-import android.support.annotation.VisibleForTesting
-import android.support.annotation.VisibleForTesting.PRIVATE
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PRIVATE
 import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager
 import com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter.DateTimeAdapter
 import com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter.OperatorFeedForeignKeyAdapter

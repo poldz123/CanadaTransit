@@ -16,7 +16,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         defaultConfig {
 
@@ -110,27 +110,29 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberLibraryVersion"
 
     // Google Library
-    implementation "com.android.support:design:$googleSupportLibraryVersion"
-    implementation "com.android.support:appcompat-v7:$googleSupportLibraryVersion"
-    implementation "com.android.support.constraint:constraint-layout:$googleContraintLayoutLibraryVersion"
+    implementation "com.google.android.material:material:$googleSupportLibraryVersion"
     implementation "com.google.android.gms:play-services-maps:$googlePlayServiceLibraryVersion"
-    implementation "android.arch.persistence.room:runtime:$googleRoomLibraryVersion"
-    implementation "android.arch.persistence.room:rxjava2:$googleRoomLibraryVersion"
-    kapt "android.arch.persistence.room:compiler:$googleRoomLibraryVersion"
+    // AndroidX Google Library
+    implementation "androidx.room:room-runtime:$googleRoomLibraryVersion"
+    implementation "androidx.room:room-rxjava2:$googleRoomLibraryVersion"
+    implementation "androidx.appcompat:appcompat:$googleSupportLibraryVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$googleContraintLayoutLibraryVersion"
+    kapt "androidx.room:room-compiler:$googleRoomLibraryVersion"
 
     // Test Library
     androidTestImplementation "com.google.code.findbugs:jsr305:$jsr305LibraryVersion"
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoLibraryVersion", {
-        exclude group: "com.android.support", module: "support-annotations"
-    })
     testImplementation "junit:junit:$junitLibraryVersion"
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
     testImplementation "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
     testImplementation "org.mockito:mockito-core:$mockitoLibraryVersion"
-    testImplementation "com.android.support.test:runner:$googleTestSupport"
-    testImplementation "com.android.support.test:rules:$googleTestSupport"
     testImplementation "org.robolectric:robolectric:$robolectricLibraryVersion"
+    // AndroidX Test Library
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoLibraryVersion", {
+        exclude group: "com.android.support", module: "support-annotations"
+    })
+    testImplementation "androidx.test:runner:$googleTestSupport"
+    testImplementation "androidx.test:rules:$googleTestSupport"
 
     // Shared Test Library
     testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
