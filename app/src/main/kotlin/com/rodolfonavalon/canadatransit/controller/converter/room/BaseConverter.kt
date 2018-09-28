@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.model.database.converter.room
+package com.rodolfonavalon.canadatransit.controller.converter.room
 
 import androidx.room.TypeConverter
 import com.rodolfonavalon.canadatransit.controller.util.extension.fromJsonDateTime

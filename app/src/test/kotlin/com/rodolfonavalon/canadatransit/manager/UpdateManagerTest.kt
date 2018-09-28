@@ -1,13 +1,12 @@
 package com.rodolfonavalon.canadatransit.manager
 
 import com.rodolfonavalon.canadatransit.BaseMockServerTest
-import com.rodolfonavalon.canadatransit.BuildConfig
 import com.rodolfonavalon.canadatransit.JvmCanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbQuery
-import com.rodolfonavalon.canadatransit.model.database.dao.transit.OperatorDao
+import com.rodolfonavalon.canadatransit.controller.dao.transit.OperatorDao
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

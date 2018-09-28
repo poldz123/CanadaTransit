@@ -35,12 +35,13 @@ class UpdateOperatorFeedTask(private val updateManager: UpdateManager) : Abstrac
             return
         }
         Timber.d("Saving ${operatorFeeds.count()} operator feeds...")
-        operatorFeedDao.dbInsert {
+        val disposable = operatorFeedDao.dbInsert {
             insert(operatorFeeds)
         }.subscribe({ rowIds ->
             DebugUtil.assertTrue(rowIds.isNotEmpty(), "Failed to save operator feeds: $trackingId")
             onOperatorFeedsSaved(operatorFeeds)
         }, ::onError)
+        this.disposables.add(disposable)
     }
 
     private fun onOperatorFeedsSaved(operatorFeeds: List<OperatorFeed>) {

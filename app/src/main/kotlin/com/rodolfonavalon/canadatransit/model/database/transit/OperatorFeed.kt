@@ -2,8 +2,8 @@ package com.rodolfonavalon.canadatransit.model.database.transit
 
 import androidx.room.*
 import com.rodolfonavalon.canadatransit.controller.manager.update.Updatable
-import com.rodolfonavalon.canadatransit.model.database.converter.moshi.adapter.OperatorFeedForeignKey
-import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
+import com.rodolfonavalon.canadatransit.controller.converter.moshi.adapter.OperatorFeedForeignKey
+import com.rodolfonavalon.canadatransit.controller.converter.room.TransitLandConverter
 import com.squareup.moshi.Json
 import org.joda.time.DateTime
 

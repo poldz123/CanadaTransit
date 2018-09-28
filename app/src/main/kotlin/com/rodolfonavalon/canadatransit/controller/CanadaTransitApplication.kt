@@ -6,7 +6,7 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 
 import com.rodolfonavalon.canadatransit.BuildConfig
-import com.rodolfonavalon.canadatransit.model.database.dao.AppDatabase
+import com.rodolfonavalon.canadatransit.controller.dao.AppDatabase
 
 import net.danlew.android.joda.JodaTimeAndroid
 

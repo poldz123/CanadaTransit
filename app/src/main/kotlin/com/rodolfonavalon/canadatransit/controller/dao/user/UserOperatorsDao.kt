@@ -1,8 +1,8 @@
-package com.rodolfonavalon.canadatransit.model.database.dao.user
+package com.rodolfonavalon.canadatransit.controller.dao.user
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.rodolfonavalon.canadatransit.model.database.dao.BaseDao
+import com.rodolfonavalon.canadatransit.controller.dao.BaseDao
 import com.rodolfonavalon.canadatransit.model.database.user.UserOperators
 import io.reactivex.Maybe
 

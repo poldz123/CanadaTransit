@@ -1,8 +1,8 @@
-package com.rodolfonavalon.canadatransit.model.database.dao.transit
+package com.rodolfonavalon.canadatransit.controller.dao.transit
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.rodolfonavalon.canadatransit.model.database.dao.BaseDao
+import com.rodolfonavalon.canadatransit.controller.dao.BaseDao
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import io.reactivex.Maybe
 

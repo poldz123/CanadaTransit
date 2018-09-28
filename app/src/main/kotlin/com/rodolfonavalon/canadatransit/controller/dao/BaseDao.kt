@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.model.database.dao
+package com.rodolfonavalon.canadatransit.controller.dao
 
 import androidx.room.*
 

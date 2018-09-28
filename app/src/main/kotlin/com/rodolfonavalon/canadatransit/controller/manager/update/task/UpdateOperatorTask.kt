@@ -25,12 +25,13 @@ class UpdateOperatorTask(private val updateManager: UpdateManager) : AbstractObs
         }
         Timber.d("Saving ${operators.count()} operators...")
         val dao = CanadaTransitApplication.appDatabase.operatorDao()
-        dao.dbInsert {
+        val disposable = dao.dbInsert {
             insert(operators)
         }.subscribe({ rowIds ->
             DebugUtil.assertTrue(rowIds.isNotEmpty(), "Failed to save operators: $trackingId")
             onOperatorsSaved(operators)
         }, ::onError)
+        this.disposables.add(disposable)
     }
 
     private fun onOperatorsSaved(operators: List<Operator>) {

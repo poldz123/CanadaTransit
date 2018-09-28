@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import androidx.annotation.NonNull
 import com.rodolfonavalon.canadatransit.controller.manager.update.Updatable
-import com.rodolfonavalon.canadatransit.model.database.converter.room.TransitLandConverter
+import com.rodolfonavalon.canadatransit.controller.converter.room.TransitLandConverter
 import com.squareup.moshi.Json
 import org.joda.time.DateTime
 
