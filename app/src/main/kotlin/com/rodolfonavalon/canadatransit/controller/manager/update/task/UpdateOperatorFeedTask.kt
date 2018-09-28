@@ -18,14 +18,19 @@ class UpdateOperatorFeedTask(private val updateManager: UpdateManager) : Abstrac
 
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
-        Timber.d("Retrieving user operators...")
+        Timber.d("Querying user operators...")
         val disposable = operatorDao.dbQuery { findOperatorsOfUser() }
                 .subscribe(::onUserOperatorsFound, ::onError)
         this.disposables.add(disposable)
     }
 
     private fun onUserOperatorsFound(operators: List<Operator>) {
-        Timber.d("Retrieving operator feeds...")
+        if (operators.isEmpty()) {
+            Timber.d("No operators was selected by the user.")
+            onOperatorFeedsSaved(mutableListOf())
+            return
+        }
+        Timber.d("Retrieving ${operators.count()} operator feeds...")
         this.disposables.add(TransitLandApi.retrieveOperatorFeed(operators, ::onOperatorFeedsReceived, ::onError))
     }
 
