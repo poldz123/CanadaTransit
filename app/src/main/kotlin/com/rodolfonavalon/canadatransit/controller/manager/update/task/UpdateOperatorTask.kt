@@ -37,7 +37,6 @@ class UpdateOperatorTask(private val updateManager: UpdateManager) : AbstractObs
     private fun onOperatorsSaved(operators: List<Operator>) {
         Timber.d("Successfully saved ${operators.count()} operators")
         this.observable.onNext(operators)
-        this.observable.onComplete()
         updateManager.success()
     }
 }

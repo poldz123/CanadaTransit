@@ -2,23 +2,20 @@ package com.rodolfonavalon.canadatransit.controller.util.queue.task
 
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateTask
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
-import io.reactivex.Maybe
-import io.reactivex.MaybeObserver
+import io.reactivex.Single
+import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.ReplaySubject
 import timber.log.Timber
 
-abstract class AbstractObservableTask<T: Any> : Maybe<T>(), UpdateTask {
+abstract class AbstractObservableTask<T: Any> : Single<T>(), UpdateTask {
     val observable: ReplaySubject<T> = ReplaySubject.create(1)
     val disposables: CompositeDisposable = CompositeDisposable()
     lateinit var trackingId: String
 
-    final override fun subscribeActual(observer: MaybeObserver<in T>?) {
-        observable.subscribeBy(
-                onNext = { observer?.onSuccess(it) },
-                onError = { observer?.onError(it) }
-        )
+    override fun subscribeActual(observer: SingleObserver<in T>) {
+        observable.singleOrError()
+                .subscribe(observer)
     }
 
     override fun onStart(trackingId: String) {

@@ -11,7 +11,7 @@ import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTask
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
-import io.reactivex.Maybe
+import io.reactivex.Single
 
 class UpdateManager : AbstractQueueTask<UpdateTask>() {
 
@@ -25,11 +25,11 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
     companion object {
         private val instance: UpdateManager = UpdateManager()
 
-        fun updateOperators(): Maybe<List<Operator>> {
+        fun updateOperators(): Single<List<Operator>> {
             return instance.add(uuid(), UpdateOperatorTask(instance))
         }
 
-        fun updateOperatorFeeds(): Maybe<List<OperatorFeed>> {
+        fun updateOperatorFeeds(): Single<List<OperatorFeed>> {
             return instance.add(uuid(), UpdateOperatorFeedTask(instance))
         }
 
