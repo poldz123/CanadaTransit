@@ -9,6 +9,7 @@ import com.rodolfonavalon.canadatransit.controller.converter.moshi.adapter.Opera
 import com.rodolfonavalon.canadatransit.model.transit.response.MetaResponse
 import com.squareup.moshi.Moshi
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import retrofit2.Retrofit
@@ -78,24 +79,29 @@ abstract class AbstractTransitApi<API : Any>(apiUrl: String, val apiClass: Class
      *  from the API through chaining the observer using its [MetaResponse].
      *
      *  @param OBSERVER the type of the object to be retrieve
-     *  @param observer the lambda that execute the observer, Parameter: [0] -> Offset [1] -> Per page
+     *  @param observable the lambda that execute the observable, Parameter: [0] -> Offset [1] -> Per page
      *  @throws [IllegalArgumentException] if per page is an invalid value
      */
-    protected fun <OBSERVER : MetaResponse> retrievePaginatedObject(perPage: Int, observer: (Int, Int) -> Observable<OBSERVER>): Observable<OBSERVER> {
-        // Recursion makes everything easier to do the paginated observable objects
-        fun retrievePaginatedObject(offset: Int): Observable<OBSERVER> {
-            return observer.invoke(offset, perPage).concatMap { metaResponse ->
-                val meta = metaResponse.meta
-                if (meta.hasNext()) {
-                    // Lets do another api call to retrieve operators
-                    Observable.just(metaResponse).concatWith(retrievePaginatedObject(meta.offset + perPage))
-                } else {
-                    Observable.just(metaResponse)
+    protected fun <MODEL: Any, OBSERVER : MetaResponse<MODEL>> retrievePaginatedObject(perPage: Int, observable: (Int, Int) -> Observable<OBSERVER>): Single<List<MODEL>> {
+        return Single.create { observer ->
+            val result = mutableListOf<MODEL>()
+            // Recursion makes everything easier to do the paginated observable objects
+            fun retrievePaginatedObject(offset: Int): Observable<OBSERVER> {
+                return observable.invoke(offset, perPage).concatMap { metaResponse ->
+                    val meta = metaResponse.meta
+                    if (meta.hasNext()) {
+                        // Lets do another api call to retrieve operators
+                        Observable.just(metaResponse).concatWith(retrievePaginatedObject(meta.offset + perPage))
+                    } else {
+                        Observable.just(metaResponse)
+                    }
                 }
             }
+            // Return the result while we start at the first offset
+            retrievePaginatedObject(0)
+                    .map { it.response }
+                    .subscribe({ result.addAll(it) }, { observer.onError(it) }, { observer.onSuccess(result) })
         }
-        // Return the result while we start at the first offset
-        return retrievePaginatedObject(0)
     }
 
     /**
