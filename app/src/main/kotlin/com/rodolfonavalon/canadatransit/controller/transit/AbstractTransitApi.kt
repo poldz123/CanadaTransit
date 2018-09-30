@@ -19,6 +19,11 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 abstract class AbstractTransitApi<API : Any>(apiUrl: String, val apiClass: Class<API>) {
 
     /**
+     * The max pagination per page of objects (http://transit.land)
+     */
+    private val defaultApiPaginationPerPage = 50
+
+    /**
      *  Retrieves the [Retrofit] instance, that handles the api networking and
      *  properly converts the json as an object model.
      */
@@ -54,53 +59,33 @@ abstract class AbstractTransitApi<API : Any>(apiUrl: String, val apiClass: Class
     private val disposableInstance: CompositeDisposable = CompositeDisposable()
 
     /**
-     *  Retrieves the [observer] from the list with chaining [Observable], this is used to
-     *  retrieve [observer] from the API using the [feeds].
-     *
-     *  @param FEED the type of the list of object from the feed
-     *  @param OBSERVER the type of the object to be retrieve
-     *  @throws [IllegalArgumentException] if the feeds is empty
-     */
-    protected fun <FEED, OBSERVER> retrieveListObject(feeds: List<FEED>, observer: (FEED) -> Observable<OBSERVER>): Observable<OBSERVER> {
-        // Return the result with chaining of the observable list feed
-        return observer.invoke(feeds.first())
-                .concatMap { operatorFeed ->
-                    var observable = Observable.just(operatorFeed)
-                    // Starts at index 1 since we already started at the index 0
-                    for (i in 1 until feeds.size) {
-                        observable = observable.concatWith(observer.invoke(feeds[i]))
-                    }
-                    observable
-                }
-    }
-
-    /**
-     *  Retrieves the [observer] using a paginated strategy, this is used to retrieve [observer]
+     *  Retrieves the [observable] using a paginated strategy, this is used to retrieve [observable]
      *  from the API through chaining the observer using its [MetaResponse].
      *
      *  @param OBSERVER the type of the object to be retrieve
-     *  @param observable the lambda that execute the observable, Parameter: [0] -> Offset [1] -> Per page
-     *  @throws [IllegalArgumentException] if per page is an invalid value
+     *  @param observable the lambda that execute the observable, Parameter: [0] -> Offset
      */
-    protected fun <MODEL: Any, OBSERVER : MetaResponse<MODEL>> retrievePaginatedObject(perPage: Int, observable: (Int, Int) -> Observable<OBSERVER>): Single<List<MODEL>> {
+    protected fun <MODEL: Any, OBSERVER : MetaResponse<MODEL>> retrievePaginatedObject(observable: (Int) -> Observable<OBSERVER>): Single<List<MODEL>> {
         return Single.create { observer ->
             val result = mutableListOf<MODEL>()
             // Recursion makes everything easier to do the paginated observable objects
             fun retrievePaginatedObject(offset: Int): Observable<OBSERVER> {
-                return observable.invoke(offset, perPage).concatMap { metaResponse ->
+                return observable.invoke(offset).concatMap { metaResponse ->
                     val meta = metaResponse.meta
                     if (meta.hasNext()) {
                         // Lets do another api call to retrieve operators
-                        Observable.just(metaResponse).concatWith(retrievePaginatedObject(meta.offset + perPage))
+                        Observable.just(metaResponse).concatWith(retrievePaginatedObject(meta.offset + defaultApiPaginationPerPage))
                     } else {
                         Observable.just(metaResponse)
                     }
                 }
             }
-            // Return the result while we start at the first offset
-            retrievePaginatedObject(0)
+            // Lets do a recursion when retrieving the paginated objects
+            val disposable = retrievePaginatedObject(0)
                     .map { it.response }
                     .subscribe({ result.addAll(it) }, { observer.onError(it) }, { observer.onSuccess(result) })
+            // Make sure that we set the disposable to this single observable
+            observer.setDisposable(disposable)
         }
     }
 

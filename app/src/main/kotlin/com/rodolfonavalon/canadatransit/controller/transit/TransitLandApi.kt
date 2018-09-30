@@ -18,13 +18,13 @@ import retrofit2.http.*
 interface TransitLandApi {
 
     @GET("operators?exclude_geometry=true&without_feed=false&country=${TransitLandApi.API_COUNTRY}")
-    fun operators(@Query("offset") offset: Int, @Query("per_page") perPage: Int): Observable<OperatorsResponse>
+    fun operators(@Query("offset") offset: Int): Observable<OperatorsResponse>
 
     @GET("feeds?active_feed_version_update=true&exclude_geometry=true")
-    fun feed(@Query("onestop_id") feedOneStopIds: String): Observable<OperatorFeedsResponse>
+    fun feed(@Query("onestop_id") feedOneStopIds: String, @Query("offset") offset: Int): Observable<OperatorFeedsResponse>
 
     @GET("feed_versions")
-    fun feedVersion(@Query("sha1") feedVersionIds: String): Observable<OperatorFeedVersionsResponse>
+    fun feedVersion(@Query("sha1") feedVersionIds: String, @Query("offset") offset: Int): Observable<OperatorFeedVersionsResponse>
 
     @GET @Streaming
     fun downloadFeed(@Url url: String): Observable<Response<ResponseBody>>
@@ -47,11 +47,6 @@ interface TransitLandApi {
         private const val API_COUNTRY = "CA"
 
         /**
-         * The max pagination data objects (http://transit.land)
-         */
-        private const val API_PAGINATION_PER_PAGE = 50
-
-        /**
          *  Retrieves all buses [Operator] of the selected country: [API_COUNTRY]
          *
          *  @param activity the activity to attached the life cycle for the disposable
@@ -59,7 +54,7 @@ interface TransitLandApi {
          *  @param error the callback method when something went wrong during retrieval of the operators
          */
         fun retrieveOperators(success: (List<Operator>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            return retrievePaginatedObject(API_PAGINATION_PER_PAGE, retrofitInstance::operators)
+            return retrievePaginatedObject(retrofitInstance::operators)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(success, error)
@@ -88,10 +83,9 @@ interface TransitLandApi {
          */
         fun retrieveOperatorFeed(operators: List<Operator>, success: (List<OperatorFeed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
             val feedOneStopIds = operators.asSequence().map { it.representedInFeedOneStopIds.joinToString(",") }.joinToString(",")
-            return TransitLandApi.retrofitInstance.feed(feedOneStopIds)
+            return retrievePaginatedObject { retrofitInstance.feed(feedOneStopIds, it) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .map(OperatorFeedsResponse::response)
                     .subscribe(success, error)
                     .attachCompositeDisposable(activity)
         }
@@ -118,10 +112,9 @@ interface TransitLandApi {
          */
         fun retrieveOperatorFeedVersion(operatorFeeds: List<OperatorFeed>, success: (List<OperatorFeedVersion>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
             val feedVersionIds = operatorFeeds.asSequence().map { it.activeFeedVersion }.joinToString(",")
-            return retrofitInstance.feedVersion(feedVersionIds)
+            return retrievePaginatedObject { retrofitInstance.feedVersion(feedVersionIds, it) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .map(OperatorFeedVersionsResponse::response)
                     .subscribe(success, error)
                     .attachCompositeDisposable(activity)
         }
