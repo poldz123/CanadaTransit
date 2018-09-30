@@ -17,7 +17,4 @@ interface OperatorDao : BaseDao<Operator> {
 
     @Query("DELETE FROM Operator")
     fun nuke(): Int
-
-    @Query("SELECT * FROM Operator INNER JOIN UserOperators ON UserOperators.operatorOneStopId = Operator.operatorOneStopId")
-    fun findOperatorsOfUser(): Maybe<List<Operator>>
 }

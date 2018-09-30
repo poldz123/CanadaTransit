@@ -3,6 +3,7 @@ package com.rodolfonavalon.canadatransit.controller.manager.update
 import android.content.Intent
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateOperatorFeedTask
+import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateOperatorFeedVersionTask
 import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateOperatorTask
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService.Companion.ACTION_START_UPDATE_MANAGER
@@ -11,6 +12,7 @@ import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTask
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import io.reactivex.Single
 
 class UpdateManager : AbstractQueueTask<UpdateTask>() {
@@ -38,9 +40,8 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
             // and updates it within the database
         }
 
-        fun updateOperatorFeedVersions() {
-            // Todo - This updates same as the operator feeds if the user has selected a particular
-            // operator and operator feed.
+        fun updateOperatorFeedVersions(): Single<List<OperatorFeedVersion>> {
+            return instance.add(uuid(), UpdateOperatorFeedVersionTask(instance))
         }
 
         fun updateOperatorFeedVersion(operatorFeed: OperatorFeed) {
@@ -55,6 +56,7 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
         fun update() {
             updateOperators()
             updateOperatorFeeds()
+            updateOperatorFeedVersions()
         }
 
         /**

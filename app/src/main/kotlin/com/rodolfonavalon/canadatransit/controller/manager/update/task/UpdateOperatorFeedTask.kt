@@ -9,19 +9,19 @@ import com.rodolfonavalon.canadatransit.controller.util.extension.dbQuery
 import com.rodolfonavalon.canadatransit.controller.util.queue.task.AbstractObservableTask
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 
 class UpdateOperatorFeedTask(private val updateManager: UpdateManager) : AbstractObservableTask<List<OperatorFeed>>() {
-    val operatorDao = CanadaTransitApplication.appDatabase.operatorDao()
-    val operatorFeedDao = CanadaTransitApplication.appDatabase.operatorFeedDao()
-    val userOperatorDao = CanadaTransitApplication.appDatabase.userOperatorsDao()
+    private val operatorFeedDao = CanadaTransitApplication.appDatabase.operatorFeedDao()
+    private val userOperatorDao = CanadaTransitApplication.appDatabase.userOperatorsDao()
 
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
         Timber.d("Querying user operators...")
-        val disposable = operatorDao.dbQuery { findOperatorsOfUser() }
+        userOperatorDao.dbQuery { findOperators() }
                 .subscribe(::onUserOperatorsFound, ::onError)
-        this.disposables.add(disposable)
+                .addTo(this.disposables)
     }
 
     private fun onUserOperatorsFound(operators: List<Operator>) {
@@ -31,7 +31,10 @@ class UpdateOperatorFeedTask(private val updateManager: UpdateManager) : Abstrac
             return
         }
         Timber.d("Retrieving ${operators.count()} operator feeds...")
-        this.disposables.add(TransitLandApi.retrieveOperatorFeed(operators, ::onOperatorFeedsReceived, ::onError))
+        TransitLandApi.retrieveOperatorFeed(operators,
+                ::onOperatorFeedsReceived,
+                ::onError)
+                .addTo(this.disposables)
     }
 
     private fun onOperatorFeedsReceived(operatorFeeds: List<OperatorFeed>) {
@@ -41,13 +44,12 @@ class UpdateOperatorFeedTask(private val updateManager: UpdateManager) : Abstrac
             return
         }
         Timber.d("Saving ${operatorFeeds.count()} operator feeds...")
-        val disposable = operatorFeedDao.dbInsert {
+        operatorFeedDao.dbInsert {
             insert(operatorFeeds)
         }.subscribe({ rowIds ->
             DebugUtil.assertTrue(rowIds.isNotEmpty(), "Failed to save operator feeds: $trackingId")
             onOperatorFeedsSaved(operatorFeeds)
-        }, ::onError)
-        this.disposables.add(disposable)
+        }, ::onError).addTo(this.disposables)
     }
 
     private fun onOperatorFeedsSaved(operatorFeeds: List<OperatorFeed>) {

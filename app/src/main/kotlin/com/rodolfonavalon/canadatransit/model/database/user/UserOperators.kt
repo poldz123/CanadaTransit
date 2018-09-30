@@ -1,9 +1,6 @@
 package com.rodolfonavalon.canadatransit.model.database.user
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 
 @Entity(indices = [

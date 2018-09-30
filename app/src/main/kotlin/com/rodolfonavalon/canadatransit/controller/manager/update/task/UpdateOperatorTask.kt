@@ -7,6 +7,7 @@ import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbInsert
 import com.rodolfonavalon.canadatransit.controller.util.queue.task.AbstractObservableTask
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
+import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 
 class UpdateOperatorTask(private val updateManager: UpdateManager) : AbstractObservableTask<List<Operator>>() {
@@ -14,7 +15,10 @@ class UpdateOperatorTask(private val updateManager: UpdateManager) : AbstractObs
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
         Timber.d("Retrieving operators...")
-        this.disposables.add(TransitLandApi.retrieveOperators(::onOperatorsReceived, ::onError))
+        TransitLandApi.retrieveOperators(
+                ::onOperatorsReceived,
+                ::onError)
+                .addTo(this.disposables)
     }
 
     private fun onOperatorsReceived(operators: List<Operator>) {
@@ -25,13 +29,12 @@ class UpdateOperatorTask(private val updateManager: UpdateManager) : AbstractObs
         }
         Timber.d("Saving ${operators.count()} operators...")
         val dao = CanadaTransitApplication.appDatabase.operatorDao()
-        val disposable = dao.dbInsert {
+        dao.dbInsert {
             insert(operators)
         }.subscribe({ rowIds ->
             DebugUtil.assertTrue(rowIds.isNotEmpty(), "Failed to save operators: $trackingId")
             onOperatorsSaved(operators)
-        }, ::onError)
-        this.disposables.add(disposable)
+        }, ::onError).addTo(this.disposables)
     }
 
     private fun onOperatorsSaved(operators: List<Operator>) {
