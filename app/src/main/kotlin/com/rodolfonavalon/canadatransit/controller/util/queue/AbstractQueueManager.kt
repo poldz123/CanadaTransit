@@ -8,7 +8,7 @@ import com.rodolfonavalon.canadatransit.controller.util.queue.task.Task
 import java.util.*
 import timber.log.Timber
 
-abstract class AbstractQueueTask<T : Task> : QueueTask<T> {
+abstract class AbstractQueueManager<T : Task> : QueueManager<T> {
     private val queueKey = LinkedList<String>()
     private val queueTaskMap = HashMap<String, T>()
 
@@ -24,7 +24,7 @@ abstract class AbstractQueueTask<T : Task> : QueueTask<T> {
      */
     abstract fun onStartService()
 
-    override var listener: QueueTaskListener? = null
+    override var listener: QueueManagerListener? = null
 
     override fun <R : T> add(trackingId: String, task: R): R {
         if (queueKey.contains(trackingId)) {

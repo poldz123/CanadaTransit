@@ -1,7 +1,7 @@
 package com.rodolfonavalon.canadatransit.util
 
-import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
-import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTaskListener
+import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueManager
+import com.rodolfonavalon.canadatransit.controller.util.queue.QueueManagerListener
 import com.rodolfonavalon.canadatransit.controller.util.queue.task.Task
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,11 +11,11 @@ import kotlin.test.*
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class QueueTaskTest {
+class QueueManagerTest {
 
     @Test
     fun testAdd_singleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTask = createSingleTask(queueTask, true)
         assertEquals(1, queueTask.numTasks())
@@ -30,7 +30,7 @@ class QueueTaskTest {
 
     @Test
     fun testAdd_multipleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTasks = createMultipleTasks(queueTask, true)
         assertEquals(testTasks.count(), queueTask.numTasks())
@@ -45,7 +45,7 @@ class QueueTaskTest {
 
     @Test
     fun testGet_singleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTask = createSingleTask(queueTask, true)
         val retrievedTask = queueTask.get(testTask.trackingId)
@@ -55,7 +55,7 @@ class QueueTaskTest {
 
     @Test
     fun testGet_nullTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         // Retrieved a task when the queue is empty
         val retrievedTaskWhenQueueIsEmpty = queueTask.get("NULL")
@@ -70,7 +70,7 @@ class QueueTaskTest {
 
     @Test
     fun testGet_multipleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTasks = createMultipleTasks(queueTask, true)
         for (testTask in testTasks) {
@@ -82,7 +82,7 @@ class QueueTaskTest {
 
     @Test
     fun testRemove_singleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTask = createSingleTask(queueTask, true)
         val isRemoved = queueTask.remove(testTask.trackingId)
@@ -94,7 +94,7 @@ class QueueTaskTest {
 
     @Test
     fun testRemove_currentTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTask = createSingleTask(queueTask, true)
         testTask.preventAutoComplete = true
@@ -108,7 +108,7 @@ class QueueTaskTest {
 
     @Test
     fun testRemove_unknownTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         createSingleTask(queueTask, true)
 
@@ -120,7 +120,7 @@ class QueueTaskTest {
 
     @Test
     fun testRemove_multipleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTasks = createMultipleTasks(queueTask, true)
         var numCurrentRemoved = 0
@@ -138,7 +138,7 @@ class QueueTaskTest {
 
     @Test
     fun testClear_singleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         createSingleTask(queueTask, true)
         queueTask.clear()
@@ -157,7 +157,7 @@ class QueueTaskTest {
 
     @Test
     fun testClear_multipleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         createMultipleTasks(queueTask, true)
         queueTask.clear()
@@ -176,7 +176,7 @@ class QueueTaskTest {
 
     @Test
     fun testStart_task() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         // Test starting the manager while there are no tasks added
         queueTask.start()
@@ -198,7 +198,7 @@ class QueueTaskTest {
 
     @Test
     fun testNext_task() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTasks = createMultipleTasks(queueTask, true)
         val totalTasks = testTasks.count()
@@ -228,7 +228,7 @@ class QueueTaskTest {
 
     @Test
     fun testSuccess_singleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTask = createSingleTask(queueTask, true)
         testTask.preventAutoComplete = true
@@ -243,7 +243,7 @@ class QueueTaskTest {
 
     @Test
     fun testSuccess_multipleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTasks = createMultipleTasks(queueTask, true)
         for (testTask in testTasks) {
@@ -263,7 +263,7 @@ class QueueTaskTest {
 
     @Test
     fun testFailure_singleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTask = createSingleTask(queueTask, true)
         testTask.preventAutoComplete = true
@@ -278,7 +278,7 @@ class QueueTaskTest {
 
     @Test
     fun testFailure_multipleTask() {
-        val queueTask = TestQueueTask()
+        val queueTask = TestQueueManager()
 
         val testTasks = createMultipleTasks(queueTask, true)
         for (testTask in testTasks) {
@@ -298,8 +298,8 @@ class QueueTaskTest {
 
     @Test
     fun testListener_successTask() {
-        val queueTaskWithListener = TestQueueTask()
-        val queueTaskWithoutListener = TestQueueTask(enableListener = false)
+        val queueTaskWithListener = TestQueueManager()
+        val queueTaskWithoutListener = TestQueueManager(enableListener = false)
         queueTaskWithoutListener.setStartService(true)
 
         createSingleTask(queueTaskWithListener, true).preventAutoComplete = true
@@ -323,8 +323,8 @@ class QueueTaskTest {
 
     @Test
     fun testListener_failedTask() {
-        val queueTaskWithListener = TestQueueTask()
-        val queueTaskWithoutListener = TestQueueTask(enableListener = false)
+        val queueTaskWithListener = TestQueueManager()
+        val queueTaskWithoutListener = TestQueueManager(enableListener = false)
         queueTaskWithoutListener.setStartService(true)
 
         createSingleTask(queueTaskWithListener, true).preventAutoComplete = true
@@ -346,7 +346,7 @@ class QueueTaskTest {
         assertFalse(queueTaskWithoutListener.isFinished)
     }
 
-    private fun createSingleTask(queueTask: TestQueueTask, addToQueue: Boolean = false): TestTask {
+    private fun createSingleTask(queueTask: TestQueueManager, addToQueue: Boolean = false): TestTask {
         val testTaskTrackingId = "1"
         val testTask = TestTask(testTaskTrackingId, queueTask)
         if (addToQueue) {
@@ -355,7 +355,7 @@ class QueueTaskTest {
         return testTask
     }
 
-    private fun createMultipleTasks(queueTask: TestQueueTask, addToQueue: Boolean = false): ArrayList<Pair<String, TestTask>> {
+    private fun createMultipleTasks(queueTask: TestQueueManager, addToQueue: Boolean = false): ArrayList<Pair<String, TestTask>> {
         val testTasks = ArrayList<Pair<String, TestTask>>()
         for (i in 1..20) {
             val testTaskTrackingId = "$i"
@@ -369,7 +369,7 @@ class QueueTaskTest {
     }
 }
 
-class TestQueueTask: AbstractQueueTask<TestTask>, QueueTaskListener {
+class TestQueueManager: AbstractQueueManager<TestTask>, QueueManagerListener {
 
     var lastSuccessfulTrackingId: String? = null
     var lastFailedTrackingId: String? = null
@@ -407,7 +407,7 @@ class TestQueueTask: AbstractQueueTask<TestTask>, QueueTaskListener {
     }
 }
 
-class TestTask(val trackingId: String, val queueTask: TestQueueTask): Task {
+class TestTask(val trackingId: String, val queueTask: TestQueueManager): Task {
 
     var isStarting = false
     var isCancelled = false

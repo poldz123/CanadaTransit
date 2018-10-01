@@ -1,8 +1,8 @@
 package com.rodolfonavalon.canadatransit.controller.util.queue
 
-interface QueueTask<T> {
+interface QueueManager<T> {
 	// Listener for the queue
-    var listener: QueueTaskListener?
+    var listener: QueueManagerListener?
 
     fun <R : T> add(trackingId: String, task: R): R
     fun remove(trackingId: String): Boolean

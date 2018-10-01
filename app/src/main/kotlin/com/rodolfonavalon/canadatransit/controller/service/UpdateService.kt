@@ -4,10 +4,10 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
-import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTaskListener
+import com.rodolfonavalon.canadatransit.controller.util.queue.QueueManagerListener
 import timber.log.Timber
 
-class UpdateService : Service(), QueueTaskListener {
+class UpdateService : Service(), QueueManagerListener {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null

@@ -1,12 +1,12 @@
 package com.rodolfonavalon.canadatransit.controller.manager.transfer
 
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.task.ObservableDownloaderTask
-import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
+import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueManager
 
 /**
  * TODO: DownloadManager
  */
-class TransferManager private constructor() : AbstractQueueTask<TransferTask>() {
+class TransferManager private constructor() : AbstractQueueManager<TransferTask>() {
 
     override fun onStartService() {
         // TODO add service to start the manager

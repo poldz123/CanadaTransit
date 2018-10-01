@@ -8,14 +8,14 @@ import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateOpe
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService.Companion.ACTION_START_UPDATE_MANAGER
 import com.rodolfonavalon.canadatransit.controller.util.extension.uuid
-import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueTask
-import com.rodolfonavalon.canadatransit.controller.util.queue.QueueTask
+import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueManager
+import com.rodolfonavalon.canadatransit.controller.util.queue.QueueManager
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import io.reactivex.Single
 
-class UpdateManager : AbstractQueueTask<UpdateTask>() {
+class UpdateManager : AbstractQueueManager<UpdateTask>() {
 
     override fun onStartService() {
         val context = CanadaTransitApplication.appContext
@@ -60,10 +60,10 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
         }
 
         /**
-         * Retrieves the instance of the [QueueTask] which is the instance of the [UpdateManager], this
+         * Retrieves the instance of the [QueueManager] which is the instance of the [UpdateManager], this
          * is to encapsulate the manager.
          */
-        fun manager(): QueueTask<UpdateTask> {
+        fun manager(): QueueManager<UpdateTask> {
             return instance
         }
     }
