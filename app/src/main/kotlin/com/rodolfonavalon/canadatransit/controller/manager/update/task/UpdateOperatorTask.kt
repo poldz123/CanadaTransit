@@ -1,45 +1,40 @@
 package com.rodolfonavalon.canadatransit.controller.manager.update.task
 
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
-import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
-import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbInsert
-import com.rodolfonavalon.canadatransit.controller.util.queue.task.AbstractObservableTask
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 
-class UpdateOperatorTask(private val updateManager: UpdateManager) : AbstractObservableTask<List<Operator>>() {
+class UpdateOperatorTask : AbstractUpdateTask<List<Operator>>() {
 
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
-        Timber.d("Retrieving operators...")
+        Timber.d("Querying operators...")
         TransitLandApi.retrieveOperators(
-                ::onOperatorsReceived,
-                ::onError)
+                ::onReceived,
+                this::onError)
                 .addTo(this.disposables)
     }
 
-    private fun onOperatorsReceived(operators: List<Operator>) {
+    private fun onReceived(operators: List<Operator>) {
         if (operators.isEmpty()) {
             Timber.d("No operators was found, this could mean that the API has a BUG.")
-            onOperatorsSaved(operators)
+            onSaved(operators)
             return
         }
         Timber.d("Saving ${operators.count()} operators...")
         val dao = CanadaTransitApplication.appDatabase.operatorDao()
         dao.dbInsert {
             insert(operators)
-        }.subscribe({ rowIds ->
-            DebugUtil.assertTrue(rowIds.isNotEmpty(), "Failed to save operators: $trackingId")
-            onOperatorsSaved(operators)
-        }, ::onError).addTo(this.disposables)
+        }.subscribe({ _ ->
+            onSaved(operators)
+        }, this::onError).addTo(this.disposables)
     }
 
-    private fun onOperatorsSaved(operators: List<Operator>) {
+    private fun onSaved(operators: List<Operator>) {
         Timber.d("Successfully saved ${operators.count()} operators")
-        this.observable.onNext(operators)
-        updateManager.success()
+        this.onSuccess(operators)
     }
 }

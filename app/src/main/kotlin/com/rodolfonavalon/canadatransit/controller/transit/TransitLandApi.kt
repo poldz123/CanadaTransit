@@ -54,6 +54,7 @@ interface TransitLandApi {
          *  @param error the callback method when something went wrong during retrieval of the operators
          */
         fun retrieveOperators(success: (List<Operator>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+            // TODO: return observable instead??
             return retrievePaginatedObject(retrofitInstance::operators)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

@@ -6,7 +6,6 @@ import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.ReplaySubject
-import timber.log.Timber
 
 abstract class AbstractObservableTask<T: Any> : Single<T>(), UpdateTask {
     val observable: ReplaySubject<T> = ReplaySubject.create(1)
@@ -14,25 +13,11 @@ abstract class AbstractObservableTask<T: Any> : Single<T>(), UpdateTask {
     lateinit var trackingId: String
 
     override fun subscribeActual(observer: SingleObserver<in T>) {
-        observable.singleOrError()
-                .subscribe(observer)
+        observable.singleOrError().subscribe(observer)
     }
 
     override fun onStart(trackingId: String) {
         DebugUtil.assertMainThread()
         this.trackingId = trackingId
-    }
-
-    final override fun onCancel() {
-        DebugUtil.assertMainThread()
-        Timber.d("AbstractUpdateTask has been CANCELLED: $trackingId")
-        // Dispose the retrofit call
-        disposables.dispose()
-    }
-
-    final override fun onError(error: Throwable) {
-        DebugUtil.assertMainThread()
-        Timber.e(error, "AbstractUpdateTask has FAILED: $trackingId")
-        observable.onError(error)
     }
 }

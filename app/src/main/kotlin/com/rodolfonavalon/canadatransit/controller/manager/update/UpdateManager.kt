@@ -28,11 +28,11 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
         private val instance: UpdateManager = UpdateManager()
 
         fun updateOperators(): Single<List<Operator>> {
-            return instance.add(uuid(), UpdateOperatorTask(instance))
+            return instance.add(uuid(), UpdateOperatorTask())
         }
 
         fun updateOperatorFeeds(): Single<List<OperatorFeed>> {
-            return instance.add(uuid(), UpdateOperatorFeedTask(instance))
+            return instance.add(uuid(), UpdateOperatorFeedTask())
         }
 
         fun updateOperatorFeed(operator: Operator) {
@@ -41,7 +41,7 @@ class UpdateManager : AbstractQueueTask<UpdateTask>() {
         }
 
         fun updateOperatorFeedVersions(): Single<List<OperatorFeedVersion>> {
-            return instance.add(uuid(), UpdateOperatorFeedVersionTask(instance))
+            return instance.add(uuid(), UpdateOperatorFeedVersionTask())
         }
 
         fun updateOperatorFeedVersion(operatorFeed: OperatorFeed) {
