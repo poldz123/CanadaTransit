@@ -100,9 +100,9 @@ object TestResourceModel {
                     DateTimeAdapter().fromJson("2017-11-07T02:15:22.733Z")!!,
                     "most_recent_succeeded",
                     "http://www.octranspo1.com/files/google_transit.zip",
-                    "https://s3.amazonaws.com/transit.land/datastore-uploads/feed_version/d157d50441cd64c50ec01a300da521a477aa03c4.zip",
+                    "https://transitland-gtfs.s3.amazonaws.com/datastore-uploads/feed_version/d157d50441cd64c50ec01a300da521a477aa03c4.zip",
                     4,
-                    true
+                    false
             )
         }
 
@@ -119,7 +119,7 @@ object TestResourceModel {
                     DateTimeAdapter().fromJson("2017-06-25T14:11:47.797Z")!!,
                     "most_recent_succeeded",
                     "http://www.amt.qc.ca/xdata/express/google_transit.zip",
-                    "https://s3.amazonaws.com/transit.land/datastore-uploads/feed_version/1b99f0448fb3ba210ea1b669529d60eeb5699a9b.zip",
+                    "https://transitland-gtfs.s3.amazonaws.com/datastore-uploads/feed_version/1b99f0448fb3ba210ea1b669529d60eeb5699a9b.zip",
                     4,
                     true
             )

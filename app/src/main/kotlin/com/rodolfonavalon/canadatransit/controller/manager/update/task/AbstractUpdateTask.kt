@@ -24,6 +24,7 @@ abstract class AbstractUpdateTask<T: Any>: AbstractObservableTask<T>() {
 
     fun onSuccess(result: T) {
         this.observable.onNext(result)
+        this.observable.onComplete()
         updateManager.success()
     }
 }

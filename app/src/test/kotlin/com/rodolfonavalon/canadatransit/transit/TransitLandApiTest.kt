@@ -129,18 +129,20 @@ class TransitLandApiTest : BaseMockServerTest() {
             val mockOperatorFeed = mock(OperatorFeed::class.java)
             given(mockOperatorFeed.activeFeedVersion).willReturn(operatorFeedVersion.sha1)
 
-            server.addResponsePath("/api/v1/feed_versions/${operatorFeedVersion.sha1}", "/transitland/operator-feed-version-(${operatorFeedVersion.feedOneStopId})")
-            var testOperatorFeedVersion: OperatorFeedVersion? = null
+            server.addResponsePath("/api/v1/feed_versions", "/transitland/operator-feed-version-(${operatorFeedVersion.feedOneStopId})")
+            var testOperatorFeedVersions: List<OperatorFeedVersion>? = null
             var testOperatorFeedVersionError: Throwable? = null
 
             TransitLandApi.retrieveOperatorFeedVersion(mockOperatorFeed, { apiOperatorFeedVersion ->
-                testOperatorFeedVersion = apiOperatorFeedVersion
+                testOperatorFeedVersions = apiOperatorFeedVersion
             }, { error ->
                 testOperatorFeedVersionError = error
             })
 
             assertNull(testOperatorFeedVersionError, "Error has occurred when retrieving operator feed version: $testOperatorFeedVersionError")
-            assertOperatorFeedVersion(testOperatorFeedVersion!!, operatorFeedVersion)
+            for (testOperatorFeedVersion in testOperatorFeedVersions!!) {
+                assertOperatorFeedVersion(testOperatorFeedVersion, operatorFeedVersion)
+            }
         }
     }
 
