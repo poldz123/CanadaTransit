@@ -30,6 +30,14 @@ interface BaseDao<MODEL> {
     fun update(model: MODEL): Int
 
     /**
+     * Update the objects from the database.
+     *
+     * @param models the models to be updated
+     */
+    @Update
+    fun update(models: List<MODEL>): Int
+
+    /**
      * Delete an object from the database
      *
      * @param model the model to be deleted

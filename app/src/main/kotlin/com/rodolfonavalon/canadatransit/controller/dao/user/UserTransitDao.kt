@@ -6,29 +6,29 @@ import androidx.room.RoomWarnings
 import com.rodolfonavalon.canadatransit.controller.dao.BaseDao
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
-import com.rodolfonavalon.canadatransit.model.database.user.UserOperators
+import com.rodolfonavalon.canadatransit.model.database.user.UserTransit
 import io.reactivex.Maybe
 
 @Dao
-interface UserOperatorsDao: BaseDao<UserOperators> {
+interface UserTransitDao: BaseDao<UserTransit> {
 
-    @Query("SELECT * FROM UserOperators WHERE operatorOneStopId = :operatorOneStopId")
-    fun find(operatorOneStopId: String): Maybe<UserOperators>
+    @Query("SELECT * FROM UserTransit WHERE operatorOneStopId = :operatorOneStopId")
+    fun find(operatorOneStopId: String): Maybe<UserTransit>
 
-    @Query("SELECT * FROM UserOperators")
-    fun load(): Maybe<List<UserOperators>>
+    @Query("SELECT * FROM UserTransit")
+    fun load(): Maybe<List<UserTransit>>
 
-    @Query("DELETE FROM UserOperators")
+    @Query("DELETE FROM UserTransit")
     fun nuke(): Int
 
-    @Query("SELECT * FROM Operator INNER JOIN UserOperators ON UserOperators.operatorOneStopId = Operator.operatorOneStopId")
+    @Query("SELECT * FROM Operator INNER JOIN UserTransit ON UserTransit.operatorOneStopId = Operator.operatorOneStopId")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     fun findOperators(): Maybe<List<Operator>>
 
     @Query("""
         SELECT * FROM OperatorFeed
         INNER JOIN Operator ON Operator.operatorOneStopId = OperatorFeed.operatorOneStopId
-        INNER JOIN UserOperators ON UserOperators.operatorOneStopId = Operator.operatorOneStopId
+        INNER JOIN UserTransit ON UserTransit.operatorOneStopId = Operator.operatorOneStopId
         """)
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     fun findOperatorFeeds(): Maybe<List<OperatorFeed>>

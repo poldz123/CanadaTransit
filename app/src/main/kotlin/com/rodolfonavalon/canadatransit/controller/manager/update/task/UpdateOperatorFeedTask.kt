@@ -11,17 +11,17 @@ import timber.log.Timber
 
 class UpdateOperatorFeedTask : AbstractUpdateTask<List<OperatorFeed>>() {
     private val operatorFeedDao = CanadaTransitApplication.appDatabase.operatorFeedDao()
-    private val userOperatorDao = CanadaTransitApplication.appDatabase.userOperatorsDao()
+    private val userTransitDao = CanadaTransitApplication.appDatabase.userTransitDao()
 
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
         Timber.d("Querying user operators...")
-        userOperatorDao.dbQuery { findOperators() }
-                .subscribe(::onUserOperatorsFound, this::onError)
+        userTransitDao.dbQuery { findOperators() }
+                .subscribe(::onFound, this::onError)
                 .addTo(this.disposables)
     }
 
-    private fun onUserOperatorsFound(operators: List<Operator>) {
+    private fun onFound(operators: List<Operator>) {
         if (operators.isEmpty()) {
             Timber.d("No operators was selected by the user.")
             onSaved(mutableListOf())
