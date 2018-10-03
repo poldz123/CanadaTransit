@@ -19,11 +19,6 @@ class UpdateOperatorTask : AbstractUpdateTask<List<Operator>>() {
     }
 
     private fun onReceived(operators: List<Operator>) {
-        if (operators.isEmpty()) {
-            Timber.d("No operators was found, this could mean that the API has a BUG.")
-            onSaved(operators)
-            return
-        }
         Timber.d("Saving ${operators.count()} operators...")
         val dao = CanadaTransitApplication.appDatabase.operatorDao()
         dao.dbInsert {

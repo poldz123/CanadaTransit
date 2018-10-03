@@ -35,11 +35,6 @@ class UpdateOperatorFeedTask : AbstractUpdateTask<List<OperatorFeed>>() {
     }
 
     private fun onReceived(operatorFeeds: List<OperatorFeed>) {
-        if (operatorFeeds.isEmpty()) {
-            Timber.d("No operator feeds was found, this could mean that the API has a BUG.")
-            onSaved(operatorFeeds)
-            return
-        }
         Timber.d("Saving ${operatorFeeds.count()} operator feeds...")
         operatorFeedDao.dbInsert {
             insert(operatorFeeds)
