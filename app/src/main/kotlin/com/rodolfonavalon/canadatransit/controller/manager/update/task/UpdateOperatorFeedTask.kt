@@ -35,11 +35,16 @@ class UpdateOperatorFeedTask : AbstractUpdateTask<List<OperatorFeed>>() {
     }
 
     private fun onReceived(operatorFeeds: List<OperatorFeed>) {
-        Timber.d("Saving ${operatorFeeds.count()} operator feeds...")
+        // Need to filter out empty current feed version since they do not have
+        // any feed version for the operator
+        Timber.d("Filtering ${operatorFeeds.count()} operator feeds...")
+        val filteredOperatorFeeds = operatorFeeds.filter { it.currentFeedVersion.isNotEmpty() }
+        Timber.d("Saving ${filteredOperatorFeeds.count()} operator feeds...")
         operatorFeedDao.dbInsert {
-            insert(operatorFeeds)
+            nuke()
+            insert(filteredOperatorFeeds)
         }.subscribe({ _ ->
-            onSaved(operatorFeeds)
+            onSaved(filteredOperatorFeeds)
         }, this::onError).addTo(this.disposables)
     }
 

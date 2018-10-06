@@ -49,10 +49,6 @@ class UpdateManager : AbstractQueueManager<UpdateTask>() {
             // and updates it within the database
         }
 
-        fun updateEverything() {
-            // Todo - This updates everything, from operator, operator feeds, operator feed version.
-        }
-
         fun update() {
             updateOperators()
             updateOperatorFeeds()

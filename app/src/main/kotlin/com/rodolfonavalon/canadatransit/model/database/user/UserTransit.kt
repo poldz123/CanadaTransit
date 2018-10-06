@@ -9,5 +9,5 @@ import org.joda.time.DateTime
 data class UserTransit(
         @PrimaryKey
         val operatorOneStopId: String,
-        val updatedAt: DateTime
+        val updatedAt: DateTime // TODO put to null?
 )

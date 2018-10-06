@@ -14,12 +14,6 @@ import retrofit2.Response
 @Entity(indices = [
             Index(value = ["sha1"], unique = true),
             Index(value = ["feedOneStopId"], unique = true)
-        ],
-        foreignKeys = [
-                ForeignKey(entity = OperatorFeed::class,
-                parentColumns = ["feedOneStopId"],
-                childColumns = ["feedOneStopId"],
-                onUpdate = ForeignKey.CASCADE)
         ])
 @TypeConverters(TransitLandConverter::class)
 data class OperatorFeedVersion(

@@ -4,7 +4,9 @@ import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbInsert
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
+import com.rodolfonavalon.canadatransit.model.database.user.UserTransit
 import io.reactivex.rxkotlin.addTo
+import org.joda.time.DateTime
 import timber.log.Timber
 
 class UpdateOperatorTask : AbstractUpdateTask<List<Operator>>() {
@@ -29,7 +31,18 @@ class UpdateOperatorTask : AbstractUpdateTask<List<Operator>>() {
     }
 
     private fun onSaved(operators: List<Operator>) {
-        Timber.d("Successfully saved ${operators.count()} operators")
-        this.onSuccess(operators)
+        var userTransits = mutableListOf<UserTransit>()
+        val userDao = CanadaTransitApplication.appDatabase.userTransitDao()
+        for (operator in operators) {
+            userTransits.add(UserTransit(operator.operatorOneStopId, DateTime.now()))
+        }
+        userDao.dbInsert {
+            insert(userTransits)
+        }.subscribe {
+            Timber.d("Successfully saved ${operators.count()} operators")
+            this.onSuccess(operators)
+        }
+//        Timber.d("Successfully saved ${operators.count()} operators")
+//        this.onSuccess(operators)
     }
 }

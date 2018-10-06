@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d3da65f6d95e084158e9a8ea4de2ea46",
+    "identityHash": "dc803fa9f883866304097cb1227d19ec",
     "entities": [
       {
         "tableName": "Operator",
@@ -104,7 +104,7 @@
       },
       {
         "tableName": "OperatorFeed",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`feedOneStopId` TEXT NOT NULL, `operatorOneStopId` TEXT NOT NULL, `name` TEXT, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `url` TEXT NOT NULL, `feedFormat` TEXT NOT NULL, `lastFetchAt` TEXT NOT NULL, `lastImportedAt` TEXT NOT NULL, `importStatus` TEXT NOT NULL, `activeFeedVersion` TEXT NOT NULL, `feedVersionUrl` TEXT NOT NULL, PRIMARY KEY(`feedOneStopId`), FOREIGN KEY(`operatorOneStopId`) REFERENCES `Operator`(`operatorOneStopId`) ON UPDATE CASCADE ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`feedOneStopId` TEXT NOT NULL, `operatorOneStopId` TEXT NOT NULL, `name` TEXT, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `url` TEXT NOT NULL, `feedFormat` TEXT NOT NULL, `lastFetchAt` TEXT, `lastImportedAt` TEXT, `importStatus` TEXT NOT NULL, `activeFeedVersion` TEXT NOT NULL, `feedVersionUrl` TEXT NOT NULL, PRIMARY KEY(`feedOneStopId`), FOREIGN KEY(`operatorOneStopId`) REFERENCES `Operator`(`operatorOneStopId`) ON UPDATE CASCADE ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "feedOneStopId",
@@ -152,13 +152,13 @@
             "fieldPath": "lastFetchAt",
             "columnName": "lastFetchAt",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "lastImportedAt",
             "columnName": "lastImportedAt",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "importStatus",
@@ -373,7 +373,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d3da65f6d95e084158e9a8ea4de2ea46\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"dc803fa9f883866304097cb1227d19ec\")"
     ]
   }
 }

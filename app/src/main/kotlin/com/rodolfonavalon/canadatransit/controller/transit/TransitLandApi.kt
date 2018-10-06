@@ -20,10 +20,10 @@ interface TransitLandApi {
     @GET("operators?exclude_geometry=true&without_feed=false&country=${TransitLandApi.API_COUNTRY}")
     fun operators(@Query("offset") offset: Int): Observable<OperatorsResponse>
 
-    @GET("feeds?active_feed_version_update=true&exclude_geometry=true")
+    @GET("feeds?exclude_geometry=true")
     fun feed(@Query("onestop_id") feedOneStopIds: String, @Query("offset") offset: Int): Observable<OperatorFeedsResponse>
 
-    @GET("feed_versions")
+    @GET("feed_versions?exclude_geometry=true")
     fun feedVersion(@Query("sha1") feedVersionIds: String, @Query("offset") offset: Int): Observable<OperatorFeedVersionsResponse>
 
     @GET @Streaming

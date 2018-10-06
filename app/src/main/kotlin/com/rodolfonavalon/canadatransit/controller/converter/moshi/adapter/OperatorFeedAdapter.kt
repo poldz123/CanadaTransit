@@ -24,3 +24,24 @@ class OperatorFeedForeignKeyAdapter {
         return null
     }
 }
+
+@Retention(AnnotationRetention.RUNTIME)
+@JsonQualifier
+annotation class OperatorFeedCurrentFeedVersion
+
+class OperatorFeedCurrentFeedVersionAdapter {
+    @FromJson
+    @OperatorFeedCurrentFeedVersion
+    fun fromJson(operatorsInFeed: List<String>): String {
+        if (operatorsInFeed.isEmpty()) {
+            return ""
+        }
+        return operatorsInFeed.last()
+    }
+
+    @ToJson
+    fun toJson(@OperatorFeedCurrentFeedVersion value: String): String? {
+        // We return null here since this value does not exist in the API response.
+        return null
+    }
+}
