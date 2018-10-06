@@ -5,7 +5,7 @@ import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbInsert
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbQuery
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbUpdate
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import io.reactivex.rxkotlin.addTo
 import org.joda.time.DateTime
@@ -18,19 +18,19 @@ class UpdateOperatorFeedVersionTask : AbstractUpdateTask<List<OperatorFeedVersio
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
         Timber.d("VERSION: Querying user operator feeds...")
-        userTransitDao.dbQuery { findOperatorFeeds() }
+        userTransitDao.dbQuery { findFeeds() }
                 .subscribe(::onFound, this::onError)
                 .addTo(this.disposables)
     }
 
-    private fun onFound(operatorFeeds: List<OperatorFeed>) {
-        if (operatorFeeds.isEmpty()) {
+    private fun onFound(feeds: List<Feed>) {
+        if (feeds.isEmpty()) {
             Timber.d("VERSION: No operator was found from selected operators.")
             onSaved(mutableListOf())
             return
         }
-        Timber.d("VERSION: Fetching ${operatorFeeds.count()} operator feed versions...")
-        TransitLandApi.retrieveOperatorFeedVersion(operatorFeeds,
+        Timber.d("VERSION: Fetching ${feeds.count()} operator feed versions...")
+        TransitLandApi.retrieveOperatorFeedVersion(feeds,
                 ::onReceived,
                 this::onError)
                 .addTo(this.disposables)

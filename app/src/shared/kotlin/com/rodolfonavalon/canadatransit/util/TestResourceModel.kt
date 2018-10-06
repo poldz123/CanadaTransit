@@ -2,7 +2,7 @@ package com.rodolfonavalon.canadatransit.util
 
 import com.rodolfonavalon.canadatransit.controller.converter.moshi.adapter.DateTimeAdapter
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import com.rodolfonavalon.canadatransit.model.database.transit.Tags
 
@@ -48,10 +48,10 @@ object TestResourceModel {
         }
     }
 
-    object OperatorFeedModel {
+    object FeedModel {
 
-        fun createOCTranspoModel(): OperatorFeed {
-            return OperatorFeed(
+        fun createOCTranspoModel(): Feed {
+            return Feed(
                     "f-f24-octranspo",
                     "o-f24-octranspo",
                     null,
@@ -67,8 +67,8 @@ object TestResourceModel {
             )
         }
 
-        fun createAMTTranspoModel(): OperatorFeed {
-            return OperatorFeed(
+        fun createAMTTranspoModel(): Feed {
+            return Feed(
                     "f-f25d-agencemtropolitainedetransportexpress",
                     "o-f25-agencemtropolitainedetransport",
                     null,

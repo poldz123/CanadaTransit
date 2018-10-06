@@ -3,10 +3,9 @@ package com.rodolfonavalon.canadatransit.transit
 import android.app.Activity
 import android.os.Bundle
 import com.rodolfonavalon.canadatransit.BaseMockServerTest
-import com.rodolfonavalon.canadatransit.BuildConfig
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import com.rodolfonavalon.canadatransit.util.TestResourceModel
 import org.junit.Test
@@ -41,13 +40,13 @@ class TransitLandApiTest : BaseMockServerTest() {
 
         val mockOperator = mock(Operator::class.java)
         given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf("test"))
-        val mockOperatorFeed = mock(OperatorFeed::class.java)
-        given(mockOperatorFeed.activeFeedVersion).willReturn("test")
+        val mockFeed = mock(Feed::class.java)
+        given(mockFeed.activeFeedVersion).willReturn("test")
 
         val disposables = mutableListOf(
                 TransitLandApi.retrieveOperators({ _ -> }, { _ -> }, activity),
-                TransitLandApi.retrieveOperatorFeed(mockOperator, { _ -> }, { _ -> }, activity),
-                TransitLandApi.retrieveOperatorFeedVersion(mockOperatorFeed, { _ -> }, { _ -> }, activity)
+                TransitLandApi.retrieveFeeds(mockOperator, { _ -> }, { _ -> }, activity),
+                TransitLandApi.retrieveOperatorFeedVersion(mockFeed, { _ -> }, { _ -> }, activity)
         )
 
         controller.create()
@@ -92,29 +91,29 @@ class TransitLandApiTest : BaseMockServerTest() {
     }
 
     @Test
-    fun testRetrieveOperatorFeed_dataConsistency() {
-        val operatorFeeds: List<OperatorFeed> = mutableListOf(
-                TestResourceModel.OperatorFeedModel.createOCTranspoModel(),
-                TestResourceModel.OperatorFeedModel.createAMTTranspoModel()
+    fun testRetrieveFeed_dataConsistency() {
+        val feeds: List<Feed> = mutableListOf(
+                TestResourceModel.FeedModel.createOCTranspoModel(),
+                TestResourceModel.FeedModel.createAMTTranspoModel()
         )
 
-        for (operatorFeed in operatorFeeds) {
+        for (feed in feeds) {
             val mockOperator = mock(Operator::class.java)
-            given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf(operatorFeed.feedOneStopId))
+            given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf(feed.feedOneStopId))
 
-            server.addResponsePath("/api/v1/feeds", "/transitland/operator-feed-(${operatorFeed.feedOneStopId})")
-            var testOperatorFeeds: List<OperatorFeed> = mutableListOf()
-            var testOperatorFeedError: Throwable? = null
+            server.addResponsePath("/api/v1/feeds", "/transitland/operator-feed-(${feed.feedOneStopId})")
+            var testFeeds: List<Feed> = mutableListOf()
+            var testFeedError: Throwable? = null
 
-            TransitLandApi.retrieveOperatorFeed(mockOperator, { apiOperatorFeeds ->
-                testOperatorFeeds = apiOperatorFeeds
+            TransitLandApi.retrieveFeeds(mockOperator, { apiFeeds ->
+                testFeeds = apiFeeds
             }, { error ->
-                testOperatorFeedError = error
+                testFeedError = error
             })
 
-            assertNull(testOperatorFeedError, "Error has occurred when retrieving operator feeds: $testOperatorFeedError")
-            assertEquals(1, testOperatorFeeds.count())
-            assertOperatorFeeds(testOperatorFeeds, operatorFeed)
+            assertNull(testFeedError, "Error has occurred when retrieving operator feeds: $testFeedError")
+            assertEquals(1, testFeeds.count())
+            assertFeeds(testFeeds, feed)
         }
     }
 
@@ -126,14 +125,14 @@ class TransitLandApiTest : BaseMockServerTest() {
         )
 
         for (operatorFeedVersion in operatorFeedVersions) {
-            val mockOperatorFeed = mock(OperatorFeed::class.java)
-            given(mockOperatorFeed.activeFeedVersion).willReturn(operatorFeedVersion.sha1)
+            val mockFeed = mock(Feed::class.java)
+            given(mockFeed.activeFeedVersion).willReturn(operatorFeedVersion.sha1)
 
             server.addResponsePath("/api/v1/feed_versions", "/transitland/operator-feed-version-(${operatorFeedVersion.feedOneStopId})")
             var testOperatorFeedVersions: List<OperatorFeedVersion>? = null
             var testOperatorFeedVersionError: Throwable? = null
 
-            TransitLandApi.retrieveOperatorFeedVersion(mockOperatorFeed, { apiOperatorFeedVersion ->
+            TransitLandApi.retrieveOperatorFeedVersion(mockFeed, { apiOperatorFeedVersion ->
                 testOperatorFeedVersions = apiOperatorFeedVersion
             }, { error ->
                 testOperatorFeedVersionError = error
@@ -171,26 +170,26 @@ class TransitLandApiTest : BaseMockServerTest() {
         fail("Test operator was not found for: ${expectedOperator.operatorOneStopId}")
     }
 
-    private fun assertOperatorFeeds(actualOperatorFeeds: List<OperatorFeed>, expectedOperatorFeed: OperatorFeed) {
-        assertTrue(actualOperatorFeeds.isNotEmpty(), "Operator Feeds is empty")
+    private fun assertFeeds(actualFeeds: List<Feed>, expectedFeed: Feed) {
+        assertTrue(actualFeeds.isNotEmpty(), "Operator Feeds is empty")
 
-        for (actualOperatorFeed in actualOperatorFeeds) {
-            if (actualOperatorFeed.feedOneStopId == expectedOperatorFeed.feedOneStopId) {
-                assertEquals(expectedOperatorFeed.operatorOneStopId, actualOperatorFeed.operatorOneStopId)
-                assertEquals(expectedOperatorFeed.name, actualOperatorFeed.name)
-                assertEquals(expectedOperatorFeed.createdAt, actualOperatorFeed.createdAt)
-                assertEquals(expectedOperatorFeed.updatedAt, actualOperatorFeed.updatedAt)
-                assertEquals(expectedOperatorFeed.url, actualOperatorFeed.url)
-                assertEquals(expectedOperatorFeed.feedFormat, actualOperatorFeed.feedFormat)
-                assertEquals(expectedOperatorFeed.lastFetchAt, actualOperatorFeed.lastFetchAt)
-                assertEquals(expectedOperatorFeed.lastImportedAt, actualOperatorFeed.lastImportedAt)
-                assertEquals(expectedOperatorFeed.importStatus, actualOperatorFeed.importStatus)
-                assertEquals(expectedOperatorFeed.activeFeedVersion, actualOperatorFeed.activeFeedVersion)
-                assertEquals(expectedOperatorFeed.feedVersionUrl, actualOperatorFeed.feedVersionUrl)
+        for (actualOperatorFeed in actualFeeds) {
+            if (actualOperatorFeed.feedOneStopId == expectedFeed.feedOneStopId) {
+                assertEquals(expectedFeed.operatorOneStopId, actualOperatorFeed.operatorOneStopId)
+                assertEquals(expectedFeed.name, actualOperatorFeed.name)
+                assertEquals(expectedFeed.createdAt, actualOperatorFeed.createdAt)
+                assertEquals(expectedFeed.updatedAt, actualOperatorFeed.updatedAt)
+                assertEquals(expectedFeed.url, actualOperatorFeed.url)
+                assertEquals(expectedFeed.feedFormat, actualOperatorFeed.feedFormat)
+                assertEquals(expectedFeed.lastFetchAt, actualOperatorFeed.lastFetchAt)
+                assertEquals(expectedFeed.lastImportedAt, actualOperatorFeed.lastImportedAt)
+                assertEquals(expectedFeed.importStatus, actualOperatorFeed.importStatus)
+                assertEquals(expectedFeed.activeFeedVersion, actualOperatorFeed.activeFeedVersion)
+                assertEquals(expectedFeed.feedVersionUrl, actualOperatorFeed.feedVersionUrl)
                 return
             }
         }
-        fail("Test operator feed was not found for: ${expectedOperatorFeed.feedOneStopId}")
+        fail("Test operator feed was not found for: ${expectedFeed.feedOneStopId}")
     }
 
     private fun assertOperatorFeedVersion(actualOperatorFeedVersion: OperatorFeedVersion, expectedOperatorFeedVersion: OperatorFeedVersion) {

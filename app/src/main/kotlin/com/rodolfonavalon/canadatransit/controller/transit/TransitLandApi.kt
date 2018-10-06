@@ -2,10 +2,10 @@ package com.rodolfonavalon.canadatransit.controller.transit
 
 import android.app.Activity
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import com.rodolfonavalon.canadatransit.model.transit.response.OperatorFeedVersionsResponse
-import com.rodolfonavalon.canadatransit.model.transit.response.OperatorFeedsResponse
+import com.rodolfonavalon.canadatransit.model.transit.response.FeedsResponse
 import com.rodolfonavalon.canadatransit.model.transit.response.OperatorsResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,7 +21,7 @@ interface TransitLandApi {
     fun operators(@Query("offset") offset: Int): Observable<OperatorsResponse>
 
     @GET("feeds?exclude_geometry=true")
-    fun feed(@Query("onestop_id") feedOneStopIds: String, @Query("offset") offset: Int): Observable<OperatorFeedsResponse>
+    fun feed(@Query("onestop_id") feedOneStopIds: String, @Query("offset") offset: Int): Observable<FeedsResponse>
 
     @GET("feed_versions?exclude_geometry=true")
     fun feedVersion(@Query("sha1") feedVersionIds: String, @Query("offset") offset: Int): Observable<OperatorFeedVersionsResponse>
@@ -63,26 +63,26 @@ interface TransitLandApi {
         }
 
         /**
-         *  Retrieves all of the [OperatorFeed] for the given [Operator]
+         *  Retrieves all of the [Feed] for the given [Operator]
          *
          *  @param activity the activity to attached the life cycle for the disposable
          *  @param operator the bus operator to retrieve the all of the feeds
          *  @param success the callback method whenever the operator feeds has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feeds
          */
-        fun retrieveOperatorFeed(operator: Operator, success: (List<OperatorFeed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            return retrieveOperatorFeed(mutableListOf(operator), success, error, activity)
+        fun retrieveFeeds(operator: Operator, success: (List<Feed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+            return retrieveFeeds(mutableListOf(operator), success, error, activity)
         }
 
         /**
-         *  Retrieves all of the [OperatorFeed] for the given [Operator]
+         *  Retrieves all of the [Feed] for the given [Operator]
          *
          *  @param activity the activity to attached the life cycle for the disposable
          *  @param operators the bus operators to retrieve the all of the feeds
          *  @param success the callback method whenever the operator feeds has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feeds
          */
-        fun retrieveOperatorFeed(operators: List<Operator>, success: (List<OperatorFeed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+        fun retrieveFeeds(operators: List<Operator>, success: (List<Feed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
             val feedOneStopIds = operators.asSequence().map { it.representedInFeedOneStopIds.joinToString(",") }.joinToString(",")
             return retrievePaginatedObject { retrofitInstance.feed(feedOneStopIds, it) }
                     .subscribeOn(Schedulers.io())
@@ -92,27 +92,27 @@ interface TransitLandApi {
         }
 
         /**
-         *  Retrieves the [OperatorFeedVersion] for the given [OperatorFeed]
+         *  Retrieves the [OperatorFeedVersion] for the given [Feed]
          *
          *  @param activity the activity to attached the life cycle for the disposable
-         *  @param operatorFeed the operator feed to retrieve the feed version
+         *  @param feed the operator feed to retrieve the feed version
          *  @param success the callback method whenever the operator feed version has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feed version
          */
-        fun retrieveOperatorFeedVersion(operatorFeed: OperatorFeed, success: (List<OperatorFeedVersion>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            return retrieveOperatorFeedVersion(mutableListOf(operatorFeed), success, error, activity)
+        fun retrieveOperatorFeedVersion(feed: Feed, success: (List<OperatorFeedVersion>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+            return retrieveOperatorFeedVersion(mutableListOf(feed), success, error, activity)
         }
 
         /**
-         *  Retrieves the [OperatorFeedVersion] for the given [OperatorFeed]
+         *  Retrieves the [OperatorFeedVersion] for the given [Feed]
          *
          *  @param activity the activity to attached the life cycle for the disposable
-         *  @param operatorFeeds the operator feeds to retrieve the feed version
+         *  @param feeds the operator feeds to retrieve the feed version
          *  @param success the callback method whenever the operator feed version has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feed version
          */
-        fun retrieveOperatorFeedVersion(operatorFeeds: List<OperatorFeed>, success: (List<OperatorFeedVersion>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            val feedVersionIds = operatorFeeds.asSequence().map { it.activeFeedVersion ?: it.currentFeedVersion }.joinToString(",")
+        fun retrieveOperatorFeedVersion(feeds: List<Feed>, success: (List<OperatorFeedVersion>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+            val feedVersionIds = feeds.asSequence().map { it.activeFeedVersion ?: it.currentFeedVersion }.joinToString(",")
             return retrievePaginatedObject { retrofitInstance.feedVersion(feedVersionIds, it) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -126,7 +126,7 @@ interface TransitLandApi {
          *  @param operatorFeedVersion the operator feed version to download the feed
          *  @return the observable response body of the feed
          */
-        fun downloadOperatorFeed(operatorFeedVersion: OperatorFeedVersion): Observable<Response<ResponseBody>> {
+        fun downloadFeedVersion(operatorFeedVersion: OperatorFeedVersion): Observable<Response<ResponseBody>> {
             return retrofitInstance.downloadFeed(operatorFeedVersion.downloadUrl)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

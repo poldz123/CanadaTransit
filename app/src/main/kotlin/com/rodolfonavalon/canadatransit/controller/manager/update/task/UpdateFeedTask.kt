@@ -5,12 +5,12 @@ import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbInsert
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbQuery
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 
-class UpdateOperatorFeedTask : AbstractUpdateTask<List<OperatorFeed>>() {
-    private val operatorFeedDao = CanadaTransitApplication.appDatabase.operatorFeedDao()
+class UpdateFeedTask : AbstractUpdateTask<List<Feed>>() {
+    private val feedDao = CanadaTransitApplication.appDatabase.feedDao()
     private val userTransitDao = CanadaTransitApplication.appDatabase.userTransitDao()
 
     override fun onStart(trackingId: String) {
@@ -28,28 +28,28 @@ class UpdateOperatorFeedTask : AbstractUpdateTask<List<OperatorFeed>>() {
             return
         }
         Timber.d("FEED: Fetching ${operators.count()} operator feeds...")
-        TransitLandApi.retrieveOperatorFeed(operators,
+        TransitLandApi.retrieveFeeds(operators,
                 ::onReceived,
                 this::onError)
                 .addTo(this.disposables)
     }
 
-    private fun onReceived(operatorFeeds: List<OperatorFeed>) {
+    private fun onReceived(feeds: List<Feed>) {
         // Need to filter out empty current feed version since they do not have
         // any feed version for the operator
-        Timber.d("FEED: Filtering ${operatorFeeds.count()} operator feeds...")
-        val filteredOperatorFeeds = operatorFeeds.filter { it.currentFeedVersion.isNotEmpty() }
-        Timber.d("FEED: Saving ${filteredOperatorFeeds.count()} operator feeds...")
-        operatorFeedDao.dbInsert {
+        Timber.d("FEED: Filtering ${feeds.count()} operator feeds...")
+        val filteredFeeds = feeds.filter { it.currentFeedVersion.isNotEmpty() }
+        Timber.d("FEED: Saving ${filteredFeeds.count()} operator feeds...")
+        feedDao.dbInsert {
             nuke()
-            insert(filteredOperatorFeeds)
+            insert(filteredFeeds)
         }.subscribe({ _ ->
-            onSaved(filteredOperatorFeeds)
+            onSaved(filteredFeeds)
         }, this::onError).addTo(this.disposables)
     }
 
-    private fun onSaved(operatorFeeds: List<OperatorFeed>) {
-        Timber.d("FEED: Successfully saved ${operatorFeeds.count()} operator feeds")
-        this.onSuccess(operatorFeeds)
+    private fun onSaved(feeds: List<Feed>) {
+        Timber.d("FEED: Successfully saved ${feeds.count()} operator feeds")
+        this.onSuccess(feeds)
     }
 }

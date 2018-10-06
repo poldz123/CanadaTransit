@@ -1,22 +1,22 @@
 package com.rodolfonavalon.canadatransit.model.database.transit
 
 import androidx.room.*
-import com.rodolfonavalon.canadatransit.controller.converter.moshi.adapter.OperatorFeedCurrentFeedVersion
+import com.rodolfonavalon.canadatransit.controller.converter.moshi.adapter.FeedCurrentFeedVersion
 import com.rodolfonavalon.canadatransit.controller.manager.update.Updatable
-import com.rodolfonavalon.canadatransit.controller.converter.moshi.adapter.OperatorFeedForeignKey
+import com.rodolfonavalon.canadatransit.controller.converter.moshi.adapter.FeedForeignKey
 import com.rodolfonavalon.canadatransit.controller.converter.room.TransitLandConverter
 import com.squareup.moshi.Json
 import org.joda.time.DateTime
 
 @Entity
 @TypeConverters(TransitLandConverter::class)
-data class OperatorFeed(
+data class Feed(
     @PrimaryKey
     @field:Json(name = "onestop_id") val feedOneStopId: String,
 
-    @field:OperatorFeedForeignKey
+    @field:FeedForeignKey
     @field:Json(name = "operators_in_feed") val operatorOneStopId: String,
-    @field:OperatorFeedCurrentFeedVersion
+    @field:FeedCurrentFeedVersion
     @field:Json(name = "feed_versions") val currentFeedVersion: String,
     @field:Json(name = "active_feed_version") val activeFeedVersion: String?,
     @field:Json(name = "name") val name: String?,

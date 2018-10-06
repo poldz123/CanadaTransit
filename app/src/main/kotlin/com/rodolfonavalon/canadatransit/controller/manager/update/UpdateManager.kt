@@ -2,7 +2,7 @@ package com.rodolfonavalon.canadatransit.controller.manager.update
 
 import android.content.Intent
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
-import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateOperatorFeedTask
+import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateFeedTask
 import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateOperatorFeedVersionTask
 import com.rodolfonavalon.canadatransit.controller.manager.update.task.UpdateOperatorTask
 import com.rodolfonavalon.canadatransit.controller.service.UpdateService
@@ -11,7 +11,7 @@ import com.rodolfonavalon.canadatransit.controller.util.extension.uuid
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueManager
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueManager
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import io.reactivex.Single
 
@@ -31,11 +31,11 @@ class UpdateManager : AbstractQueueManager<UpdateTask>() {
             return instance.add(uuid(), UpdateOperatorTask())
         }
 
-        fun updateOperatorFeeds(): Single<List<OperatorFeed>> {
-            return instance.add(uuid(), UpdateOperatorFeedTask())
+        fun updateFeeds(): Single<List<Feed>> {
+            return instance.add(uuid(), UpdateFeedTask())
         }
 
-        fun updateOperatorFeed(operator: Operator) {
+        fun updateFeed(operator: Operator) {
             // Todo - This adds the operator feeds to the pool of operator feeds that needs to be updated.
             // and updates it within the database
         }
@@ -44,14 +44,14 @@ class UpdateManager : AbstractQueueManager<UpdateTask>() {
             return instance.add(uuid(), UpdateOperatorFeedVersionTask())
         }
 
-        fun updateOperatorFeedVersion(operatorFeed: OperatorFeed) {
+        fun updateOperatorFeedVersion(feed: Feed) {
             // Todo - This adds the operator feeds version to the pool of operator feeds that needs to be updated.
             // and updates it within the database
         }
 
         fun update() {
             updateOperators()
-            updateOperatorFeeds()
+            updateFeeds()
             updateOperatorFeedVersions()
         }
 

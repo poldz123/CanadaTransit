@@ -8,18 +8,18 @@ import com.squareup.moshi.ToJson
 
 @Retention(AnnotationRetention.RUNTIME)
 @JsonQualifier
-annotation class OperatorFeedForeignKey
+annotation class FeedForeignKey
 
-class OperatorFeedForeignKeyAdapter {
+class FeedForeignKeyAdapter {
     @FromJson
-    @OperatorFeedForeignKey
+    @FeedForeignKey
     fun fromJson(operatorsInFeed: List<OperatorInFeed>): String {
         DebugUtil.assertTrue(operatorsInFeed.isNotEmpty(), "There are no operator found, make sure to skip them.")
         return operatorsInFeed.first().operatorOneStopId
     }
 
     @ToJson
-    fun toJson(@OperatorFeedForeignKey value: String): String? {
+    fun toJson(@FeedForeignKey value: String): String? {
         // We return null here since this value does not exist in the API response.
         return null
     }
@@ -27,11 +27,11 @@ class OperatorFeedForeignKeyAdapter {
 
 @Retention(AnnotationRetention.RUNTIME)
 @JsonQualifier
-annotation class OperatorFeedCurrentFeedVersion
+annotation class FeedCurrentFeedVersion
 
-class OperatorFeedCurrentFeedVersionAdapter {
+class FeedCurrentFeedVersionAdapter {
     @FromJson
-    @OperatorFeedCurrentFeedVersion
+    @FeedCurrentFeedVersion
     fun fromJson(operatorsInFeed: List<String>): String {
         if (operatorsInFeed.isEmpty()) {
             return ""
@@ -40,7 +40,7 @@ class OperatorFeedCurrentFeedVersionAdapter {
     }
 
     @ToJson
-    fun toJson(@OperatorFeedCurrentFeedVersion value: String): String? {
+    fun toJson(@FeedCurrentFeedVersion value: String): String? {
         // We return null here since this value does not exist in the API response.
         return null
     }

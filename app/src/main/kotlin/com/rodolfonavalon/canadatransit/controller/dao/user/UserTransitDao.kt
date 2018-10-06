@@ -4,7 +4,7 @@ import androidx.room.*
 import com.rodolfonavalon.canadatransit.controller.converter.room.BaseConverter
 import com.rodolfonavalon.canadatransit.controller.dao.BaseDao
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeed
+import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
 import com.rodolfonavalon.canadatransit.model.database.user.UserTransit
 import io.reactivex.Maybe
@@ -31,17 +31,17 @@ interface UserTransitDao: BaseDao<UserTransit> {
     fun findOperators(): Maybe<List<Operator>>
 
     @Query("""
-        SELECT * FROM OperatorFeed
-        INNER JOIN Operator ON Operator.operatorOneStopId = OperatorFeed.operatorOneStopId
+        SELECT * FROM Feed
+        INNER JOIN Operator ON Operator.operatorOneStopId = Feed.operatorOneStopId
         INNER JOIN UserTransit ON UserTransit.operatorOneStopId = Operator.operatorOneStopId
         """)
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    fun findOperatorFeeds(): Maybe<List<OperatorFeed>>
+    fun findFeeds(): Maybe<List<Feed>>
 
     @Query("""
         SELECT * FROM OperatorFeedVersion
-        INNER JOIN OperatorFeed ON OperatorFeed.feedOneStopId = OperatorFeedVersion.feedOneStopId
-        INNER JOIN Operator ON Operator.operatorOneStopId = OperatorFeed.operatorOneStopId
+        INNER JOIN Feed ON Feed.feedOneStopId = OperatorFeedVersion.feedOneStopId
+        INNER JOIN Operator ON Operator.operatorOneStopId = Feed.operatorOneStopId
         INNER JOIN UserTransit ON UserTransit.operatorOneStopId = Operator.operatorOneStopId
         """)
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)

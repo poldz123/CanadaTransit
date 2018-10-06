@@ -38,7 +38,7 @@ data class OperatorFeedVersion(
         }
 
         override fun transferObservable(): Observable<Response<ResponseBody>> {
-            return TransitLandApi.downloadOperatorFeed(this)
+            return TransitLandApi.downloadFeedVersion(this)
         }
 
         override fun transferDirectoryPath(): String {
