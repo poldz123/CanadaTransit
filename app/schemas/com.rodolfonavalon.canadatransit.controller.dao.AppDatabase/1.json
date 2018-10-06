@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "dc803fa9f883866304097cb1227d19ec",
+    "identityHash": "463fa74b6b4fb9f91ed5b3177702dbc8",
     "entities": [
       {
         "tableName": "Operator",
@@ -104,7 +104,7 @@
       },
       {
         "tableName": "OperatorFeed",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`feedOneStopId` TEXT NOT NULL, `operatorOneStopId` TEXT NOT NULL, `name` TEXT, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `url` TEXT NOT NULL, `feedFormat` TEXT NOT NULL, `lastFetchAt` TEXT, `lastImportedAt` TEXT, `importStatus` TEXT NOT NULL, `activeFeedVersion` TEXT NOT NULL, `feedVersionUrl` TEXT NOT NULL, PRIMARY KEY(`feedOneStopId`), FOREIGN KEY(`operatorOneStopId`) REFERENCES `Operator`(`operatorOneStopId`) ON UPDATE CASCADE ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`feedOneStopId` TEXT NOT NULL, `operatorOneStopId` TEXT NOT NULL, `currentFeedVersion` TEXT NOT NULL, `name` TEXT, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `url` TEXT NOT NULL, `feedFormat` TEXT NOT NULL, `importStatus` TEXT NOT NULL, `activeFeedVersion` TEXT, `feedVersionUrl` TEXT NOT NULL, PRIMARY KEY(`feedOneStopId`))",
         "fields": [
           {
             "fieldPath": "feedOneStopId",
@@ -115,6 +115,12 @@
           {
             "fieldPath": "operatorOneStopId",
             "columnName": "operatorOneStopId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentFeedVersion",
+            "columnName": "currentFeedVersion",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -149,18 +155,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "lastFetchAt",
-            "columnName": "lastFetchAt",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "lastImportedAt",
-            "columnName": "lastImportedAt",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
             "fieldPath": "importStatus",
             "columnName": "importStatus",
             "affinity": "TEXT",
@@ -170,7 +164,7 @@
             "fieldPath": "activeFeedVersion",
             "columnName": "activeFeedVersion",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "feedVersionUrl",
@@ -193,33 +187,13 @@
               "feedOneStopId"
             ],
             "createSql": "CREATE UNIQUE INDEX `index_OperatorFeed_feedOneStopId` ON `${TABLE_NAME}` (`feedOneStopId`)"
-          },
-          {
-            "name": "index_OperatorFeed_operatorOneStopId",
-            "unique": true,
-            "columnNames": [
-              "operatorOneStopId"
-            ],
-            "createSql": "CREATE UNIQUE INDEX `index_OperatorFeed_operatorOneStopId` ON `${TABLE_NAME}` (`operatorOneStopId`)"
           }
         ],
-        "foreignKeys": [
-          {
-            "table": "Operator",
-            "onDelete": "NO ACTION",
-            "onUpdate": "CASCADE",
-            "columns": [
-              "operatorOneStopId"
-            ],
-            "referencedColumns": [
-              "operatorOneStopId"
-            ]
-          }
-        ]
+        "foreignKeys": []
       },
       {
         "tableName": "OperatorFeedVersion",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sha1` TEXT NOT NULL, `feedOneStopId` TEXT NOT NULL, `earliestCalendarDate` TEXT NOT NULL, `latestCalendarDate` TEXT NOT NULL, `md5` TEXT NOT NULL, `fetchedAt` TEXT NOT NULL, `importedAt` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `importStatus` TEXT NOT NULL, `url` TEXT NOT NULL, `downloadUrl` TEXT NOT NULL, `importLevel` INTEGER NOT NULL, `isActiveFeedVersion` INTEGER NOT NULL, PRIMARY KEY(`sha1`), FOREIGN KEY(`feedOneStopId`) REFERENCES `OperatorFeed`(`feedOneStopId`) ON UPDATE CASCADE ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sha1` TEXT NOT NULL, `feedOneStopId` TEXT NOT NULL, `earliestCalendarDate` TEXT NOT NULL, `latestCalendarDate` TEXT NOT NULL, `md5` TEXT NOT NULL, `fetchedAt` TEXT NOT NULL, `importedAt` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `importStatus` TEXT NOT NULL, `url` TEXT NOT NULL, `downloadUrl` TEXT NOT NULL, `importLevel` INTEGER NOT NULL, `isActiveFeedVersion` INTEGER NOT NULL, PRIMARY KEY(`sha1`))",
         "fields": [
           {
             "fieldPath": "sha1",
@@ -330,19 +304,7 @@
             "createSql": "CREATE UNIQUE INDEX `index_OperatorFeedVersion_feedOneStopId` ON `${TABLE_NAME}` (`feedOneStopId`)"
           }
         ],
-        "foreignKeys": [
-          {
-            "table": "OperatorFeed",
-            "onDelete": "NO ACTION",
-            "onUpdate": "CASCADE",
-            "columns": [
-              "feedOneStopId"
-            ],
-            "referencedColumns": [
-              "feedOneStopId"
-            ]
-          }
-        ]
+        "foreignKeys": []
       },
       {
         "tableName": "UserTransit",
@@ -373,7 +335,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"dc803fa9f883866304097cb1227d19ec\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"463fa74b6b4fb9f91ed5b3177702dbc8\")"
     ]
   }
 }

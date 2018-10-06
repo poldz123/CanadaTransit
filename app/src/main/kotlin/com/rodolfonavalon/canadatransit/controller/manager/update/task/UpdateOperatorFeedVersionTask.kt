@@ -17,7 +17,7 @@ class UpdateOperatorFeedVersionTask : AbstractUpdateTask<List<OperatorFeedVersio
 
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
-        Timber.d("Querying user operator feeds...")
+        Timber.d("VERSION: Querying user operator feeds...")
         userTransitDao.dbQuery { findOperatorFeeds() }
                 .subscribe(::onFound, this::onError)
                 .addTo(this.disposables)
@@ -25,11 +25,11 @@ class UpdateOperatorFeedVersionTask : AbstractUpdateTask<List<OperatorFeedVersio
 
     private fun onFound(operatorFeeds: List<OperatorFeed>) {
         if (operatorFeeds.isEmpty()) {
-            Timber.d("No operator was found from selected operators.")
+            Timber.d("VERSION: No operator was found from selected operators.")
             onSaved(mutableListOf())
             return
         }
-        Timber.d("Retrieving ${operatorFeeds.count()} operator feed versions...")
+        Timber.d("VERSION: Fetching ${operatorFeeds.count()} operator feed versions...")
         TransitLandApi.retrieveOperatorFeedVersion(operatorFeeds,
                 ::onReceived,
                 this::onError)
@@ -37,7 +37,7 @@ class UpdateOperatorFeedVersionTask : AbstractUpdateTask<List<OperatorFeedVersio
     }
 
     private fun onReceived(operatorFeedVersions: List<OperatorFeedVersion>) {
-        Timber.d("Saving ${operatorFeedVersions.count()} operator feed versions...")
+        Timber.d("VERSION: Saving ${operatorFeedVersions.count()} operator feed versions...")
         operatorFeedVersionDao.dbInsert {
             insert(operatorFeedVersions)
         }.subscribe({ _ ->
@@ -52,7 +52,7 @@ class UpdateOperatorFeedVersionTask : AbstractUpdateTask<List<OperatorFeedVersio
     }
 
     private fun onSaved(operatorFeedVersions: List<OperatorFeedVersion>) {
-        Timber.d("Successfully saved ${operatorFeedVersions.count()} operator feed versions")
+        Timber.d("VERSION: Successfully saved ${operatorFeedVersions.count()} operator feed versions")
         this.onSuccess(operatorFeedVersions)
     }
 }

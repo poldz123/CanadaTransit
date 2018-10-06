@@ -13,7 +13,7 @@ class UpdateOperatorTask : AbstractUpdateTask<List<Operator>>() {
 
     override fun onStart(trackingId: String) {
         super.onStart(trackingId)
-        Timber.d("Querying operators...")
+        Timber.d("OPERATOR: Fetching operators...")
         TransitLandApi.retrieveOperators(
                 ::onReceived,
                 this::onError)
@@ -21,7 +21,7 @@ class UpdateOperatorTask : AbstractUpdateTask<List<Operator>>() {
     }
 
     private fun onReceived(operators: List<Operator>) {
-        Timber.d("Saving ${operators.count()} operators...")
+        Timber.d("OPERATOR: Saving ${operators.count()} operators...")
         val dao = CanadaTransitApplication.appDatabase.operatorDao()
         dao.dbInsert {
             insert(operators)
@@ -39,7 +39,7 @@ class UpdateOperatorTask : AbstractUpdateTask<List<Operator>>() {
         userDao.dbInsert {
             insert(userTransits)
         }.subscribe {
-            Timber.d("Successfully saved ${operators.count()} operators")
+            Timber.d("OPERATOR: Successfully saved ${it.count()} operators")
             this.onSuccess(operators)
         }
 //        Timber.d("Successfully saved ${operators.count()} operators")

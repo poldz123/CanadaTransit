@@ -112,7 +112,7 @@ interface TransitLandApi {
          *  @param error the callback method when something went wrong during retrieval of the operator feed version
          */
         fun retrieveOperatorFeedVersion(operatorFeeds: List<OperatorFeed>, success: (List<OperatorFeedVersion>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            val feedVersionIds = operatorFeeds.asSequence().map { it.activeFeedVersion }.joinToString(",")
+            val feedVersionIds = operatorFeeds.asSequence().map { it.activeFeedVersion ?: it.currentFeedVersion }.joinToString(",")
             return retrievePaginatedObject { retrofitInstance.feedVersion(feedVersionIds, it) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

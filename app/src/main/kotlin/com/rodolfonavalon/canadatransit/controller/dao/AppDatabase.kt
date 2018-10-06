@@ -16,7 +16,7 @@ import com.rodolfonavalon.canadatransit.model.database.user.UserTransit
             OperatorFeed::class,
             OperatorFeedVersion::class,
             UserTransit::class
-        ], version = 1)
+        ], version = 4) // TODO(change back to 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun operatorDao(): OperatorDao
     abstract fun operatorFeedDao(): OperatorFeedDao

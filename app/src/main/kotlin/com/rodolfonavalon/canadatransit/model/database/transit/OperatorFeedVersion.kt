@@ -12,7 +12,6 @@ import org.joda.time.DateTime
 import retrofit2.Response
 
 @Entity(indices = [
-            Index(value = ["sha1"], unique = true),
             Index(value = ["feedOneStopId"], unique = true)
         ])
 @TypeConverters(TransitLandConverter::class)
@@ -25,7 +24,6 @@ data class OperatorFeedVersion(
     @field:Json(name = "latest_calendar_date") val latestCalendarDate: DateTime,
     @field:Json(name = "md5") val md5: String,
     @field:Json(name = "fetched_at") val fetchedAt: DateTime,
-    @field:Json(name = "imported_at") val importedAt: DateTime,
     @field:Json(name = "created_at") val createdAt: DateTime,
     @field:Json(name = "updated_at") val updatedAt: DateTime,
     @field:Json(name = "import_status") val importStatus: String,
