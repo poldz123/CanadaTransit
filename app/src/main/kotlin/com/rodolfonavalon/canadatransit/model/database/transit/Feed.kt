@@ -21,19 +21,13 @@ data class Feed(
     @field:Json(name = "active_feed_version") val activeFeedVersion: String?,
     @field:Json(name = "name") val name: String?,
     @field:Json(name = "created_at") val createdAt: DateTime,
-    @field:Json(name = "updated_at") val updatedAt: DateTime,
     @field:Json(name = "url") val url: String,
     @field:Json(name = "feed_format") val feedFormat: String,
     @field:Json(name = "import_status") val importStatus: String,
     @field:Json(name = "feed_versions_url") val feedVersionUrl: String
-) : Updatable {
-
-    override fun trackingId(): String {
-        return feedOneStopId
-    }
-
-    override fun update() {
-    }
+) {
+    @Transient
+    val updatedAt: DateTime = DateTime.now()
 }
 
 data class OperatorInFeed(

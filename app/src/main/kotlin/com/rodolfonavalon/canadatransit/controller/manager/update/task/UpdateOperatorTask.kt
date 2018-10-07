@@ -36,6 +36,7 @@ class UpdateOperatorTask : AbstractUpdateTask<List<Operator>>() {
         for (operator in operators) {
             userTransits.add(UserTransit(operator.operatorOneStopId, DateTime.now()))
         }
+        // TODO(remove)
         userDao.dbInsert {
             insert(userTransits)
         }.subscribe {

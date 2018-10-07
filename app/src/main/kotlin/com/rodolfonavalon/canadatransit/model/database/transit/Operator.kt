@@ -20,7 +20,6 @@ data class Operator(
     @field:Json(name = "state") val state: String,
     @field:Json(name = "timezone") val timezone: String,
     @field:Json(name = "created_at") val createdAt: DateTime,
-    @field:Json(name = "updated_at") val updatedAt: DateTime,
     @field:Json(name = "country") val country: String?,
     @field:Json(name = "website") val website: String?,
     @field:Json(name = "metro") val metro: String?,
@@ -30,15 +29,9 @@ data class Operator(
     @Embedded
     @NonNull
     @field:Json(name = "tags") val tags: Tags?
-) : Updatable {
-
-        override fun trackingId(): String {
-            return operatorOneStopId
-        }
-
-        override fun update() {
-            TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-        }
+) {
+    @Transient
+    val updatedAt: DateTime = DateTime.now()
 }
 
 data class Tags(

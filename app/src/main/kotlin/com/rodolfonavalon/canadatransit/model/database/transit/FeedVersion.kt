@@ -25,7 +25,6 @@ data class FeedVersion(
     @field:Json(name = "md5") val md5: String,
     @field:Json(name = "fetched_at") val fetchedAt: DateTime,
     @field:Json(name = "created_at") val createdAt: DateTime,
-    @field:Json(name = "updated_at") val updatedAt: DateTime,
     @field:Json(name = "import_status") val importStatus: String,
     @field:Json(name = "url") val url: String,
     @field:Json(name = "download_url") val downloadUrl: String,
@@ -33,20 +32,23 @@ data class FeedVersion(
     @field:Json(name = "is_active_feed_version") val isActiveFeedVersion: Boolean
 ) : Downloadable {
 
-        override fun trackingId(): String {
-            return sha1
-        }
+    @Transient
+    val updatedAt: DateTime = DateTime.now()
 
-        override fun transferObservable(): Observable<Response<ResponseBody>> {
-            return TransitLandApi.downloadFeedVersion(this)
-        }
+    override fun trackingId(): String {
+        return sha1
+    }
 
-        override fun transferDirectoryPath(): String {
-            return "feed/transitland/feed-version/"
-        }
+    override fun transferObservable(): Observable<Response<ResponseBody>> {
+        return TransitLandApi.downloadFeedVersion(this)
+    }
 
-        override fun download() {
-            // TODO Transfer Manager download
-            TransferManager.download(this)
-        }
+    override fun transferDirectoryPath(): String {
+        return "feed/transitland/feed-version/"
+    }
+
+    override fun download() {
+        // TODO Transfer Manager download
+        TransferManager.download(this)
+    }
 }
