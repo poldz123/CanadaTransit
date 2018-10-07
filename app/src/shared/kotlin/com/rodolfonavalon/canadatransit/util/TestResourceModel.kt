@@ -3,7 +3,7 @@ package com.rodolfonavalon.canadatransit.util
 import com.rodolfonavalon.canadatransit.controller.converter.moshi.adapter.DateTimeAdapter
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
 import com.rodolfonavalon.canadatransit.model.database.transit.Tags
 
 object TestResourceModel {
@@ -85,10 +85,10 @@ object TestResourceModel {
         }
     }
 
-    object OperatorFeedVersionModel {
+    object FeedVersionModel {
 
-        fun createOCTranspoModel(): OperatorFeedVersion {
-            return OperatorFeedVersion(
+        fun createOCTranspoModel(): FeedVersion {
+            return FeedVersion(
                     "d157d50441cd64c50ec01a300da521a477aa03c4",
                     "f-f24-octranspo",
                     DateTimeAdapter().fromJson("2017-10-27")!!,
@@ -106,8 +106,8 @@ object TestResourceModel {
             )
         }
 
-        fun createAMTTranspoModel(): OperatorFeedVersion {
-            return OperatorFeedVersion(
+        fun createAMTTranspoModel(): FeedVersion {
+            return FeedVersion(
                     "1b99f0448fb3ba210ea1b669529d60eeb5699a9b",
                     "f-f25d-agencemtropolitainedetransportexpress",
                     DateTimeAdapter().fromJson("2017-01-02")!!,

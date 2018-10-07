@@ -6,7 +6,7 @@ import com.rodolfonavalon.canadatransit.BaseMockServerTest
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
 import com.rodolfonavalon.canadatransit.util.TestResourceModel
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,7 +46,7 @@ class TransitLandApiTest : BaseMockServerTest() {
         val disposables = mutableListOf(
                 TransitLandApi.retrieveOperators({ _ -> }, { _ -> }, activity),
                 TransitLandApi.retrieveFeeds(mockOperator, { _ -> }, { _ -> }, activity),
-                TransitLandApi.retrieveOperatorFeedVersion(mockFeed, { _ -> }, { _ -> }, activity)
+                TransitLandApi.retrieveFeedVersion(mockFeed, { _ -> }, { _ -> }, activity)
         )
 
         controller.create()
@@ -119,28 +119,28 @@ class TransitLandApiTest : BaseMockServerTest() {
 
     @Test
     fun testRetrieveFeedVersion_dataConsistency() {
-        val operatorFeedVersions: List<OperatorFeedVersion> = mutableListOf(
-                TestResourceModel.OperatorFeedVersionModel.createOCTranspoModel(),
-                TestResourceModel.OperatorFeedVersionModel.createAMTTranspoModel()
+        val feedVersions: List<FeedVersion> = mutableListOf(
+                TestResourceModel.FeedVersionModel.createOCTranspoModel(),
+                TestResourceModel.FeedVersionModel.createAMTTranspoModel()
         )
 
-        for (operatorFeedVersion in operatorFeedVersions) {
+        for (feedVersion in feedVersions) {
             val mockFeed = mock(Feed::class.java)
-            given(mockFeed.activeFeedVersion).willReturn(operatorFeedVersion.sha1)
+            given(mockFeed.activeFeedVersion).willReturn(feedVersion.sha1)
 
-            server.addResponsePath("/api/v1/feed_versions", "/transitland/operator-feed-version-(${operatorFeedVersion.feedOneStopId})")
-            var testOperatorFeedVersions: List<OperatorFeedVersion>? = null
-            var testOperatorFeedVersionError: Throwable? = null
+            server.addResponsePath("/api/v1/feed_versions", "/transitland/operator-feed-version-(${feedVersion.feedOneStopId})")
+            var testFeedVersions: List<FeedVersion>? = null
+            var testFeedVersionError: Throwable? = null
 
-            TransitLandApi.retrieveOperatorFeedVersion(mockFeed, { apiOperatorFeedVersion ->
-                testOperatorFeedVersions = apiOperatorFeedVersion
+            TransitLandApi.retrieveFeedVersion(mockFeed, { apiFeedVersion ->
+                testFeedVersions = apiFeedVersion
             }, { error ->
-                testOperatorFeedVersionError = error
+                testFeedVersionError = error
             })
 
-            assertNull(testOperatorFeedVersionError, "Error has occurred when retrieving operator feed version: $testOperatorFeedVersionError")
-            for (testOperatorFeedVersion in testOperatorFeedVersions!!) {
-                assertOperatorFeedVersion(testOperatorFeedVersion, operatorFeedVersion)
+            assertNull(testFeedVersionError, "Error has occurred when retrieving operator feed version: $testFeedVersionError")
+            for (testFeedVersion in testFeedVersions!!) {
+                assertFeedVersion(testFeedVersion, feedVersion)
             }
         }
     }
@@ -192,21 +192,21 @@ class TransitLandApiTest : BaseMockServerTest() {
         fail("Test operator feed was not found for: ${expectedFeed.feedOneStopId}")
     }
 
-    private fun assertOperatorFeedVersion(actualOperatorFeedVersion: OperatorFeedVersion, expectedOperatorFeedVersion: OperatorFeedVersion) {
-        assertEquals(expectedOperatorFeedVersion.sha1, actualOperatorFeedVersion.sha1)
-        assertEquals(expectedOperatorFeedVersion.feedOneStopId, actualOperatorFeedVersion.feedOneStopId)
-        assertEquals(expectedOperatorFeedVersion.earliestCalendarDate, actualOperatorFeedVersion.earliestCalendarDate)
-        assertEquals(expectedOperatorFeedVersion.latestCalendarDate, actualOperatorFeedVersion.latestCalendarDate)
-        assertEquals(expectedOperatorFeedVersion.md5, actualOperatorFeedVersion.md5)
-        assertEquals(expectedOperatorFeedVersion.fetchedAt, actualOperatorFeedVersion.fetchedAt)
-        assertEquals(expectedOperatorFeedVersion.importedAt, actualOperatorFeedVersion.importedAt)
-        assertEquals(expectedOperatorFeedVersion.createdAt, actualOperatorFeedVersion.createdAt)
-        assertEquals(expectedOperatorFeedVersion.updatedAt, actualOperatorFeedVersion.updatedAt)
-        assertEquals(expectedOperatorFeedVersion.importStatus, actualOperatorFeedVersion.importStatus)
-        assertEquals(expectedOperatorFeedVersion.url, actualOperatorFeedVersion.url)
-        assertEquals(expectedOperatorFeedVersion.downloadUrl, actualOperatorFeedVersion.downloadUrl)
-        assertEquals(expectedOperatorFeedVersion.importLevel, actualOperatorFeedVersion.importLevel)
-        assertEquals(expectedOperatorFeedVersion.isActiveFeedVersion, actualOperatorFeedVersion.isActiveFeedVersion)
+    private fun assertFeedVersion(actualFeedVersion: FeedVersion, expectedFeedVersion: FeedVersion) {
+        assertEquals(expectedFeedVersion.sha1, actualFeedVersion.sha1)
+        assertEquals(expectedFeedVersion.feedOneStopId, actualFeedVersion.feedOneStopId)
+        assertEquals(expectedFeedVersion.earliestCalendarDate, actualFeedVersion.earliestCalendarDate)
+        assertEquals(expectedFeedVersion.latestCalendarDate, actualFeedVersion.latestCalendarDate)
+        assertEquals(expectedFeedVersion.md5, actualFeedVersion.md5)
+        assertEquals(expectedFeedVersion.fetchedAt, actualFeedVersion.fetchedAt)
+        assertEquals(expectedFeedVersion.importedAt, actualFeedVersion.importedAt)
+        assertEquals(expectedFeedVersion.createdAt, actualFeedVersion.createdAt)
+        assertEquals(expectedFeedVersion.updatedAt, actualFeedVersion.updatedAt)
+        assertEquals(expectedFeedVersion.importStatus, actualFeedVersion.importStatus)
+        assertEquals(expectedFeedVersion.url, actualFeedVersion.url)
+        assertEquals(expectedFeedVersion.downloadUrl, actualFeedVersion.downloadUrl)
+        assertEquals(expectedFeedVersion.importLevel, actualFeedVersion.importLevel)
+        assertEquals(expectedFeedVersion.isActiveFeedVersion, actualFeedVersion.isActiveFeedVersion)
 
     }
 }

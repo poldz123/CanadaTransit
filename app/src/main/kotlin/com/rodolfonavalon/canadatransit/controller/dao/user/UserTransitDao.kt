@@ -5,7 +5,7 @@ import com.rodolfonavalon.canadatransit.controller.converter.room.BaseConverter
 import com.rodolfonavalon.canadatransit.controller.dao.BaseDao
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
 import com.rodolfonavalon.canadatransit.model.database.user.UserTransit
 import io.reactivex.Maybe
 import org.joda.time.DateTime
@@ -39,11 +39,11 @@ interface UserTransitDao: BaseDao<UserTransit> {
     fun findFeeds(): Maybe<List<Feed>>
 
     @Query("""
-        SELECT * FROM OperatorFeedVersion
-        INNER JOIN Feed ON Feed.feedOneStopId = OperatorFeedVersion.feedOneStopId
+        SELECT * FROM FeedVersion
+        INNER JOIN Feed ON Feed.feedOneStopId = FeedVersion.feedOneStopId
         INNER JOIN Operator ON Operator.operatorOneStopId = Feed.operatorOneStopId
         INNER JOIN UserTransit ON UserTransit.operatorOneStopId = Operator.operatorOneStopId
         """)
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    fun findOperatorFeedVersions(): Maybe<List<OperatorFeedVersion>>
+    fun findFeedVersions(): Maybe<List<FeedVersion>>
 }

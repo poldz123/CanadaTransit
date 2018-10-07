@@ -4,11 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.rodolfonavalon.canadatransit.R
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
-import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
-import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.model.database.transit.Feed
-import com.rodolfonavalon.canadatransit.model.database.transit.OperatorFeedVersion
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 

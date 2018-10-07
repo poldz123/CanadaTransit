@@ -15,7 +15,7 @@ import retrofit2.Response
             Index(value = ["feedOneStopId"], unique = true)
         ])
 @TypeConverters(TransitLandConverter::class)
-data class OperatorFeedVersion(
+data class FeedVersion(
     @PrimaryKey
     @field:Json(name = "sha1") val sha1: String,
     @field:Json(name = "feed") val feedOneStopId: String,
