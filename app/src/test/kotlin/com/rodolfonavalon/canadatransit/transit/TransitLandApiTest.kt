@@ -8,6 +8,7 @@ import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
 import com.rodolfonavalon.canadatransit.util.TestResourceModel
+import net.danlew.android.joda.DateUtils
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
@@ -156,11 +157,11 @@ class TransitLandApiTest : BaseMockServerTest() {
                 assertEquals(expectedOperator.state, actualOperator.state)
                 assertEquals(expectedOperator.timezone, actualOperator.timezone)
                 assertEquals(expectedOperator.createdAt, actualOperator.createdAt)
-                assertEquals(expectedOperator.updatedAt, actualOperator.updatedAt)
                 assertEquals(expectedOperator.website, actualOperator.website)
                 assertEquals(expectedOperator.metro, actualOperator.metro)
                 assertEquals(expectedOperator.shortName, actualOperator.shortName)
                 assertEquals(expectedOperator.representedInFeedOneStopIds.count(), actualOperator.representedInFeedOneStopIds.count())
+                assertTrue(DateUtils.isToday(actualOperator.updatedAt))
                 for (i in 0 until expectedOperator.representedInFeedOneStopIds.count()) {
                     assertEquals(expectedOperator.representedInFeedOneStopIds[i], actualOperator.representedInFeedOneStopIds[i])
                 }
@@ -178,14 +179,12 @@ class TransitLandApiTest : BaseMockServerTest() {
                 assertEquals(expectedFeed.operatorOneStopId, actualOperatorFeed.operatorOneStopId)
                 assertEquals(expectedFeed.name, actualOperatorFeed.name)
                 assertEquals(expectedFeed.createdAt, actualOperatorFeed.createdAt)
-                assertEquals(expectedFeed.updatedAt, actualOperatorFeed.updatedAt)
                 assertEquals(expectedFeed.url, actualOperatorFeed.url)
                 assertEquals(expectedFeed.feedFormat, actualOperatorFeed.feedFormat)
-                assertEquals(expectedFeed.lastFetchAt, actualOperatorFeed.lastFetchAt)
-                assertEquals(expectedFeed.lastImportedAt, actualOperatorFeed.lastImportedAt)
                 assertEquals(expectedFeed.importStatus, actualOperatorFeed.importStatus)
                 assertEquals(expectedFeed.activeFeedVersion, actualOperatorFeed.activeFeedVersion)
                 assertEquals(expectedFeed.feedVersionUrl, actualOperatorFeed.feedVersionUrl)
+                assertTrue(DateUtils.isToday(actualOperatorFeed.updatedAt))
                 return
             }
         }
@@ -199,15 +198,13 @@ class TransitLandApiTest : BaseMockServerTest() {
         assertEquals(expectedFeedVersion.latestCalendarDate, actualFeedVersion.latestCalendarDate)
         assertEquals(expectedFeedVersion.md5, actualFeedVersion.md5)
         assertEquals(expectedFeedVersion.fetchedAt, actualFeedVersion.fetchedAt)
-        assertEquals(expectedFeedVersion.importedAt, actualFeedVersion.importedAt)
         assertEquals(expectedFeedVersion.createdAt, actualFeedVersion.createdAt)
-        assertEquals(expectedFeedVersion.updatedAt, actualFeedVersion.updatedAt)
         assertEquals(expectedFeedVersion.importStatus, actualFeedVersion.importStatus)
         assertEquals(expectedFeedVersion.url, actualFeedVersion.url)
         assertEquals(expectedFeedVersion.downloadUrl, actualFeedVersion.downloadUrl)
         assertEquals(expectedFeedVersion.importLevel, actualFeedVersion.importLevel)
         assertEquals(expectedFeedVersion.isActiveFeedVersion, actualFeedVersion.isActiveFeedVersion)
-
+        assertTrue(DateUtils.isToday(actualFeedVersion.updatedAt))
     }
 }
 

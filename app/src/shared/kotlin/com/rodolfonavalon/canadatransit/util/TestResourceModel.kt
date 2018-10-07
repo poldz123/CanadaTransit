@@ -17,7 +17,6 @@ object TestResourceModel {
                     "CA-ON",
                     "America/Montreal",
                     DateTimeAdapter().fromJson("2016-05-26T21:32:08.877Z")!!,
-                    DateTimeAdapter().fromJson("2017-11-07T00:55:35.171Z")!!,
                     "CA",
                     "http://www.octranspo.com",
                     "Ottawa",
@@ -34,7 +33,6 @@ object TestResourceModel {
                     "CA-QC",
                     "America/Montreal",
                     DateTimeAdapter().fromJson("2016-08-26T22:39:04.204Z")!!,
-                    DateTimeAdapter().fromJson("2017-10-23T04:57:10.108Z")!!,
                     "CA",
                     "http://www.amt.qc.ca/",
                     null,
@@ -54,15 +52,13 @@ object TestResourceModel {
             return Feed(
                     "f-f24-octranspo",
                     "o-f24-octranspo",
+                    "1b99f0448fb3ba210ea1b669529d60eeb5699a9b",
+                    "03ee676c71cdce519b0723f1a455bb838dc9ecf6",
                     null,
                     DateTimeAdapter().fromJson("2016-05-26T21:32:08.883Z")!!,
-                    DateTimeAdapter().fromJson("2018-08-28T22:30:12.841Z")!!,
                     "http://www.octranspo1.com/files/google_transit.zip",
                     "gtfs",
-                    DateTimeAdapter().fromJson("2018-08-28T22:30:12.837Z")!!,
-                    DateTimeAdapter().fromJson("2018-08-05T11:56:56.400Z")!!,
                     "most_recent_succeeded",
-                    "03ee676c71cdce519b0723f1a455bb838dc9ecf6",
                     "https://api.transit.land/api/v1/feed_versions?feed_onestop_id=f-f24-octranspo"
             )
         }
@@ -71,15 +67,13 @@ object TestResourceModel {
             return Feed(
                     "f-f25d-agencemtropolitainedetransportexpress",
                     "o-f25-agencemtropolitainedetransport",
+                    "42e9b5c66882cd52af6e86669e5e14e57c7b1230",
+                    "1b99f0448fb3ba210ea1b669529d60eeb5699a9b",
                     null,
                     DateTimeAdapter().fromJson("2016-08-26T23:08:40.138Z")!!,
-                    DateTimeAdapter().fromJson("2018-08-29T02:00:24.556Z")!!,
                     "http://www.amt.qc.ca/xdata/express/google_transit.zip",
                     "gtfs",
-                    DateTimeAdapter().fromJson("2018-08-29T02:00:24.553Z")!!,
-                    DateTimeAdapter().fromJson("2017-06-24T15:12:28.891Z")!!,
                     "most_recent_succeeded",
-                    "1b99f0448fb3ba210ea1b669529d60eeb5699a9b",
                     "https://api.transit.land/api/v1/feed_versions?feed_onestop_id=f-f25d-agencemtropolitainedetransportexpress"
             )
         }
@@ -95,9 +89,7 @@ object TestResourceModel {
                     DateTimeAdapter().fromJson("2017-12-23")!!,
                     "da348c4b21073a8d1cf52168d03e3e48",
                     DateTimeAdapter().fromJson("2017-10-27T21:30:17.347Z")!!,
-                    DateTimeAdapter().fromJson("2017-11-07T02:15:22.661Z")!!,
                     DateTimeAdapter().fromJson("2017-10-27T21:30:17.354Z")!!,
-                    DateTimeAdapter().fromJson("2017-11-07T02:15:22.733Z")!!,
                     "most_recent_succeeded",
                     "http://www.octranspo1.com/files/google_transit.zip",
                     "https://transitland-gtfs.s3.amazonaws.com/datastore-uploads/feed_version/d157d50441cd64c50ec01a300da521a477aa03c4.zip",
@@ -114,9 +106,7 @@ object TestResourceModel {
                     DateTimeAdapter().fromJson("2017-07-01")!!,
                     "7d9249c414bc7007bde1712b17a5eb46",
                     DateTimeAdapter().fromJson("2017-06-22T17:30:28.106Z")!!,
-                    DateTimeAdapter().fromJson("2017-06-24T15:12:28.891Z")!!,
                     DateTimeAdapter().fromJson("2017-06-22T17:30:28.098Z")!!,
-                    DateTimeAdapter().fromJson("2017-06-25T14:11:47.797Z")!!,
                     "most_recent_succeeded",
                     "http://www.amt.qc.ca/xdata/express/google_transit.zip",
                     "https://transitland-gtfs.s3.amazonaws.com/datastore-uploads/feed_version/1b99f0448fb3ba210ea1b669529d60eeb5699a9b.zip",
