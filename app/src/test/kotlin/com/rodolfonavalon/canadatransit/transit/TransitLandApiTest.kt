@@ -8,7 +8,9 @@ import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
 import com.rodolfonavalon.canadatransit.util.TestResourceModel
-import net.danlew.android.joda.DateUtils
+import com.rodolfonavalon.canadatransit.util.TestResourceModel.FeedModel.assertFeeds
+import com.rodolfonavalon.canadatransit.util.TestResourceModel.FeedVersionModel.assertFeedVersion
+import com.rodolfonavalon.canadatransit.util.TestResourceModel.OperatorModel.assertOperator
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
@@ -71,6 +73,11 @@ class TransitLandApiTest : BaseMockServerTest() {
     }
 
     @Test
+    fun testRetrieveOperators_modelConsistency() {
+        // TODO(implement the model consistency)
+    }
+
+    @Test
     fun testRetrieveOperators_dataConsistency() {
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page1")
         server.addResponsePath("/api/v1/operators", "/transitland/operators-page2")
@@ -89,6 +96,11 @@ class TransitLandApiTest : BaseMockServerTest() {
         assertNull(testOperatorError, "Error has occurred when retrieving operators: $testOperatorError")
         assertOperator(testOperators, operatorOCTranspo)
         assertOperator(testOperators, operatorAMTTranspo)
+    }
+
+    @Test
+    fun testRetrieveFeed_modelConsistency() {
+        // TODO(implement the model consistency)
     }
 
     @Test
@@ -119,6 +131,11 @@ class TransitLandApiTest : BaseMockServerTest() {
     }
 
     @Test
+    fun testRetrieveFeedVersion_modelConsistency() {
+        // TODO(implement the model consistency)
+    }
+
+    @Test
     fun testRetrieveFeedVersion_dataConsistency() {
         val feedVersions: List<FeedVersion> = mutableListOf(
                 TestResourceModel.FeedVersionModel.createOCTranspoModel(),
@@ -144,67 +161,6 @@ class TransitLandApiTest : BaseMockServerTest() {
                 assertFeedVersion(testFeedVersion, feedVersion)
             }
         }
-    }
-
-    private fun assertOperator(actualOperators: List<Operator>, expectedOperator: Operator) {
-        assertTrue(actualOperators.isNotEmpty(), "Operators is empty")
-        for (actualOperator in actualOperators) {
-            // All operator should have the same country
-            assertEquals(expectedOperator.country, actualOperator.country)
-            // Lets find the test operator
-            if (expectedOperator.operatorOneStopId == actualOperator.operatorOneStopId) {
-                assertEquals(expectedOperator.name, actualOperator.name)
-                assertEquals(expectedOperator.state, actualOperator.state)
-                assertEquals(expectedOperator.timezone, actualOperator.timezone)
-                assertEquals(expectedOperator.createdAt, actualOperator.createdAt)
-                assertEquals(expectedOperator.website, actualOperator.website)
-                assertEquals(expectedOperator.metro, actualOperator.metro)
-                assertEquals(expectedOperator.shortName, actualOperator.shortName)
-                assertEquals(expectedOperator.representedInFeedOneStopIds.count(), actualOperator.representedInFeedOneStopIds.count())
-                assertTrue(DateUtils.isToday(actualOperator.updatedAt))
-                for (i in 0 until expectedOperator.representedInFeedOneStopIds.count()) {
-                    assertEquals(expectedOperator.representedInFeedOneStopIds[i], actualOperator.representedInFeedOneStopIds[i])
-                }
-                return
-            }
-        }
-        fail("Test operator was not found for: ${expectedOperator.operatorOneStopId}")
-    }
-
-    private fun assertFeeds(actualFeeds: List<Feed>, expectedFeed: Feed) {
-        assertTrue(actualFeeds.isNotEmpty(), "Operator Feeds is empty")
-
-        for (actualOperatorFeed in actualFeeds) {
-            if (actualOperatorFeed.feedOneStopId == expectedFeed.feedOneStopId) {
-                assertEquals(expectedFeed.operatorOneStopId, actualOperatorFeed.operatorOneStopId)
-                assertEquals(expectedFeed.name, actualOperatorFeed.name)
-                assertEquals(expectedFeed.createdAt, actualOperatorFeed.createdAt)
-                assertEquals(expectedFeed.url, actualOperatorFeed.url)
-                assertEquals(expectedFeed.feedFormat, actualOperatorFeed.feedFormat)
-                assertEquals(expectedFeed.importStatus, actualOperatorFeed.importStatus)
-                assertEquals(expectedFeed.activeFeedVersion, actualOperatorFeed.activeFeedVersion)
-                assertEquals(expectedFeed.feedVersionUrl, actualOperatorFeed.feedVersionUrl)
-                assertTrue(DateUtils.isToday(actualOperatorFeed.updatedAt))
-                return
-            }
-        }
-        fail("Test operator feed was not found for: ${expectedFeed.feedOneStopId}")
-    }
-
-    private fun assertFeedVersion(actualFeedVersion: FeedVersion, expectedFeedVersion: FeedVersion) {
-        assertEquals(expectedFeedVersion.sha1, actualFeedVersion.sha1)
-        assertEquals(expectedFeedVersion.feedOneStopId, actualFeedVersion.feedOneStopId)
-        assertEquals(expectedFeedVersion.earliestCalendarDate, actualFeedVersion.earliestCalendarDate)
-        assertEquals(expectedFeedVersion.latestCalendarDate, actualFeedVersion.latestCalendarDate)
-        assertEquals(expectedFeedVersion.md5, actualFeedVersion.md5)
-        assertEquals(expectedFeedVersion.fetchedAt, actualFeedVersion.fetchedAt)
-        assertEquals(expectedFeedVersion.createdAt, actualFeedVersion.createdAt)
-        assertEquals(expectedFeedVersion.importStatus, actualFeedVersion.importStatus)
-        assertEquals(expectedFeedVersion.url, actualFeedVersion.url)
-        assertEquals(expectedFeedVersion.downloadUrl, actualFeedVersion.downloadUrl)
-        assertEquals(expectedFeedVersion.importLevel, actualFeedVersion.importLevel)
-        assertEquals(expectedFeedVersion.isActiveFeedVersion, actualFeedVersion.isActiveFeedVersion)
-        assertTrue(DateUtils.isToday(actualFeedVersion.updatedAt))
     }
 }
 
