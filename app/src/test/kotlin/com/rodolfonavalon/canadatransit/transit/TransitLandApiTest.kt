@@ -74,7 +74,22 @@ class TransitLandApiTest : BaseMockServerTest() {
 
     @Test
     fun testRetrieveOperators_modelConsistency() {
-        // TODO(implement the model consistency)
+        server.addResponsePath("/api/v1/operators", "/transitland/operators-page1")
+        server.addResponsePath("/api/v1/operators", "/transitland/operators-page2")
+        var success = false
+        var operators: List<Operator>? = null
+
+        TransitLandApi.retrieveOperators({
+            operators = it
+            success = true
+        }, { _ ->
+            operators = null
+            success = false
+        })
+
+        assertTrue(success)
+        assertNotNull(operators)
+        assertTrue(operators!!.isNotEmpty())
     }
 
     @Test
@@ -100,7 +115,25 @@ class TransitLandApiTest : BaseMockServerTest() {
 
     @Test
     fun testRetrieveFeed_modelConsistency() {
-        // TODO(implement the model consistency)
+        server.addResponsePath("/api/v1/feeds", "/transitland/feeds-page1")
+        server.addResponsePath("/api/v1/feeds", "/transitland/feeds-page2")
+
+        val mockOperator = mock(Operator::class.java)
+        given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf("test"))
+        var success = false
+        var feeds: List<Feed>? = null
+
+        TransitLandApi.retrieveFeeds(mockOperator, {
+            feeds = it
+            success = true
+        }, {
+            feeds = null
+            success = false
+        })
+
+        assertTrue(success)
+        assertNotNull(feeds)
+        assertTrue(feeds!!.isNotEmpty())
     }
 
     @Test
@@ -132,7 +165,25 @@ class TransitLandApiTest : BaseMockServerTest() {
 
     @Test
     fun testRetrieveFeedVersion_modelConsistency() {
-        // TODO(implement the model consistency)
+        server.addResponsePath("/api/v1/feed_versions", "/transitland/feed-versions-page1")
+        server.addResponsePath("/api/v1/feed_versions", "/transitland/feed-versions-page2")
+
+        val mockFeed = mock(Feed::class.java)
+        given(mockFeed.activeFeedVersion).willReturn("test")
+        var success = false
+        var feeds: List<FeedVersion>? = null
+
+        TransitLandApi.retrieveFeedVersion(mockFeed, {
+            feeds = it
+            success = true
+        }, {
+            feeds = null
+            success = false
+        })
+
+        assertTrue(success)
+        assertNotNull(feeds)
+        assertTrue(feeds!!.isNotEmpty())
     }
 
     @Test
