@@ -65,7 +65,9 @@ class CustomMockWebServer {
      * @param responseCode The response code of the request
      */
     fun addResponsePath(path: String, filePath: String, responseCode: Int = 200, delay: Long? = null) {
-        val body = javaClass.getResource(filePath).readText()
+        val filePaths = filePath.plus(".json")
+        val url = javaClass.getResource(filePaths)
+        val body = url?.readText() ?: error("File does not exist: $filePaths")
         addResponse(path, MockWebServerResponse(body, responseCode, delay))
     }
 

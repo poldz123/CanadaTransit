@@ -1,0 +1,29 @@
+{
+  "operators":[
+    {
+      "onestop_id":"o-f24-octranspo",
+      "created_at":"2016-05-26T21:32:08.877Z",
+      "updated_at":"2017-11-07T00:55:35.171Z",
+      "tags":{
+
+      },
+      "created_or_updated_in_changeset_id":9111,
+      "name":"OC Transpo",
+      "short_name":null,
+      "website":"http://www.octranspo.com",
+      "country":"CA",
+      "state":"CA-ON",
+      "metro":"Ottawa",
+      "timezone":"America/Montreal",
+      "represented_in_feed_onestop_ids":[
+        "f-f24-octranspo"
+      ]
+    }
+  ],
+  "meta":{
+    "sort_key":"id",
+    "sort_order":"asc",
+    "per_page":50,
+    "offset":0
+  }
+}

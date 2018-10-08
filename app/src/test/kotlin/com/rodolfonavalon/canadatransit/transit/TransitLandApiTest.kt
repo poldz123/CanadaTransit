@@ -10,7 +10,6 @@ import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
 import com.rodolfonavalon.canadatransit.util.TestResourceModel
 import com.rodolfonavalon.canadatransit.util.TestResourceModel.FeedModel.assertFeeds
 import com.rodolfonavalon.canadatransit.util.TestResourceModel.FeedVersionModel.assertFeedVersion
-import com.rodolfonavalon.canadatransit.util.TestResourceModel.OperatorModel.assertOperator
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
@@ -94,23 +93,25 @@ class TransitLandApiTest : BaseMockServerTest() {
 
     @Test
     fun testRetrieveOperators_dataConsistency() {
-        server.addResponsePath("/api/v1/operators", "/transitland/operators-page1")
-        server.addResponsePath("/api/v1/operators", "/transitland/operators-page2")
-        var testOperators: List<Operator> = mutableListOf()
-        var testOperatorError: Throwable? = null
+        val operators: List<Operator> = mutableListOf(
+                TestResourceModel.OperatorModel.createOCTranspoModel(),
+                TestResourceModel.OperatorModel.createAMTTranspoModel()
+        )
 
-        TransitLandApi.retrieveOperators({ operators ->
-            testOperators = operators
-        }, { error ->
-            testOperatorError = error
-        })
+        for (operator in operators) {
+            server.addResponsePath("/api/v1/operators", "/transitland/operator-(${operator.operatorOneStopId})")
+            var testOperators: List<Operator> = mutableListOf()
+            var testOperatorError: Throwable? = null
 
-        val operatorOCTranspo = TestResourceModel.OperatorModel.createOCTranspoModel()
-        val operatorAMTTranspo= TestResourceModel.OperatorModel.createAMTTranspoModel()
+            TransitLandApi.retrieveOperators({
+                testOperators = it
+            }, { error ->
+                testOperatorError = error
+            })
 
-        assertNull(testOperatorError, "Error has occurred when retrieving operators: $testOperatorError")
-        assertOperator(testOperators, operatorOCTranspo)
-        assertOperator(testOperators, operatorAMTTranspo)
+            assertNull(testOperatorError, "Error has occurred when retrieving operator feeds: $testOperatorError")
+            assertEquals(1, testOperators.count())
+        }
     }
 
     @Test
@@ -147,7 +148,7 @@ class TransitLandApiTest : BaseMockServerTest() {
             val mockOperator = mock(Operator::class.java)
             given(mockOperator.representedInFeedOneStopIds).willReturn(mutableListOf(feed.feedOneStopId))
 
-            server.addResponsePath("/api/v1/feeds", "/transitland/operator-feed-(${feed.feedOneStopId})")
+            server.addResponsePath("/api/v1/feeds", "/transitland/feed-(${feed.feedOneStopId})")
             var testFeeds: List<Feed> = mutableListOf()
             var testFeedError: Throwable? = null
 
@@ -197,7 +198,7 @@ class TransitLandApiTest : BaseMockServerTest() {
             val mockFeed = mock(Feed::class.java)
             given(mockFeed.activeFeedVersion).willReturn(feedVersion.sha1)
 
-            server.addResponsePath("/api/v1/feed_versions", "/transitland/operator-feed-version-(${feedVersion.feedOneStopId})")
+            server.addResponsePath("/api/v1/feed_versions", "/transitland/feed-version-(${feedVersion.feedOneStopId})")
             var testFeedVersions: List<FeedVersion>? = null
             var testFeedVersionError: Throwable? = null
 
