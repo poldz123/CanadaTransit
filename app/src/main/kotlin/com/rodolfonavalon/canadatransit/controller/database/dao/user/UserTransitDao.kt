@@ -1,8 +1,8 @@
-package com.rodolfonavalon.canadatransit.controller.dao.user
+package com.rodolfonavalon.canadatransit.controller.database.dao.user
 
 import androidx.room.*
-import com.rodolfonavalon.canadatransit.controller.converter.room.BaseConverter
-import com.rodolfonavalon.canadatransit.controller.dao.BaseDao
+import com.rodolfonavalon.canadatransit.controller.database.converter.room.BaseConverter
+import com.rodolfonavalon.canadatransit.controller.database.dao.BaseDao
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion

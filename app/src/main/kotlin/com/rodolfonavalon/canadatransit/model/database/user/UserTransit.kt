@@ -1,7 +1,7 @@
 package com.rodolfonavalon.canadatransit.model.database.user
 
 import androidx.room.*
-import com.rodolfonavalon.canadatransit.controller.converter.room.BaseConverter
+import com.rodolfonavalon.canadatransit.controller.database.converter.room.BaseConverter
 import org.joda.time.DateTime
 
 @Entity

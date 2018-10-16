@@ -1,6 +1,6 @@
 package com.rodolfonavalon.canadatransit.controller.util.extension
 
-import com.rodolfonavalon.canadatransit.controller.dao.BaseDao
+import com.rodolfonavalon.canadatransit.controller.database.dao.BaseDao
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

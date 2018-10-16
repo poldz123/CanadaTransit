@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.controller.converter.moshi.adapter
+package com.rodolfonavalon.canadatransit.controller.database.converter.moshi.adapter
 
 import com.rodolfonavalon.canadatransit.controller.util.extension.fromJsonDateTime
 import com.rodolfonavalon.canadatransit.controller.util.extension.toJson

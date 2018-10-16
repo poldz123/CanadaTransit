@@ -6,7 +6,7 @@ import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbQuery
-import com.rodolfonavalon.canadatransit.controller.dao.transit.OperatorDao
+import com.rodolfonavalon.canadatransit.controller.database.dao.transit.OperatorDao
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
