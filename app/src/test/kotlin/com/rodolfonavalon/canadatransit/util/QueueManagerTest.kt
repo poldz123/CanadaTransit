@@ -3,11 +3,11 @@ package com.rodolfonavalon.canadatransit.util
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueManager
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueManagerListener
 import com.rodolfonavalon.canadatransit.controller.util.queue.task.Task
+import kotlin.test.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import kotlin.test.*
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
@@ -369,7 +369,7 @@ class QueueManagerTest {
     }
 }
 
-class TestQueueManager: AbstractQueueManager<TestTask>, QueueManagerListener {
+class TestQueueManager : AbstractQueueManager<TestTask>, QueueManagerListener {
 
     var lastSuccessfulTrackingId: String? = null
     var lastFailedTrackingId: String? = null
@@ -377,7 +377,7 @@ class TestQueueManager: AbstractQueueManager<TestTask>, QueueManagerListener {
     var isStarted: Boolean = false
     var isFinished: Boolean = false
 
-    constructor(): this(true)
+    constructor() : this(true)
 
     constructor(enableListener: Boolean) {
         if (enableListener) {
@@ -407,7 +407,7 @@ class TestQueueManager: AbstractQueueManager<TestTask>, QueueManagerListener {
     }
 }
 
-class TestTask(val trackingId: String, val queueTask: TestQueueManager): Task {
+class TestTask(val trackingId: String, val queueTask: TestQueueManager) : Task {
 
     var isStarting = false
     var isCancelled = false

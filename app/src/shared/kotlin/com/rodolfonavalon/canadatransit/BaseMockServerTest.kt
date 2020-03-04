@@ -46,7 +46,7 @@ open class BaseMockServerTest {
     }
 
     @After
-    open fun teardown(){
+    open fun teardown() {
         // Check the server that all of the responses are consumed
         server.check()
     }

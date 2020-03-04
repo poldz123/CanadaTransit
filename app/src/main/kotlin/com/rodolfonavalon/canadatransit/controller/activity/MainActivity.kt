@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.rodolfonavalon.canadatransit.R
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
+import io.reactivex.rxkotlin.subscribeBy
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,6 +14,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // TODO Lets update the manager when application is started
-        UpdateManager.update()
+        UpdateManager.update().subscribeBy(onSuccess = { result ->
+            Timber.d("Number of results: $result")
+        })
     }
 }

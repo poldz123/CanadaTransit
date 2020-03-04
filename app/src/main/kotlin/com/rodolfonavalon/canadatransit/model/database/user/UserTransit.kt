@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 @Entity
 @TypeConverters(BaseConverter::class)
 data class UserTransit(
-        @PrimaryKey
-        val operatorOneStopId: String,
-        val updatedAt: DateTime // TODO put to null?
+    @PrimaryKey
+    val operatorOneStopId: String,
+    val updatedAt: DateTime // TODO put to null?
 )

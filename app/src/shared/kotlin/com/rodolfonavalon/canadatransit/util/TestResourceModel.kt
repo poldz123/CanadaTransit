@@ -1,14 +1,14 @@
 package com.rodolfonavalon.canadatransit.util
 
 import com.rodolfonavalon.canadatransit.controller.database.converter.moshi.adapter.DateTimeAdapter
-import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Tags
-import net.danlew.android.joda.DateUtils
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.test.fail
+import net.danlew.android.joda.DateUtils
 
 object TestResourceModel {
 

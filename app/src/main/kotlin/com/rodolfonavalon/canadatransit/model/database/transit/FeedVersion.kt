@@ -1,10 +1,10 @@
 package com.rodolfonavalon.canadatransit.model.database.transit
 
 import androidx.room.*
+import com.rodolfonavalon.canadatransit.controller.database.converter.room.TransitLandConverter
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.Downloadable
 import com.rodolfonavalon.canadatransit.controller.manager.transfer.TransferManager
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
-import com.rodolfonavalon.canadatransit.controller.database.converter.room.TransitLandConverter
 import com.squareup.moshi.Json
 import io.reactivex.Observable
 import okhttp3.ResponseBody

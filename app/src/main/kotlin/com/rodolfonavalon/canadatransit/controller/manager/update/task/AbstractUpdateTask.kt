@@ -5,7 +5,7 @@ import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 import com.rodolfonavalon.canadatransit.controller.util.queue.task.AbstractObservableTask
 import timber.log.Timber
 
-abstract class AbstractUpdateTask<T: Any>: AbstractObservableTask<T>() {
+abstract class AbstractUpdateTask<T : Any> : AbstractObservableTask<T>() {
     private val updateManager = UpdateManager.manager() as UpdateManager
 
     final override fun onCancel() {

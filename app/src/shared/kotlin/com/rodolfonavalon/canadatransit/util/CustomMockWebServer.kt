@@ -2,15 +2,15 @@ package com.rodolfonavalon.canadatransit.util
 
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
+import java.net.URI
+import java.util.*
+import java.util.concurrent.TimeUnit
 import junit.framework.AssertionFailedError
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import java.net.URI
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * This is the wrapper of the [MockWebServer] that handles the requests and responses
@@ -218,7 +218,7 @@ class CustomMockWebServer {
      *
      * @property message The message of the exception
      */
-    private inner class MockWebServerException(override var message: String): Exception() {
+    private inner class MockWebServerException(override var message: String) : Exception() {
         init {
             failure = true
         }
@@ -229,7 +229,7 @@ class CustomMockWebServer {
      * responses that was attached. Each of the responses are removed if ever it was
      * successfully requested by the mock server.
      */
-    private inner class MockWebServerDispatcher: Dispatcher() {
+    private inner class MockWebServerDispatcher : Dispatcher() {
 
         override fun dispatch(request: RecordedRequest?): MockResponse {
             if (request != null) {
@@ -250,6 +250,5 @@ class CustomMockWebServer {
             }
             throw MockWebServerException("Unknown request from the mock server")
         }
-
     }
 }

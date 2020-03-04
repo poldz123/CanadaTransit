@@ -2,19 +2,7 @@ import java.util.regex.Pattern
 
 apply plugin: 'jacoco'
 
-android {
-    testOptions {
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
-        animationsDisabled true
-
-        unitTests {
-            includeAndroidResources = true
-        }
-    }
-}
-
 jacoco {
-    toolVersion = "$jacocoVersion"
     reportsDir = file("${project.buildDir}/reports/jacoco")
 }
 
@@ -27,11 +15,13 @@ tasks.withType(Test) {
 // TODO Must run the emulator first before starting this task
 // TODO Add the ui test coverage: 'createDebugCoverageReport' and "${project.buildDir}/outputs/code-coverage/connected/*.ec"
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+    group = "Verification"
+    description = "Runs a unit test with jacoco code coverage."
     reports {
         xml.enabled = true
         html.enabled = true
     }
-
+    // TODO(Re-check all of this)
     def fileFilter = [
             '**/R.class',
             '**/R$*.class',
@@ -39,6 +29,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
             '**/Manifest*.*',
             '**/*Test*.*',
             '**/*Activity*.*',
+            '**/*Fragment*.*',
             '**/*$[0-9].*',
             '**/*$ViewBinder*.*',
             '**/*$InjectAdapter*.*',
@@ -47,12 +38,11 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     ]
     def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/kotlin"
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree])
-    executionData = files(
+    sourceDirectories.from = files([mainSrc])
+    classDirectories.from = files([debugTree])
+    executionData.from = files(
             "${project.buildDir}/jacoco/testDebugUnitTest.exec"
     )
-
     doLast {
         // Display the total coverage for the CI to parse it and when it
         // parsed the CI will generate a badge for the coverage.

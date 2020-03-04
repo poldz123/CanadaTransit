@@ -4,23 +4,22 @@ import android.app.Activity
 import android.os.Bundle
 import com.rodolfonavalon.canadatransit.controller.manager.LifecycleCallback
 import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.CREATED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.DESTROYED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.PAUSED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.RESUMED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.SAVED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.STARTED
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.STOPPED
+import java.util.*
+import kotlin.test.assertEquals
+import kotlin.test.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-
-import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.CREATED
-import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.STARTED
-import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.RESUMED
-import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.PAUSED
-import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.STOPPED
-import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.SAVED
-import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager.LifecycleStage.DESTROYED
 import org.robolectric.android.controller.ActivityController
-import java.util.*
-import kotlin.test.assertEquals
-import kotlin.test.fail
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
@@ -76,7 +75,7 @@ class LifecycleManagerTest {
                 SAVED
         )
         // Lets test the activity and controller in random.
-        fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) +  start
+        fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) + start
         for (i in 1 until controllers.count() * testStages.count()) {
             val controllerIndex = (0..controllers.count()).random()
             val stageIndex = (0..(testStages.count())).random()
@@ -191,7 +190,10 @@ class LifecycleManagerTest {
         callAllControllerActivityLifecycle(controller)
     }
 
-    private fun callControllerActivityLifecycle(stage: LifecycleManager.LifecycleStage, controller: ActivityController<Activity>) {
+    private fun callControllerActivityLifecycle(
+        stage: LifecycleManager.LifecycleStage,
+        controller: ActivityController<Activity>
+    ) {
         when (stage) {
             CREATED -> controller.create()
             STARTED -> controller.start()

@@ -10,9 +10,9 @@ import com.rodolfonavalon.canadatransit.controller.service.UpdateService.Compani
 import com.rodolfonavalon.canadatransit.controller.util.extension.uuid
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueManager
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueManager
-import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import io.reactivex.Single
 
 class UpdateManager : AbstractQueueManager<UpdateTask>() {
@@ -43,6 +43,13 @@ class UpdateManager : AbstractQueueManager<UpdateTask>() {
             updateOperators()
             updateFeeds()
             updateFeedVersions()
+            // TODO(Zip instead of flat map, to run all of them in parallel)
+//            updateOperators().zip
+//            return updateOperators().flatMap { operators ->
+//                updateFeeds().map { feeds -> Pair(operators, feeds) }
+//            }.flatMap { pair ->
+//                updateFeedVersions().map { Triple(pair.first, pair.second, it) }
+//            }
         }
 
         /**

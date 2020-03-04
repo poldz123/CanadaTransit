@@ -3,22 +3,22 @@ package com.rodolfonavalon.canadatransit.manager
 import com.rodolfonavalon.canadatransit.BaseMockServerTest
 import com.rodolfonavalon.canadatransit.JvmCanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
+import com.rodolfonavalon.canadatransit.controller.database.dao.transit.OperatorDao
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbQuery
-import com.rodolfonavalon.canadatransit.controller.database.dao.transit.OperatorDao
+import kotlin.test.assertTrue
+import kotlin.test.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import timber.log.Timber
-import kotlin.test.assertTrue
-import kotlin.test.fail
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE,
         application = JvmCanadaTransitApplication::class)
-class UpdateManagerTest: BaseMockServerTest() {
+class UpdateManagerTest : BaseMockServerTest() {
 
     private lateinit var operatorDao: OperatorDao
 

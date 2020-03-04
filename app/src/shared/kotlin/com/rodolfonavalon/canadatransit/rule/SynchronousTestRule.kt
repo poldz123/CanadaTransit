@@ -12,9 +12,9 @@ import org.junit.runners.model.Statement
  * This Rule is to make all of the asynchronous tasks use only a single thread. The networking
  * would be mostly benefit on this rule since this will work on both Retrofit and ReactiveX.
  */
-class SynchronousTestRule: TestRule {
+class SynchronousTestRule : TestRule {
     override fun apply(base: Statement, description: Description): Statement {
-        return object: Statement() {
+        return object : Statement() {
             override fun evaluate() {
                 enableSynchronousTasks()
                 try {
@@ -56,6 +56,4 @@ class SynchronousTestRule: TestRule {
         RxJavaPlugins.reset()
         RxAndroidPlugins.reset()
     }
-
-
 }

@@ -4,12 +4,13 @@ import android.app.Activity
 import android.os.Bundle
 import com.rodolfonavalon.canadatransit.BaseMockServerTest
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
-import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.util.TestResourceModel
 import com.rodolfonavalon.canadatransit.util.TestResourceModel.FeedModel.assertFeeds
 import com.rodolfonavalon.canadatransit.util.TestResourceModel.FeedVersionModel.assertFeedVersion
+import kotlin.test.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito.given
@@ -17,7 +18,6 @@ import org.mockito.Mockito.mock
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import kotlin.test.*
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
@@ -215,4 +215,3 @@ class TransitLandApiTest : BaseMockServerTest() {
         }
     }
 }
-

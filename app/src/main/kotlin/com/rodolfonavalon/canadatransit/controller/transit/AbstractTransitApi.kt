@@ -3,10 +3,10 @@ package com.rodolfonavalon.canadatransit.controller.transit
 import android.app.Activity
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
-import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager
 import com.rodolfonavalon.canadatransit.controller.database.converter.moshi.adapter.DateTimeAdapter
 import com.rodolfonavalon.canadatransit.controller.database.converter.moshi.adapter.FeedCurrentFeedVersionAdapter
 import com.rodolfonavalon.canadatransit.controller.database.converter.moshi.adapter.FeedForeignKeyAdapter
+import com.rodolfonavalon.canadatransit.controller.manager.LifecycleManager
 import com.rodolfonavalon.canadatransit.model.transit.response.MetaResponse
 import com.squareup.moshi.Moshi
 import io.reactivex.Observable
@@ -67,7 +67,9 @@ abstract class AbstractTransitApi<API : Any>(apiUrl: String, val apiClass: Class
      *  @param OBSERVER the type of the object to be retrieve
      *  @param observable the lambda that execute the observable, Parameter: [0] -> Offset
      */
-    protected fun <MODEL: Any, OBSERVER : MetaResponse<MODEL>> retrievePaginatedObject(observable: (Int) -> Observable<OBSERVER>): Single<List<MODEL>> {
+    protected fun <MODEL : Any, OBSERVER : MetaResponse<MODEL>> retrievePaginatedObject(
+        observable: (Int) -> Observable<OBSERVER>
+    ): Single<List<MODEL>> {
         return Single.create { observer ->
             val result = mutableListOf<MODEL>()
             // Recursion makes everything easier to do the paginated observable objects

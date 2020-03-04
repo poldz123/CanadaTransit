@@ -4,8 +4,8 @@ import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbInsert
 import com.rodolfonavalon.canadatransit.controller.util.extension.dbQuery
-import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
+import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 

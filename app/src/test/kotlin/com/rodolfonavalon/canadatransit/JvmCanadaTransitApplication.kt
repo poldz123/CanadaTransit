@@ -3,7 +3,7 @@ package com.rodolfonavalon.canadatransit
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.util.DebugUtil
 
-class JvmCanadaTransitApplication: CanadaTransitApplication() {
+class JvmCanadaTransitApplication : CanadaTransitApplication() {
 
     override fun onCreate() {
         // The database should be allowed to run in the main thread. Make sure that this is

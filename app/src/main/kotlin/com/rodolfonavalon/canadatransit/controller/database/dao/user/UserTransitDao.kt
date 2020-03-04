@@ -3,15 +3,15 @@ package com.rodolfonavalon.canadatransit.controller.database.dao.user
 import androidx.room.*
 import com.rodolfonavalon.canadatransit.controller.database.converter.room.BaseConverter
 import com.rodolfonavalon.canadatransit.controller.database.dao.BaseDao
-import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.user.UserTransit
 import io.reactivex.Maybe
 import org.joda.time.DateTime
 
 @Dao
-interface UserTransitDao: BaseDao<UserTransit> {
+interface UserTransitDao : BaseDao<UserTransit> {
 
     @Query("SELECT * FROM UserTransit WHERE operatorOneStopId = :operatorOneStopId")
     fun find(operatorOneStopId: String): Maybe<UserTransit>

@@ -1,15 +1,12 @@
 package com.rodolfonavalon.canadatransit.controller
 
 import android.app.Application
-import androidx.room.Room
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-
+import androidx.room.Room
 import com.rodolfonavalon.canadatransit.BuildConfig
 import com.rodolfonavalon.canadatransit.controller.database.AppDatabase
-
 import net.danlew.android.joda.JodaTimeAndroid
-
 import timber.log.Timber
 
 open class CanadaTransitApplication : Application() {

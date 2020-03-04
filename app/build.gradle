@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 apply from: '../plugins/jacoco-plugin.gradle'
+apply from: '../plugins/detekt-plugin.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -95,6 +96,20 @@ afterEvaluate {
     }
 }
 
+// Task used to do code formatting to the entire source code.
+task detektFormat(type: io.gitlab.arturbosch.detekt.Detekt) {
+    group = "Code Format"
+    description = "Runs a detekt with autocorrect code formatting."
+    input = files("$rootDir/app/src")
+    config = files("$rootDir/plugins/data/detekt-format-plugin-config.yml")
+    autoCorrect = true
+    ignoreFailures = true
+    reports {
+        xml.enabled = false
+        html.enabled = false
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -110,8 +125,6 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberLibraryVersion"
 
     // Google Library
-    implementation "com.google.android.material:material:$googleSupportLibraryVersion"
-    implementation "com.google.android.gms:play-services-maps:$googlePlayServiceLibraryVersion"
     // AndroidX Google Library
     implementation "androidx.room:room-runtime:$googleRoomLibraryVersion"
     implementation "androidx.room:room-rxjava2:$googleRoomLibraryVersion"

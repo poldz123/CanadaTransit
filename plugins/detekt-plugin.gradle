@@ -1,14 +1,28 @@
 apply plugin: 'io.gitlab.arturbosch.detekt'
 
 detekt {
-    version = "$detektVersion"
-    defaultProfile {
-        input = file("$project.projectDir/app/src/main/kotlin")
-        output = file("$project.projectDir/app/build/reports/staticAnalysisTests/detekt")
-        config = file("$project.projectDir/plugins/data/detekt-plugin-config.yml")
-        filters = ".*/resources/.*,.*/build/.*"
-//        dependencies {
-//            detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
-//        }
+    toolVersion = "$detektVersion"
+    input = files(
+            "$rootDir/app/src/main/kotlin"
+    )
+    config = files("$rootDir/plugins/data/detekt-plugin-config.yml")
+    filters = ".*/resources/.*,.*/build/.*"
+    parallel = true
+    // We should not auto correct on detekt by default. Only the detekt format
+    // should have the ability to format the code.
+    autoCorrect = false
+    reports {
+        xml {
+            enabled = true
+            destination = file("$rootDir/app/build/reports/detekt/detekt.xml")
+        }
+        html {
+            enabled = true
+            destination = file("$rootDir/app/build/reports/detekt/detekt.html")
+        }
     }
+}
+
+dependencies {
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion"
 }

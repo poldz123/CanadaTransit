@@ -5,7 +5,7 @@ import com.rodolfonavalon.canadatransit.model.transit.Meta
 import com.squareup.moshi.Json
 
 class FeedsResponse(
-        @field:Json(name = "feeds") override val response: List<Feed>,
-        @field:Json(name = "meta") override val meta: Meta
+    @field:Json(name = "feeds") override val response: List<Feed>,
+    @field:Json(name = "meta") override val meta: Meta
 
 ) : MetaResponse<Feed>()

@@ -1,10 +1,10 @@
 package com.rodolfonavalon.canadatransit.model.database.transit
 
+import androidx.annotation.NonNull
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import androidx.annotation.NonNull
 import com.rodolfonavalon.canadatransit.controller.database.converter.room.TransitLandConverter
 import com.squareup.moshi.Json
 import org.joda.time.DateTime

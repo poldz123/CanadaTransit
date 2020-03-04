@@ -1,9 +1,9 @@
 package com.rodolfonavalon.canadatransit.controller.transit
 
 import android.app.Activity
-import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
+import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.transit.response.FeedVersionsResponse
 import com.rodolfonavalon.canadatransit.model.transit.response.FeedsResponse
 import com.rodolfonavalon.canadatransit.model.transit.response.OperatorsResponse
@@ -54,7 +54,7 @@ interface TransitLandApi {
          *  @param error the callback method when something went wrong during retrieval of the operators
          */
         fun retrieveOperators(success: (List<Operator>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
-            // TODO: return observable instead??
+            // TODO(return observable instead??)
             return retrievePaginatedObject(retrofitInstance::operators)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -70,7 +70,12 @@ interface TransitLandApi {
          *  @param success the callback method whenever the operator feeds has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feeds
          */
-        fun retrieveFeeds(operator: Operator, success: (List<Feed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+        fun retrieveFeeds(
+            operator: Operator,
+            success: (List<Feed>) -> Unit,
+            error: (Throwable) -> Unit,
+            activity: Activity? = null
+        ): Disposable {
             return retrieveFeeds(mutableListOf(operator), success, error, activity)
         }
 
@@ -82,7 +87,12 @@ interface TransitLandApi {
          *  @param success the callback method whenever the operator feeds has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feeds
          */
-        fun retrieveFeeds(operators: List<Operator>, success: (List<Feed>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+        fun retrieveFeeds(
+            operators: List<Operator>,
+            success: (List<Feed>) -> Unit,
+            error: (Throwable) -> Unit,
+            activity: Activity? = null
+        ): Disposable {
             val feedOneStopIds = operators.asSequence().map { it.representedInFeedOneStopIds.joinToString(",") }.joinToString(",")
             return retrievePaginatedObject { retrofitInstance.feed(feedOneStopIds, it) }
                     .subscribeOn(Schedulers.io())
@@ -99,7 +109,12 @@ interface TransitLandApi {
          *  @param success the callback method whenever the operator feed version has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feed version
          */
-        fun retrieveFeedVersion(feed: Feed, success: (List<FeedVersion>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+        fun retrieveFeedVersion(
+            feed: Feed,
+            success: (List<FeedVersion>) -> Unit,
+            error: (Throwable) -> Unit,
+            activity: Activity? = null
+        ): Disposable {
             return retrieveFeedVersion(mutableListOf(feed), success, error, activity)
         }
 
@@ -111,7 +126,12 @@ interface TransitLandApi {
          *  @param success the callback method whenever the operator feed version has successfully retrieved
          *  @param error the callback method when something went wrong during retrieval of the operator feed version
          */
-        fun retrieveFeedVersion(feeds: List<Feed>, success: (List<FeedVersion>) -> Unit, error: (Throwable) -> Unit, activity: Activity? = null): Disposable {
+        fun retrieveFeedVersion(
+            feeds: List<Feed>,
+            success: (List<FeedVersion>) -> Unit,
+            error: (Throwable) -> Unit,
+            activity: Activity? = null
+        ): Disposable {
             val feedVersionIds = feeds.asSequence().map { it.activeFeedVersion ?: it.currentFeedVersion }.joinToString(",")
             return retrievePaginatedObject { retrofitInstance.feedVersion(feedVersionIds, it) }
                     .subscribeOn(Schedulers.io())

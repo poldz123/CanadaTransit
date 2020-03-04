@@ -7,7 +7,7 @@ import io.reactivex.SingleObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.ReplaySubject
 
-abstract class AbstractObservableTask<T: Any> : Single<T>(), UpdateTask {
+abstract class AbstractObservableTask<T : Any> : Single<T>(), UpdateTask {
     val observable: ReplaySubject<T> = ReplaySubject.create(1)
     val disposables: CompositeDisposable = CompositeDisposable()
     lateinit var trackingId: String
