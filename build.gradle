@@ -26,9 +26,14 @@ buildscript {
     // Google Library
     ext.googlePlayServiceLibraryVersion = "16.0.0"
     // AndroidX Google Library
+    ext.googleMaterialLibraryVersion = "1.0.0"
     ext.googleRoomLibraryVersion = "2.2.4"
     ext.googleSupportLibraryVersion = "1.1.0"
     ext.googleContraintLayoutLibraryVersion = "1.1.3"
+    ext.googleLifecycleExtension = "2.2.0"
+    ext.googleLifecycleSavedStateExtension = "1.0.0-rc03"
+    ext.googleActivityKtxVersion = "1.1.0"
+    ext.googleFragmentKtxVersion = "1.2.2"
 
     // Test Library
     ext.junitLibraryVersion = "4.12"

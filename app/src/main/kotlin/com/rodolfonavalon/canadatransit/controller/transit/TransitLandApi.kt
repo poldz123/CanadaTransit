@@ -15,6 +15,7 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 
+// TODO (Increase the timeout of each of the API call)
 interface TransitLandApi {
 
     @GET("operators?exclude_geometry=true&without_feed=false&country=${TransitLandApi.API_COUNTRY}")

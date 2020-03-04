@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Generic dimensions -->
+
+    <dimen name="spacing_extra_small">3dp</dimen>
+    <dimen name="spacing_small">5dp</dimen>
+    <dimen name="spacing_small_medium">8dp</dimen>
+    <dimen name="spacing_medium">10dp</dimen>
+    <dimen name="spacing_medium_large">13dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_extra_large">22dp</dimen>
+
+    <dimen name="text_small">12sp</dimen>
+    <dimen name="text_medium">15sp</dimen>
+    <dimen name="text_large">20sp</dimen>
+    <dimen name="text_extra_large">25sp</dimen>
+
+    <dimen name="elevation_item">2dp</dimen>
+    <dimen name="elevation_menu">4dp</dimen>
+    <dimen name="elevation_toolbar">4dp</dimen>
+
+    <dimen name="page_title">20sp</dimen>
+    <dimen name="list_title">16sp</dimen>
+    <dimen name="list_description">14sp</dimen>
+    <dimen name="menu_title">14sp</dimen>
+    <dimen name="radius_card_view">3dp</dimen>
+</resources>

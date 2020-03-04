@@ -41,6 +41,10 @@ android {
         }
     }
 
+    viewBinding {
+        enabled = true
+    }
+
     sourceSets {
         String mainKotlinDir = "src/main/kotlin"
         String sharedTestKotlinDir = "src/shared/kotlin"
@@ -108,6 +112,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        // TODO: Removed when activity and fragment ktx rc versions is not needed anymore
+        // https://stackoverflow.com/questions/48988778/cannot-inline-bytecode-built-with-jvm-target-1-8-into-bytecode-that-is-being-bui
+        jvmTarget = "1.8"
+    }
+
 }
 
 // Makes sure that kotlin test will not be used in production code
@@ -148,11 +159,18 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberLibraryVersion"
 
     // Google Library
+    implementation "com.google.android.material:material:$googleMaterialLibraryVersion"
+
     // AndroidX Google Library
     implementation "androidx.room:room-runtime:$googleRoomLibraryVersion"
     implementation "androidx.room:room-rxjava2:$googleRoomLibraryVersion"
     implementation "androidx.appcompat:appcompat:$googleSupportLibraryVersion"
     implementation "androidx.constraintlayout:constraintlayout:$googleContraintLayoutLibraryVersion"
+    implementation "androidx.activity:activity-ktx:$googleActivityKtxVersion"
+    implementation "androidx.fragment:fragment-ktx:$googleFragmentKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$googleLifecycleExtension"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$googleLifecycleExtension"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$googleLifecycleExtension"
     kapt "androidx.room:room-compiler:$googleRoomLibraryVersion"
 
     // Compile time plugin
