@@ -7,7 +7,7 @@ import com.rodolfonavalon.canadatransit.databinding.ItemOperatorBinding
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.viewmodel.MainViewModel
 
-class OperatorViewHolder(val binding : ItemOperatorBinding) : RecyclerView.ViewHolder(binding.root)
+class OperatorViewHolder(val binding: ItemOperatorBinding) : RecyclerView.ViewHolder(binding.root)
 
 class OperatorAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<OperatorViewHolder>() {
     val operators = mutableListOf<Operator>()
