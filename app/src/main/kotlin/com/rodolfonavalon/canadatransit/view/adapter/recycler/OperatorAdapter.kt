@@ -3,6 +3,7 @@ package com.rodolfonavalon.canadatransit.view.adapter.recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.rodolfonavalon.canadatransit.databinding.ItemOperatorBinding
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.viewmodel.MainViewModel
@@ -29,8 +30,14 @@ class OperatorAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: OperatorViewHolder, position: Int) {
+        val context = holder.binding.root.context
         val operator = operators[position]
         holder.binding.textviewOperatorTitle.text = operator.name
+        holder.binding.textviewOperatorWebsite.text = operator.website
+        val operatorIconPath = operator.website?.split("/")?.subList(2, 3)?.joinToString("/")
+        Glide.with(context)
+                .load("https://icons.duckduckgo.com/ip3/$operatorIconPath.ico")
+                .into(holder.binding.imageviewOperatorIcon)
     }
 
     override fun getItemCount(): Int {

@@ -1,6 +1,7 @@
 package com.rodolfonavalon.canadatransit.controller.activity
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -49,8 +50,10 @@ class MainActivity : AppCompatActivity() {
         // TODO Lets update the manager when application is started
         UpdateManager.updateOperators().subscribeBy(onSuccess = { operators ->
             Timber.d("Number of operators: ${operators.size}")
+            Toast.makeText(this,"Successfully updated operators", Toast.LENGTH_LONG).show()
         }, onError = {
             Timber.e(it, "Error fetching operators")
+            Toast.makeText(this,"Failed to update operators", Toast.LENGTH_LONG).show()
         })
     }
 }

@@ -22,6 +22,7 @@ buildscript {
     ext.rxJavaLibraryVersion = "2.2.1"
     ext.moshiLibraryVersion = "1.7.0"
     ext.jodaTimeAndroidLibraryVersion = "2.9.9"
+    ext.glideLibraryVersion = "4.10.0"
 
     // Google Library
     ext.googlePlayServiceLibraryVersion = "16.0.0"

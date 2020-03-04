@@ -157,6 +157,8 @@ dependencies {
     implementation "com.squareup.moshi:moshi:$moshiLibraryVersion"
     implementation "net.danlew:android.joda:$jodaTimeAndroidLibraryVersion"
     implementation "com.jakewharton.timber:timber:$timberLibraryVersion"
+    implementation "com.github.bumptech.glide:glide:$glideLibraryVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideLibraryVersion"
 
     // Google Library
     implementation "com.google.android.material:material:$googleMaterialLibraryVersion"
