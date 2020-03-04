@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // TODO Lets update the manager when application is started
-        UpdateManager.update().subscribeBy(onSuccess = { result ->
-            Timber.d("Number of results: $result")
-        })
+//        UpdateManager.update().subscribeBy(onSuccess = { result ->
+//            Timber.d("Number of results: $result")
+//        })
     }
 }
