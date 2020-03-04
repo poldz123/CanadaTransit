@@ -16,7 +16,7 @@ import com.rodolfonavalon.canadatransit.model.database.user.UserTransit
             Feed::class,
             FeedVersion::class,
             UserTransit::class
-        ], version = 8) // TODO(change back to 1)
+        ], version = 1) // TODO(change back to 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun operatorDao(): OperatorDao
     abstract fun feedDao(): FeedDao
