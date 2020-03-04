@@ -155,25 +155,25 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$googleContraintLayoutLibraryVersion"
     kapt "androidx.room:room-compiler:$googleRoomLibraryVersion"
 
+    // Compile time plugin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
     // Test Library
     androidTestImplementation "com.google.code.findbugs:jsr305:$jsr305LibraryVersion"
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoLibraryVersion", {
+        exclude group: "com.android.support", module: "support-annotations"
+    })
     testImplementation "junit:junit:$junitLibraryVersion"
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
     testImplementation "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
     testImplementation "org.mockito:mockito-core:$mockitoLibraryVersion"
     testImplementation "org.robolectric:robolectric:$robolectricLibraryVersion"
-    // AndroidX Test Library
-    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoLibraryVersion", {
-        exclude group: "com.android.support", module: "support-annotations"
-    })
     testImplementation "androidx.test:runner:$googleTestSupport"
     testImplementation "androidx.test:rules:$googleTestSupport"
+    testImplementation "com.google.truth:truth:$googleTrustLibraryVersion"
 
     // Shared Test Library
     testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
-
-    // Compile time plugin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }

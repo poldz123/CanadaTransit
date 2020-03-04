@@ -33,13 +33,14 @@ buildscript {
     // Test Library
     ext.junitLibraryVersion = "4.12"
     ext.jsr305LibraryVersion = "3.0.2"
-    ext.robolectricLibraryVersion = "4.0-alpha-3"
+    ext.robolectricLibraryVersion = "4.3.1"
     ext.mockitoLibraryVersion = "2.12.0"
-    ext.jacocoVersion = "0.8.2"
+    ext.jacocoVersion = "0.8.5"
     ext.detektVersion = "1.1.1"
     // AndroidX Test Library
     ext.espressoLibraryVersion = "3.1.0-alpha4"
     ext.googleTestSupport = "1.1.0-alpha4"
+    ext.googleTrustLibraryVersion = "0.40"
 
     // Tools Library
     ext.kotlinVersion = "1.3.61"
