@@ -3,24 +3,20 @@ package com.rodolfonavalon.canadatransit.controller.activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rodolfonavalon.canadatransit.R
-import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.databinding.ActivityMainBinding
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.view.CustomSearchActionMode
 import com.rodolfonavalon.canadatransit.view.adapter.recycler.OperatorAdapter
 import com.rodolfonavalon.canadatransit.view.adapter.recycler.decorator.MarginItemDecorator
 import com.rodolfonavalon.canadatransit.viewmodel.MainViewModel
-import io.reactivex.rxkotlin.subscribeBy
 import java.util.*
 import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -79,7 +75,9 @@ class MainActivity : AppCompatActivity() {
         // Setup action mode
         actionMode = CustomSearchActionMode()
         actionMode.onDestroyedListener = {
-
+            mainViewModel.operators.value?.also { operators ->
+                recyclerAdapter.addAll(operators)
+            }
         }
     }
 

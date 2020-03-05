@@ -7,14 +7,13 @@ import com.bumptech.glide.Glide
 import com.rodolfonavalon.canadatransit.R
 import com.rodolfonavalon.canadatransit.databinding.ItemOperatorBinding
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.model.database.user.UserTransit
 import com.rodolfonavalon.canadatransit.viewmodel.MainViewModel
 
 class OperatorViewHolder(val binding: ItemOperatorBinding) : RecyclerView.ViewHolder(binding.root)
 
 class OperatorAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<OperatorViewHolder>() {
     private val operators = mutableListOf<Operator>()
-    private val userTransits = mutableListOf<UserTransit>()
+    private val selectedOperators = mutableSetOf<String>()
 
     fun addAll(operators: List<Operator>) {
         this.operators.clear()
@@ -35,6 +34,8 @@ class OperatorAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapt
     override fun onBindViewHolder(holder: OperatorViewHolder, position: Int) {
         val context = holder.binding.root.context
         val operator = operators[position]
+        val id = operator.operatorOneStopId
+        holder.binding.checkboxOperatorSelect.isChecked = selectedOperators.contains(id)
         holder.binding.textviewOperatorTitle.text = operator.name
         holder.binding.textviewOperatorWebsite.text = operator.website
         val operatorIconPath = operator.website?.split("/")?.subList(2, 3)?.joinToString("/")
@@ -43,6 +44,11 @@ class OperatorAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapt
                 .placeholder(R.drawable.ic_directions_bus_black_24dp)
                 .into(holder.binding.imageviewOperatorIcon)
         holder.binding.cardviewOperator.setOnClickListener {
+            if (selectedOperators.contains(id)) {
+                selectedOperators.remove(id)
+            } else {
+                selectedOperators.add(id)
+            }
             holder.binding.checkboxOperatorSelect.toggle()
         }
     }
