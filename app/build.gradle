@@ -17,15 +17,15 @@ def getGitCommitHash = { ->
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.applicationCompileSdkVersion
     buildToolsVersion rootProject.ext.buildToolVersion
 
     defaultConfig {
         applicationId rootProject.ext.applicationId
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+        minSdkVersion rootProject.ext.applicationMinSdkVersion
+        targetSdkVersion rootProject.ext.applicationTargetSdkVersion
+        versionCode rootProject.ext.applicationVersionCode
+        versionName rootProject.ext.applicationVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         defaultConfig {

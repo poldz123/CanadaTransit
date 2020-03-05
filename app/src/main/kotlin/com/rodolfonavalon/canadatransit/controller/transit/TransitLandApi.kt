@@ -18,7 +18,7 @@ import retrofit2.http.*
 // TODO (Increase the timeout of each of the API call)
 interface TransitLandApi {
 
-    @GET("operators?exclude_geometry=true&without_feed=false&country=${TransitLandApi.API_COUNTRY}")
+    @GET("operators?exclude_geometry=true&without_feed=false&country=${API_COUNTRY}")
     fun operators(@Query("offset") offset: Int): Observable<OperatorsResponse>
 
     @GET("feeds?exclude_geometry=true")
@@ -35,7 +35,7 @@ interface TransitLandApi {
             /**
              * API endpoint for the bus transits (http://transit.land)
              */
-            apiUrl = "http://transit.land/api/v1/",
+            apiUrl = "https://transit.land/api/v1/",
 
             /**
              * API class that holds the endpoint interface for the target transit

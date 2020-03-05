@@ -9,14 +9,18 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rodolfonavalon.canadatransit.R
+import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
+import com.rodolfonavalon.canadatransit.controller.util.extension.toast
 import com.rodolfonavalon.canadatransit.databinding.ActivityMainBinding
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.view.CustomSearchActionMode
 import com.rodolfonavalon.canadatransit.view.adapter.recycler.OperatorAdapter
 import com.rodolfonavalon.canadatransit.view.adapter.recycler.decorator.MarginItemDecorator
 import com.rodolfonavalon.canadatransit.viewmodel.MainViewModel
+import io.reactivex.rxkotlin.subscribeBy
 import java.util.*
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setup()
+        update()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -48,8 +53,10 @@ class MainActivity : AppCompatActivity() {
                 actionMode.start(binding.root) {
                     actionMode.onQueryListener = { queryText ->
                         mainViewModel.operators.value?.also { operators ->
-                            val filteredOperators = operators.filter {
-                                it.name.toLowerCase(Locale.getDefault()).contains(queryText.trim().toLowerCase(Locale.getDefault()))
+                            val filteredOperators = operators.filter { operator ->
+                                val name = operator.name.toLowerCase(Locale.getDefault())
+                                val shortName = operator.shortName?.toLowerCase(Locale.getDefault()) ?: ""
+                                name.contains(queryText.trim().toLowerCase(Locale.getDefault())) || shortName.contains(queryText.trim().toLowerCase(Locale.getDefault()))
                             }
                             recyclerAdapter.addAll(filteredOperators)
                         }
@@ -105,14 +112,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun update() {
-//        // TODO Lets update the manager when application is started
-//        UpdateManager.updateOperators().subscribeBy(onSuccess = { operators ->
-//            Timber.d("Number of operators: ${operators.size}")
-//            Toast.makeText(this, "Successfully updated operators", Toast.LENGTH_LONG).show()
-//        }, onError = {
-//            Timber.e(it, "Error fetching operators")
-//            Toast.makeText(this, "Failed to update operators", Toast.LENGTH_LONG).show()
-//        })
-//    }
+    private fun update() {
+        // TODO Lets update the manager when application is started
+        UpdateManager.updateOperators().subscribeBy(onSuccess = { operators ->
+            Timber.d("Number of operators: ${operators.size}")
+            toast("Successfully updated operators")
+        }, onError = {
+            Timber.e(it, "Error fetching operators")
+            toast("Failed to update operators")
+        })
+    }
 }
