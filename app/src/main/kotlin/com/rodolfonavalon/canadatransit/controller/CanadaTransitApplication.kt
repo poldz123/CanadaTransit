@@ -46,7 +46,7 @@ open class CanadaTransitApplication : Application() {
 
         // This enables support the database to be queried in the main thread instead
         // in the background thread which is by default.
-        private var isEnableJVMTest = false
+        var isEnableJVMTest = false
 
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         fun enableDatabaseOnMainThread() {
