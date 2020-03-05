@@ -50,6 +50,7 @@ class OperatorAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapt
                 selectedOperators.add(id)
             }
             holder.binding.checkboxOperatorSelect.toggle()
+            viewModel.didNumSelectedOperators(selectedOperators.count())
         }
     }
 

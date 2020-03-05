@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerOperator.adapter = recyclerAdapter
         binding.recyclerOperator.addItemDecoration(MarginItemDecorator(resources.getDimensionPixelSize(R.dimen.spacing_small_medium)))
         mainViewModel.operators.observe(this, Observer<List<Operator>> { operators ->
-            onOperatorChanged(operators)
+            onOperatorsChanged(operators)
         })
         // Setup action mode
         actionMode = CustomSearchActionMode()
@@ -79,14 +79,30 @@ class MainActivity : AppCompatActivity() {
                 recyclerAdapter.addAll(operators)
             }
         }
+        // Setup done selecting operators
+        binding.fabOperatorDone.hide()
+        binding.fabOperatorDone.setOnClickListener {
+        }
+        // Setup viewmodel listeners
+        mainViewModel.getListenerNumSelectedOperators().observe(this, Observer { numSelected ->
+            onNumSelectedOperatorsChanged(numSelected)
+        })
     }
 
-    private fun onOperatorChanged(operators: List<Operator>) {
+    private fun onOperatorsChanged(operators: List<Operator>) {
         if (actionMode.isShowing) {
             actionMode.update()
             return
         }
         recyclerAdapter.addAll(operators)
+    }
+
+    private fun onNumSelectedOperatorsChanged(numSelected: Int) {
+        if (numSelected == 0) {
+            binding.fabOperatorDone.hide()
+        } else {
+            binding.fabOperatorDone.show()
+        }
     }
 
 //    private fun update() {
