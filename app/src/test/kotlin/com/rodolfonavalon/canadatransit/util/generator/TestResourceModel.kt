@@ -147,6 +147,23 @@ object TestResourceModel {
 
     object FeedVersionModel {
 
+        fun createRandomModel(downloadUrl: String = "https://transitland-gtfs.s3.amazonaws.com/datastore-uploads/feed_version/d157d50441cd64c50ec01a300da521a477aa03c4.zip"): FeedVersion {
+            return FeedVersion(
+                    "d157d50441cd64c50ec01a300da521a477aa03c4",
+                    "f-f24-octranspo",
+                    DateTimeAdapter().fromJson("2017-10-27")!!,
+                    DateTimeAdapter().fromJson("2017-12-23")!!,
+                    "da348c4b21073a8d1cf52168d03e3e48",
+                    DateTimeAdapter().fromJson("2017-10-27T21:30:17.347Z")!!,
+                    DateTimeAdapter().fromJson("2017-10-27T21:30:17.354Z")!!,
+                    "most_recent_succeeded",
+                    "http://www.octranspo1.com/files/google_transit.zip",
+                    "https://transitland-gtfs.s3.amazonaws.com/datastore-uploads/feed_version/d157d50441cd64c50ec01a300da521a477aa03c4.zip",
+                    4,
+                    false
+            )
+        }
+
         fun createOCTranspoModel(): FeedVersion {
             return FeedVersion(
                     "d157d50441cd64c50ec01a300da521a477aa03c4",

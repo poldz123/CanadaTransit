@@ -17,6 +17,8 @@ import org.junit.*
  */
 open class BaseMockServerTest : BaseTest() {
 
+    val serverPath = "/api/v1/"
+
     companion object {
         lateinit var server: TransitMockWebServer
 
