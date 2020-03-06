@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.manager
+package com.rodolfonavalon.canadatransit.unit.manager
 
 import com.rodolfonavalon.canadatransit.BaseMockServerTest
 import com.rodolfonavalon.canadatransit.JvmCanadaTransitApplication

@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.util
+package com.rodolfonavalon.canadatransit.unit.util
 
 import com.rodolfonavalon.canadatransit.controller.database.converter.moshi.adapter.DateTimeAdapter
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed

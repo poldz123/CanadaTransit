@@ -1,7 +1,7 @@
 package com.rodolfonavalon.canadatransit
 
 import com.rodolfonavalon.canadatransit.rule.SynchronousTestRule
-import com.rodolfonavalon.canadatransit.util.CustomMockWebServer
+import com.rodolfonavalon.canadatransit.unit.util.CustomMockWebServer
 import org.junit.*
 
 /**

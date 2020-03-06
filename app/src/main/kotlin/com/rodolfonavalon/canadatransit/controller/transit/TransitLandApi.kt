@@ -18,7 +18,7 @@ import retrofit2.http.*
 // TODO (Increase the timeout of each of the API call)
 interface TransitLandApi {
 
-    @GET("operators?exclude_geometry=true&without_feed=false&country=${API_COUNTRY}")
+    @GET("operators?exclude_geometry=true&without_feed=false&country=$API_COUNTRY")
     fun operators(@Query("offset") offset: Int): Observable<OperatorsResponse>
 
     @GET("feeds?exclude_geometry=true")

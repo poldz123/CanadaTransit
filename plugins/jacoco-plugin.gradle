@@ -23,6 +23,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     }
     // TODO(Re-check all of this)
     def fileFilter = [
+            '**/*Ext*.*', // TODO Remove this? I dont know... :(
             '**/R.class',
             '**/R$*.class',
             '**/BuildConfig.*',

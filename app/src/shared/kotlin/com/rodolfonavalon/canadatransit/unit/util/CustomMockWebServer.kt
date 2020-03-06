@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.util
+package com.rodolfonavalon.canadatransit.unit.util
 
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
