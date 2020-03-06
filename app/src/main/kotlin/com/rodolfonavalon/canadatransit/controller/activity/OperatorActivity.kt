@@ -32,7 +32,8 @@ class OperatorActivity : AppCompatActivity() {
     private lateinit var recyclerAdapter: OperatorAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
 
-    private lateinit var actionMode: CustomSearchActionMode
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    lateinit var actionMode: CustomSearchActionMode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +71,8 @@ class OperatorActivity : AppCompatActivity() {
     }
 
     private fun setup() {
-        title = "Select Transits"
+        title = "Transits"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         // Setup recycler view list
         layoutManager = LinearLayoutManager(this)
         recyclerAdapter = OperatorAdapter(operatorViewModel)

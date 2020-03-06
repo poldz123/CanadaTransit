@@ -104,7 +104,7 @@ class CustomSearchActionMode : ActionMode.Callback {
         // Change back the original status bar color
         context?.also { context ->
             context.activity().window?.statusBarColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
-            context.closeKeyboard()
+            closeKeyboard()
             autoCompleteDisposable?.dispose()
             autoCompleteDisposable = null
             onQueryListener = null
