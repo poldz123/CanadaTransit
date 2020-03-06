@@ -36,14 +36,7 @@ class UpdateOperatorTask : AbstractUpdateTask<List<Operator>>() {
         for (operator in operators) {
             userTransits.add(UserTransit(operator.operatorOneStopId, DateTime.now()))
         }
-        // TODO(remove)
-        userDao.dbInsert {
-            insert(userTransits)
-        }.subscribe {
-            Timber.d("OPERATOR: Successfully saved ${it.count()} operators")
-            this.onSuccess(operators)
-        }
-//        Timber.d("Successfully saved ${operators.count()} operators")
-//        this.onSuccess(operators)
+        Timber.d("Successfully saved ${operators.count()} operators")
+        this.onSuccess(operators)
     }
 }

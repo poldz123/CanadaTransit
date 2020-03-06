@@ -20,7 +20,15 @@ interface BaseDao<MODEL> {
      * @param models the arguments of models to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg models: MODEL): List<Long>
+    fun insert(vararg models: MODEL): Maybe<List<Long>>
+
+    /**
+     * Insert an object in the database.
+     *
+     * @param model the arguments of model to be inserted.
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(model: MODEL): Maybe<Long>
 
     /**
      * Update an object from the database.
@@ -28,7 +36,7 @@ interface BaseDao<MODEL> {
      * @param model the model to be updated
      */
     @Update
-    fun update(model: MODEL): Int
+    fun update(model: MODEL): Maybe<Int>
 
     /**
      * Update the objects from the database.
@@ -36,7 +44,7 @@ interface BaseDao<MODEL> {
      * @param models the models to be updated
      */
     @Update
-    fun update(models: List<MODEL>): Int
+    fun update(models: List<MODEL>): Maybe<Int>
 
     /**
      * Delete an object from the database
@@ -44,5 +52,5 @@ interface BaseDao<MODEL> {
      * @param model the model to be deleted
      */
     @Delete
-    fun delete(model: MODEL): Int
+    fun delete(model: MODEL): Maybe<Int>
 }
