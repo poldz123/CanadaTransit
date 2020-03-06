@@ -15,10 +15,7 @@ import org.junit.*
  * IMPORTANT: That during [setup] the URL endpoint from the mock server
  * should be used by the API class as the base URL.
  */
-open class BaseMockServerTest {
-
-    @get:Rule
-    val synchronousTasks = SynchronousTestRule()
+open class BaseMockServerTest : BaseTest() {
 
     companion object {
         lateinit var server: TransitMockWebServer
@@ -38,14 +35,16 @@ open class BaseMockServerTest {
     }
 
     @Before
-    open fun setup() {
+    override fun setup() {
+        super.setup()
         // Reset the server per test cases, this
         // to have a clean slate on it
         server.reset()
     }
 
     @After
-    open fun teardown() {
+    override fun teardown() {
+        super.teardown()
         // Check the server that all of the responses are consumed
         server.check()
     }
