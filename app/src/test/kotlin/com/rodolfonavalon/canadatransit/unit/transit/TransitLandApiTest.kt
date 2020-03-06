@@ -33,7 +33,7 @@ class TransitLandApiTest : BaseMockServerTest() {
         val controller = Robolectric.buildActivity(Activity::class.java).create().start()
         val activity = controller.get()
 
-        synchronousTasks.enableTestSchedulerTasks()
+        synchronousTask.enableTestSchedulerTasks()
 
         // Adds a delay to the response to properly test the activity lifecycle of the mock-server
         server.addResponseBody("/api/v1/operators", "{}")

@@ -9,7 +9,7 @@ import com.rodolfonavalon.canadatransit.R
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.activity.OperatorActivity
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.ui.BaseUITest
+import com.rodolfonavalon.canadatransit.util.BaseRobolectricTest
 import com.rodolfonavalon.canadatransit.util.generator.TestResourceModel
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,8 +21,7 @@ import org.robolectric.fakes.RoboMenuItem
 @Config(sdk = [ Build.VERSION_CODES.N ],
         manifest = Config.NONE,
         application = JvmCanadaTransitApplication::class)
-
-class OperatorActivityTest : BaseUITest() {
+class OperatorActivityTest : BaseRobolectricTest() {
 
     private val numOperators = 10
     private lateinit var operators: MutableList<Operator>
