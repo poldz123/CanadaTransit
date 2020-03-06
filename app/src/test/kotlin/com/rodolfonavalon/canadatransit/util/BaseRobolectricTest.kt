@@ -9,9 +9,9 @@ import org.robolectric.Shadows
 open class BaseRobolectricTest : BaseTest() {
 
     inline fun <reified T : Activity> launchActivity(
-            intent: Intent = Intent(CanadaTransitApplication.appContext, T::class.java),
-            vararg permissions: String,
-            crossinline callback: (T) -> Unit
+        intent: Intent = Intent(CanadaTransitApplication.appContext, T::class.java),
+        vararg permissions: String,
+        crossinline callback: (T) -> Unit
     ): ActivityScenario<T> {
         return ActivityScenario.launch<T>(intent).use { scenario ->
             scenario.onActivity { activity ->
@@ -25,8 +25,8 @@ open class BaseRobolectricTest : BaseTest() {
     }
 
     inline fun <reified T : Activity> launchActivity(
-            vararg permissions: String,
-            crossinline callback: (T) -> Unit
+        vararg permissions: String,
+        crossinline callback: (T) -> Unit
     ): ActivityScenario<T> {
         return ActivityScenario.launch(T::class.java).use { scenario ->
             scenario.onActivity { activity ->

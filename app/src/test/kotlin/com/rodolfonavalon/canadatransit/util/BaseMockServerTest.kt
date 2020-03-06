@@ -1,6 +1,6 @@
 package com.rodolfonavalon.canadatransit.util
 
-import com.rodolfonavalon.canadatransit.util.rule.SynchronousTestRule
+import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import org.junit.*
 
 /**
@@ -40,6 +40,8 @@ open class BaseMockServerTest : BaseTest() {
         // Reset the server per test cases, this
         // to have a clean slate on it
         server.reset()
+        // Initialize the server path the test are connecting into
+        TransitLandApi.initializeRetrofit(server.url("/api/v1/").toString())
     }
 
     @After

@@ -23,11 +23,6 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE)
 class TransitLandApiTest : BaseMockServerTest() {
 
-    override fun setup() {
-        super.setup()
-        TransitLandApi.initializeRetrofit(server.url("/api/v1/").toString())
-    }
-
     @Test
     fun testTransitLandApi_disposable() {
         val controller = Robolectric.buildActivity(Activity::class.java).create().start()

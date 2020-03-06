@@ -8,7 +8,6 @@ import com.rodolfonavalon.canadatransit.controller.database.dao.transit.FeedVers
 import com.rodolfonavalon.canadatransit.controller.database.dao.transit.OperatorDao
 import com.rodolfonavalon.canadatransit.controller.database.dao.user.UserTransitDao
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
-import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.user.UserTransit
 import com.rodolfonavalon.canadatransit.util.BaseMockServerTest
 import kotlin.test.fail
@@ -31,7 +30,6 @@ class UpdateManagerTest : BaseMockServerTest() {
 
     override fun setup() {
         super.setup()
-        TransitLandApi.initializeRetrofit(server.url("/api/v1/").toString())
         userTransitDao = CanadaTransitApplication.appDatabase.userTransitDao()
         operatorDao = CanadaTransitApplication.appDatabase.operatorDao()
         feedDao = CanadaTransitApplication.appDatabase.feedDao()
