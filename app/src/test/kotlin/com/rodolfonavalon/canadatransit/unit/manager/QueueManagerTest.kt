@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.unit.util
+package com.rodolfonavalon.canadatransit.unit.manager
 
 import com.rodolfonavalon.canadatransit.controller.util.queue.AbstractQueueManager
 import com.rodolfonavalon.canadatransit.controller.util.queue.QueueManagerListener

@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.unit.util
+package com.rodolfonavalon.canadatransit.unit.manager
 
 import android.app.Activity
 import android.os.Bundle
