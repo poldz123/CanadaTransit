@@ -23,7 +23,7 @@ object FileUtil {
         val suffix = if (temporary) TEMP_FILE_NAME_SUFFIX else ""
         val fileName = transferable.trackingId() + suffix
         // TODO Change the directory as internal
-        return File(createExternalDirectoryFile(transferable.transferDirectoryPath()), fileName)
+        return File(createInternalDirectoryFile(context, transferable.transferDirectoryPath()), fileName)
     }
 
     private fun createInternalDirectoryFile(context: Context, directory: String): File {
