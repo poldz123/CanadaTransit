@@ -29,7 +29,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         defaultConfig {
-
             kapt {
                 arguments {
                     // This is the location of the generated schemas for the Room database and
@@ -46,26 +45,14 @@ android {
     }
 
     sourceSets {
-        String mainKotlinDir = "src/main/kotlin"
-        String sharedTestKotlinDir = "src/shared/kotlin"
-        String sharedResourceKotlinDir = "src/shared/res"
-        String unitTestKotlinDir = "src/test/kotlin"
-        String androidTestKotlinDir = "src/androidTest/kotlin"
-
         main {
-            java.srcDir mainKotlinDir
+            java.srcDir "src/main/kotlin"
+            res.srcDir "src/main/res"
+            assets.srcDir "src/main/asset"
         }
-
         test {
-            java.srcDir unitTestKotlinDir
-            java.srcDir sharedTestKotlinDir
-            resources.srcDir sharedResourceKotlinDir
-        }
-
-        androidTest {
-            java.srcDir androidTestKotlinDir
-            java.srcDir sharedTestKotlinDir
-            resources.srcDir sharedResourceKotlinDir
+            java.srcDir "src/test/kotlin"
+            resources.srcDir "src/test/res"
         }
     }
 

@@ -2,14 +2,14 @@ package com.rodolfonavalon.canadatransit.unit.transit
 
 import android.app.Activity
 import android.os.Bundle
-import com.rodolfonavalon.canadatransit.BaseMockServerTest
+import com.rodolfonavalon.canadatransit.util.BaseMockServerTest
 import com.rodolfonavalon.canadatransit.controller.transit.TransitLandApi
 import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.unit.util.TestResourceModel
-import com.rodolfonavalon.canadatransit.unit.util.TestResourceModel.FeedModel.assertFeeds
-import com.rodolfonavalon.canadatransit.unit.util.TestResourceModel.FeedVersionModel.assertFeedVersion
+import com.rodolfonavalon.canadatransit.util.generator.TestResourceModel
+import com.rodolfonavalon.canadatransit.util.generator.TestResourceModel.FeedModel.assertFeeds
+import com.rodolfonavalon.canadatransit.util.generator.TestResourceModel.FeedVersionModel.assertFeedVersion
 import kotlin.test.*
 import org.junit.Test
 import org.junit.runner.RunWith

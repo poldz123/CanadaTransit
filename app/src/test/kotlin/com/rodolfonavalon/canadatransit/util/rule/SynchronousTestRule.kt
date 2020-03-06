@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.rule
+package com.rodolfonavalon.canadatransit.util.rule
 
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins

@@ -1,6 +1,6 @@
 package com.rodolfonavalon.canadatransit.unit.manager
 
-import com.rodolfonavalon.canadatransit.BaseMockServerTest
+import com.rodolfonavalon.canadatransit.util.BaseMockServerTest
 import com.rodolfonavalon.canadatransit.JvmCanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.controller.database.dao.transit.OperatorDao

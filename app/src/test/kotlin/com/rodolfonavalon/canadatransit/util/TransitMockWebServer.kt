@@ -1,4 +1,4 @@
-package com.rodolfonavalon.canadatransit.unit.util
+package com.rodolfonavalon.canadatransit.util
 
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
@@ -23,7 +23,7 @@ import okhttp3.mockwebserver.RecordedRequest
  * Usage of the server within the test suites should be configured to [start] in [@BeforeClass]
  * and should be [stop] within [@AfterClass] to properly prevent it for hanging.
  */
-class CustomMockWebServer {
+class TransitMockWebServer {
 
     companion object {
         /**

@@ -1,7 +1,6 @@
-package com.rodolfonavalon.canadatransit
+package com.rodolfonavalon.canadatransit.util
 
-import com.rodolfonavalon.canadatransit.rule.SynchronousTestRule
-import com.rodolfonavalon.canadatransit.unit.util.CustomMockWebServer
+import com.rodolfonavalon.canadatransit.util.rule.SynchronousTestRule
 import org.junit.*
 
 /**
@@ -22,12 +21,12 @@ open class BaseMockServerTest {
     val synchronousTasks = SynchronousTestRule()
 
     companion object {
-        lateinit var server: CustomMockWebServer
+        lateinit var server: TransitMockWebServer
 
         @BeforeClass
         @JvmStatic
         fun setupClass() {
-            server = CustomMockWebServer()
+            server = TransitMockWebServer()
             server.start()
         }
 
