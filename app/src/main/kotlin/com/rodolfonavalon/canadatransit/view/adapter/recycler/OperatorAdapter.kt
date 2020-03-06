@@ -7,11 +7,11 @@ import com.bumptech.glide.Glide
 import com.rodolfonavalon.canadatransit.R
 import com.rodolfonavalon.canadatransit.databinding.ItemOperatorBinding
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
-import com.rodolfonavalon.canadatransit.viewmodel.MainViewModel
+import com.rodolfonavalon.canadatransit.viewmodel.OperatorViewModel
 
 class OperatorViewHolder(val binding: ItemOperatorBinding) : RecyclerView.ViewHolder(binding.root)
 
-class OperatorAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<OperatorViewHolder>() {
+class OperatorAdapter(private val viewModel: OperatorViewModel) : RecyclerView.Adapter<OperatorViewHolder>() {
     private val operators = mutableListOf<Operator>()
     private val selectedOperators = mutableSetOf<String>()
 

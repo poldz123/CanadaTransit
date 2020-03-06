@@ -5,6 +5,7 @@ import com.rodolfonavalon.canadatransit.model.database.transit.Feed
 import com.rodolfonavalon.canadatransit.model.database.transit.FeedVersion
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.model.database.transit.Tags
+import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.test.fail
@@ -13,6 +14,22 @@ import net.danlew.android.joda.DateUtils
 object TestResourceModel {
 
     object OperatorModel {
+
+        fun createRandomModel(index: Int): Operator {
+            return Operator(
+                    UUID.randomUUID().toString(),
+                    "OC Transpo$index",
+                    "CA-ON$index",
+                    "America/Montreal",
+                    DateTimeAdapter().fromJson("2016-05-26T21:32:08.877Z")!!,
+                    "CA$index",
+                    "http://www.octranspo.com$index",
+                    "Ottawa$index",
+                    null,
+                    mutableListOf("f-f24-octranspo"),
+                    Tags(null, null, null)
+            )
+        }
 
         fun createOCTranspoModel(): Operator {
             return Operator(

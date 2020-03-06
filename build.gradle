@@ -45,7 +45,7 @@ buildscript {
     ext.detektVersion = "1.1.1"
     // AndroidX Test Library
     ext.espressoLibraryVersion = "3.1.0-alpha4"
-    ext.googleTestSupport = "1.1.0-alpha4"
+    ext.googleTestSupport = "1.1.0"
     ext.googleTrustLibraryVersion = "0.40"
 
     // Tools Library

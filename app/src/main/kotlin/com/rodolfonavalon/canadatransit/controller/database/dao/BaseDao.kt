@@ -1,6 +1,7 @@
 package com.rodolfonavalon.canadatransit.controller.database.dao
 
 import androidx.room.*
+import io.reactivex.Maybe
 
 @Dao
 interface BaseDao<MODEL> {
@@ -11,7 +12,7 @@ interface BaseDao<MODEL> {
      * @param models the list of models to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(models: List<MODEL>): List<Long>
+    fun insert(models: List<MODEL>): Maybe<List<Long>>
 
     /**
      * Insert an array of objects in the database.

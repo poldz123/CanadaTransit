@@ -191,7 +191,10 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$robolectricLibraryVersion"
     testImplementation "androidx.test:runner:$googleTestSupport"
     testImplementation "androidx.test:rules:$googleTestSupport"
+    testImplementation "android.arch.core:core-testing:$googleTestSupport"
+    testImplementation "androidx.test.ext:junit:$googleTestSupport"
     testImplementation "com.google.truth:truth:$googleTrustLibraryVersion"
+    testImplementation "androidx.room:room-testing:$googleRoomLibraryVersion"
 
     // Shared Test Library
     testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"

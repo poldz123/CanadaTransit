@@ -20,11 +20,11 @@ interface UserTransitDao : BaseDao<UserTransit> {
     fun load(): Maybe<List<UserTransit>>
 
     @Query("DELETE FROM UserTransit")
-    fun nuke(): Int
+    fun nuke(): Maybe<Int>
 
     @Query("UPDATE UserTransit SET updatedAt = :updatedAt")
     @TypeConverters(BaseConverter::class)
-    fun updateAll(updatedAt: DateTime): Int
+    fun updateAll(updatedAt: DateTime): Maybe<Int>
 
     @Query("SELECT * FROM Operator INNER JOIN UserTransit ON UserTransit.operatorOneStopId = Operator.operatorOneStopId")
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)

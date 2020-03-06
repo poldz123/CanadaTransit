@@ -19,5 +19,5 @@ interface FeedDao : BaseDao<Feed> {
     fun load(): Maybe<List<Feed>>
 
     @Query("DELETE FROM Feed")
-    fun nuke(): Int
+    fun nuke(): Maybe<Int>
 }

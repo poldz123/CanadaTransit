@@ -6,7 +6,7 @@ import com.rodolfonavalon.canadatransit.controller.CanadaTransitApplication
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.viewmodel.util.SingleLiveEvent
 
-class MainViewModel : ViewModel() {
+class OperatorViewModel : ViewModel() {
 
     val operators: LiveData<List<Operator>> = CanadaTransitApplication.appDatabase.operatorDao().loadLive()
 

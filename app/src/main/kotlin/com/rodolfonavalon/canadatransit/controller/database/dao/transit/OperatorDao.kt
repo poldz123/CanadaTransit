@@ -20,5 +20,5 @@ interface OperatorDao : BaseDao<Operator> {
     fun loadLive(): LiveData<List<Operator>>
 
     @Query("DELETE FROM Operator")
-    fun nuke(): Int
+    fun nuke(): Maybe<Int>
 }

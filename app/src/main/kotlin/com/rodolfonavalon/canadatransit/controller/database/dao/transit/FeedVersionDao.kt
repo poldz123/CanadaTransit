@@ -16,5 +16,5 @@ interface FeedVersionDao : BaseDao<FeedVersion> {
     fun load(): Maybe<List<FeedVersion>>
 
     @Query("DELETE FROM FeedVersion")
-    fun nuke(): Int
+    fun nuke(): Maybe<Int>
 }

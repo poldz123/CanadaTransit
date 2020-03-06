@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,22 +12,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rodolfonavalon.canadatransit.R
 import com.rodolfonavalon.canadatransit.controller.manager.update.UpdateManager
 import com.rodolfonavalon.canadatransit.controller.util.extension.toast
-import com.rodolfonavalon.canadatransit.databinding.ActivityMainBinding
+import com.rodolfonavalon.canadatransit.databinding.ActivityOperatorBinding
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
 import com.rodolfonavalon.canadatransit.view.CustomSearchActionMode
 import com.rodolfonavalon.canadatransit.view.adapter.recycler.OperatorAdapter
 import com.rodolfonavalon.canadatransit.view.adapter.recycler.decorator.MarginItemDecorator
-import com.rodolfonavalon.canadatransit.viewmodel.MainViewModel
+import com.rodolfonavalon.canadatransit.viewmodel.OperatorViewModel
 import io.reactivex.rxkotlin.subscribeBy
 import java.util.*
-import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+class OperatorActivity : AppCompatActivity() {
 
-    private val mainViewModel by viewModels<MainViewModel>()
+    private val operatorViewModel by viewModels<OperatorViewModel>()
 
-    private lateinit var binding: ActivityMainBinding
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    lateinit var binding: ActivityOperatorBinding
 
     private lateinit var recyclerAdapter: OperatorAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityOperatorBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setup()
         update()
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_operator_search -> {
                 actionMode.start(binding.root) {
                     actionMode.onQueryListener = { queryText ->
-                        mainViewModel.operators.value?.also { operators ->
+                        operatorViewModel.operators.value?.also { operators ->
                             val filteredOperators = operators.filter { operator ->
                                 val name = operator.name.toLowerCase(Locale.getDefault())
                                 val shortName = operator.shortName?.toLowerCase(Locale.getDefault()) ?: ""
@@ -72,17 +73,17 @@ class MainActivity : AppCompatActivity() {
         title = "Select Transits"
         // Setup recycler view list
         layoutManager = LinearLayoutManager(this)
-        recyclerAdapter = OperatorAdapter(mainViewModel)
+        recyclerAdapter = OperatorAdapter(operatorViewModel)
         binding.recyclerOperator.layoutManager = layoutManager
         binding.recyclerOperator.adapter = recyclerAdapter
         binding.recyclerOperator.addItemDecoration(MarginItemDecorator(resources.getDimensionPixelSize(R.dimen.spacing_small_medium)))
-        mainViewModel.operators.observe(this, Observer<List<Operator>> { operators ->
+        operatorViewModel.operators.observe(this, Observer<List<Operator>> { operators ->
             onOperatorsChanged(operators)
         })
         // Setup action mode
         actionMode = CustomSearchActionMode()
         actionMode.onDestroyedListener = {
-            mainViewModel.operators.value?.also { operators ->
+            operatorViewModel.operators.value?.also { operators ->
                 recyclerAdapter.addAll(operators)
             }
         }
@@ -91,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         binding.fabOperatorDone.setOnClickListener {
         }
         // Setup viewmodel listeners
-        mainViewModel.getListenerNumSelectedOperators().observe(this, Observer { numSelected ->
+        operatorViewModel.getListenerNumSelectedOperators().observe(this, Observer { numSelected ->
             onNumSelectedOperatorsChanged(numSelected)
         })
     }
@@ -116,7 +117,15 @@ class MainActivity : AppCompatActivity() {
         // TODO Lets update the manager when application is started
         UpdateManager.updateOperators().subscribeBy(onSuccess = { operators ->
             Timber.d("Number of operators: ${operators.size}")
-            toast("Successfully updated operators")
+//            UpdateManager.updateFeeds().subscribeBy(onSuccess = {
+//                toast("Successfully updated feeds")
+//                UpdateManager.updateFeedVersions().subscribeBy(onSuccess = {
+//                    toast("Successfully updated feed version")
+//                }, onError = {
+//                })
+//            }, onError = {
+//            })
+//            toast("Successfully updated operators")
         }, onError = {
             Timber.e(it, "Error fetching operators")
             toast("Failed to update operators")
