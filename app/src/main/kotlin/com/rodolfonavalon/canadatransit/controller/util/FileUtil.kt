@@ -22,7 +22,6 @@ object FileUtil {
         DebugUtil.assertTrue(transferable.trackingId().isNotEmpty(), "Entity's id is empty")
         val suffix = if (temporary) TEMP_FILE_NAME_SUFFIX else ""
         val fileName = transferable.trackingId() + suffix
-        // TODO Change the directory as internal
         return File(createInternalDirectoryFile(context, transferable.transferDirectoryPath()), fileName)
     }
 
