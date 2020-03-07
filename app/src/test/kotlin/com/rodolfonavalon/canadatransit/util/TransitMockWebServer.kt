@@ -11,6 +11,7 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import okio.Buffer
 
 /**
  * This is the wrapper of the [MockWebServer] that handles the requests and responses
@@ -54,7 +55,7 @@ class TransitMockWebServer {
      * @param responseCode The response code of the request
      */
     fun addResponse(path: String, responseCode: Int = 200) {
-        addResponse(path, MockWebServerResponse(null, responseCode, null))
+        addResponse(path, StringMockWebServerResponse(null, responseCode, null))
     }
 
     /**
@@ -68,7 +69,7 @@ class TransitMockWebServer {
         val filePaths = filePath.plus(".json")
         val url = javaClass.getResource(filePaths)
         val body = url?.readText() ?: error("File does not exist: $filePaths")
-        addResponse(path, MockWebServerResponse(body, responseCode, delay))
+        addResponse(path, StringMockWebServerResponse(body, responseCode, delay))
     }
 
     /**
@@ -79,7 +80,18 @@ class TransitMockWebServer {
      * @param responseCode The response code of the request
      */
     fun addResponseBody(path: String, body: String, responseCode: Int = 200, delay: Long? = null) {
-        addResponse(path, MockWebServerResponse(body, responseCode, delay))
+        addResponse(path, StringMockWebServerResponse(body, responseCode, delay))
+    }
+
+    /**
+     * Adds the response of the mock server for the request.
+     *
+     * @param path The api path to the request
+     * @param body The body of the response to the request
+     * @param responseCode The response code of the request
+     */
+    fun addResponseBody(path: String, body: Buffer, responseCode: Int = 200, delay: Long? = null) {
+        addResponse(path, BufferMockWebServerResponse(body, responseCode, delay))
     }
 
     /**
@@ -209,7 +221,9 @@ class TransitMockWebServer {
      * @property response The response string of the request
      * @property code The response code of the request
      */
-    private data class MockWebServerResponse(val response: String?, val code: Int, var delay: Long?)
+    private open class MockWebServerResponse(val code: Int, var delay: Long?)
+    private class StringMockWebServerResponse(val response: String?, code: Int, delay: Long?) : MockWebServerResponse(code, delay)
+    private class BufferMockWebServerResponse(val response: Buffer?, code: Int, delay: Long?) : MockWebServerResponse(code, delay)
 
     /**
      * The exception class for the mock web server which will flag the server
@@ -240,7 +254,11 @@ class TransitMockWebServer {
                 val response = removeResponse(path)
                 // Create the response for the request
                 val mockResponse = MockResponse()
-                mockResponse.setBody(response.response ?: "")
+                when (response) {
+                    is StringMockWebServerResponse -> mockResponse.setBody(response.response ?: "")
+                    is BufferMockWebServerResponse -> mockResponse.body = response.response ?: Buffer()
+                    else -> throw MockWebServerException("Unknown request from the mock server")
+                }
                 mockResponse.setResponseCode(response.code)
                 // Delay the response to the request
                 if (response.delay != null) {
