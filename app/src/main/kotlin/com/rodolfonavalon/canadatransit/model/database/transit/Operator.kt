@@ -17,7 +17,7 @@ data class Operator(
 
     @field:Json(name = "name") val name: String,
     @field:Json(name = "state") val state: String,
-    @field:Json(name = "timezone") val timezone: String,
+    @field:Json(name = "timezone") val timezone: String?,
     @field:Json(name = "created_at") val createdAt: DateTime,
     @field:Json(name = "country") val country: String?,
     @field:Json(name = "website") val website: String?,

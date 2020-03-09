@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5f1d5a72ab5486d6bd774a4a3b3d238d",
+    "identityHash": "864d13162178ebcbdc3dabbc43725496",
     "entities": [
       {
         "tableName": "Operator",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operatorOneStopId` TEXT NOT NULL, `name` TEXT NOT NULL, `state` TEXT NOT NULL, `timezone` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `country` TEXT, `website` TEXT, `metro` TEXT, `shortName` TEXT, `representedInFeedOneStopIds` TEXT NOT NULL, `agencyId` TEXT, `agencyLang` TEXT, `agencyPhone` TEXT, PRIMARY KEY(`operatorOneStopId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operatorOneStopId` TEXT NOT NULL, `name` TEXT NOT NULL, `state` TEXT NOT NULL, `timezone` TEXT, `createdAt` TEXT NOT NULL, `country` TEXT, `website` TEXT, `metro` TEXT, `shortName` TEXT, `representedInFeedOneStopIds` TEXT NOT NULL, `agencyId` TEXT, `agencyLang` TEXT, `agencyPhone` TEXT, PRIMARY KEY(`operatorOneStopId`))",
         "fields": [
           {
             "fieldPath": "operatorOneStopId",
@@ -30,7 +30,7 @@
             "fieldPath": "timezone",
             "columnName": "timezone",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "createdAt",
@@ -295,7 +295,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5f1d5a72ab5486d6bd774a4a3b3d238d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '864d13162178ebcbdc3dabbc43725496')"
     ]
   }
 }
