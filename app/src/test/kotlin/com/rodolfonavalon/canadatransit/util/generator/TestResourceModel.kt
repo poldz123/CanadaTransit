@@ -148,10 +148,11 @@ object TestResourceModel {
     object FeedVersionModel {
 
         fun createRandomModel(
+            id: String = "d157d50441cd64c50ec01a300da521a477aa03c4",
             downloadUrl: String = "https://transitland-gtfs.s3.amazonaws.com/datastore-uploads/feed_version/d157d50441cd64c50ec01a300da521a477aa03c4.zip"
         ): FeedVersion {
             return FeedVersion(
-                    "d157d50441cd64c50ec01a300da521a477aa03c4",
+                    id,
                     "f-f24-octranspo",
                     DateTimeAdapter().fromJson("2017-10-27")!!,
                     DateTimeAdapter().fromJson("2017-12-23")!!,
