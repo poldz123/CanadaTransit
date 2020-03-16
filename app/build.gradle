@@ -40,8 +40,12 @@ android {
         }
     }
 
-    viewBinding {
-        enabled = true
+    // The default value for each feature is shown below. You can change the value to
+    // override the default behavior.
+    buildFeatures {
+        // Determines whether to support View Binding.
+        // Note that the viewBinding.enabled property is now deprecated.
+        viewBinding = true
     }
 
     sourceSets {

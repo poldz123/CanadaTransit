@@ -3,7 +3,7 @@
 buildscript {
     // Gradle
     ext.buildToolVersion = "28.0.3"
-    ext.gradleBuildToolVersion = "3.6.1"
+    ext.gradleBuildToolVersion = "4.1.0-alpha02"
 
     // Project
     ext.applicationId = "com.rodolfonavalon.canadatransit"
