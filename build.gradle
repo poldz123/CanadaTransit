@@ -2,13 +2,13 @@
 
 buildscript {
     // Gradle
-    ext.buildToolVersion = "28.0.3"
+    ext.buildToolVersion = "29.0.2"
     ext.gradleBuildToolVersion = "4.1.0-alpha02"
 
     // Project
     ext.applicationId = "com.rodolfonavalon.canadatransit"
-    ext.applicationCompileSdkVersion = 28
-    ext.applicationTargetSdkVersion = 28
+    ext.applicationCompileSdkVersion = 29
+    ext.applicationTargetSdkVersion = 29
     ext.applicationMinSdkVersion = 21
     ext.applicationVersionCode = 1
     ext.applicationVersionName = "1.0"
