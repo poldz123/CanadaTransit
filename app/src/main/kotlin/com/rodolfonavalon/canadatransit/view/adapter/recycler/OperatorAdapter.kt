@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.rodolfonavalon.canadatransit.R
 import com.rodolfonavalon.canadatransit.databinding.ItemOperatorBinding
 import com.rodolfonavalon.canadatransit.model.database.transit.Operator
@@ -38,9 +39,11 @@ class OperatorAdapter(private val viewModel: OperatorViewModel) : RecyclerView.A
         holder.binding.checkboxOperatorSelect.isChecked = selectedOperators.contains(id)
         holder.binding.textviewOperatorTitle.text = operator.name
         holder.binding.textviewOperatorWebsite.text = operator.website
+        holder.binding.textviewOperatorState.text = operator.state
         val operatorIconPath = operator.website?.split("/")?.subList(2, 3)?.joinToString("/")
         Glide.with(context)
                 .load("https://icons.duckduckgo.com/ip3/$operatorIconPath.ico")
+                .apply(RequestOptions.circleCropTransform())
                 .placeholder(R.drawable.ic_directions_bus_black_24dp)
                 .into(holder.binding.imageviewOperatorIcon)
         holder.binding.cardviewOperator.setOnClickListener {
