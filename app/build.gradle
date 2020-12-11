@@ -1,11 +1,15 @@
 apply plugin: 'com.android.application'
-apply plugin: 'realm-android'
-apply plugin: 'com.jakewharton.butterknife'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.adarshr.test-logger'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+apply from: '../plugins/jacoco-plugin.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolVersion
+
     defaultConfig {
         applicationId rootProject.ext.applicationId
         minSdkVersion rootProject.ext.minSdkVersion
@@ -13,48 +17,125 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        defaultConfig {
+
+            kapt {
+                arguments {
+                    // This is the location of the generated schemas for the Room database and
+                    // must be added to version control but removed from APK.
+                    arg("room.schemaLocation", "$project.projectDir/schemas".toString())
+                }
+            }
+        }
     }
+
+    sourceSets {
+        String mainKotlinDir = "src/main/kotlin"
+        String sharedTestKotlinDir = "src/shared/kotlin"
+        String sharedResourceKotlinDir = "src/shared/res"
+        String unitTestKotlinDir = "src/test/kotlin"
+        String androidTestKotlinDir = "src/androidTest/kotlin"
+
+        main {
+            java.srcDir mainKotlinDir
+        }
+
+        test {
+            java.srcDir unitTestKotlinDir
+            java.srcDir sharedTestKotlinDir
+            resources.srcDir sharedResourceKotlinDir
+        }
+
+        androidTest {
+            java.srcDir androidTestKotlinDir
+            java.srcDir sharedTestKotlinDir
+            resources.srcDir sharedResourceKotlinDir
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    testOptions {
+        unitTests.all {
+            // Apply the gradle logs which the custom logger will configure
+            testLogging {
+                events "passed", "skipped", "failed", "standardOut", "standardError"
+                outputs.upToDateWhen { false }
+                showStandardStreams = true
+            }
+        }
+    }
+}
+
+// Makes sure that kotlin test will not be used in production code
+afterEvaluate {
+    android.sourceSets.all { sourceSet ->
+        if (!sourceSet.name.startsWith("test") || !sourceSet.name.startsWith("androidTest")) {
+            sourceSet.kotlin.setSrcDirs([])
+        }
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Community Library
-    compile "com.jakewharton:butterknife:$butterKnifeLibraryVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeLibraryVersion"
-    compile "com.jakewharton.timber:timber:$timberLibraryVersion"
-    compile "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
-    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidLibraryVersion"
-    compile "io.reactivex.rxjava2:rxjava:$rxJavaLibraryVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava2:$rxJavaRetrofitAdapterLibraryVersion"
-    compile "com.google.code.gson:gson:$gsonLibraryVersion"
-    compile "com.squareup.retrofit2:converter-gson:$gsonRetrofitConverterLibraryVersion"
-    compile "net.danlew:android.joda:$jodaTimeAndroidLibraryVersion"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinLibraryVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidLibraryVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaLibraryVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitLibraryVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitLibraryVersion"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiLibraryVersion"
+    implementation "net.danlew:android.joda:$jodaTimeAndroidLibraryVersion"
+    implementation "com.jakewharton.timber:timber:$timberLibraryVersion"
 
     // Google Library
-    compile "com.android.support:design:$googleDesignLibraryVersion"
-    compile "com.android.support:appcompat-v7:$googleSupportLibraryVersion"
-    compile "com.android.support.constraint:constraint-layout:$googleContraintLayoutLibraryVersion"
-    compile "com.google.android.gms:play-services-maps:$googlePlayServiceLibraryVersion"
+    implementation "com.android.support:design:$googleSupportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$googleSupportLibraryVersion"
+    implementation "com.android.support.constraint:constraint-layout:$googleContraintLayoutLibraryVersion"
+    implementation "com.google.android.gms:play-services-maps:$googlePlayServiceLibraryVersion"
+    implementation "android.arch.persistence.room:runtime:$googleRoomLibraryVersion"
+    implementation "android.arch.persistence.room:rxjava2:$googleRoomLibraryVersion"
+    kapt "android.arch.persistence.room:compiler:$googleRoomLibraryVersion"
 
     // Test Library
-    androidTestCompile "com.google.code.findbugs:jsr305:$jsr305LibraryVersion"
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoLibraryVersion", {
+    androidTestImplementation "com.google.code.findbugs:jsr305:$jsr305LibraryVersion"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoLibraryVersion", {
         exclude group: "com.android.support", module: "support-annotations"
     })
-    testCompile "junit:junit:$junitLibraryVersion"
+    testImplementation "junit:junit:$junitLibraryVersion"
+    testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
+    testImplementation "joda-time:joda-time:$jodaTimeAndroidLibraryVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoLibraryVersion"
+    testImplementation "com.android.support.test:runner:$googleTestSupport"
+    testImplementation "com.android.support.test:rules:$googleTestSupport"
+    testImplementation "org.robolectric:robolectric:$robolectricLibraryVersion"
+
+    // Shared Test Library
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttpLibraryVersion"
 
     // Compile time plugin
-    provided "org.projectlombok:lombok:$lombokCompilerVersion"
-
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }

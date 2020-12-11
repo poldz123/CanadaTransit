@@ -1,0 +1,353 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "11a67054b29a437912588cc8213d68df",
+    "entities": [
+      {
+        "tableName": "Operator",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operatorOneStopId` TEXT NOT NULL, `name` TEXT NOT NULL, `state` TEXT NOT NULL, `timezone` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `country` TEXT, `website` TEXT, `metro` TEXT, `shortName` TEXT, `representedInFeedOneStopIds` TEXT NOT NULL, `agencyId` TEXT, `agencyLang` TEXT, `agencyPhone` TEXT, PRIMARY KEY(`operatorOneStopId`))",
+        "fields": [
+          {
+            "fieldPath": "operatorOneStopId",
+            "columnName": "operatorOneStopId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timezone",
+            "columnName": "timezone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "website",
+            "columnName": "website",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "metro",
+            "columnName": "metro",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "shortName",
+            "columnName": "shortName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "representedInFeedOneStopIds",
+            "columnName": "representedInFeedOneStopIds",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tags.agencyId",
+            "columnName": "agencyId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tags.agencyLang",
+            "columnName": "agencyLang",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tags.agencyPhone",
+            "columnName": "agencyPhone",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "operatorOneStopId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "OperatorFeed",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`feedOneStopId` TEXT NOT NULL, `operatorOneStopId` TEXT NOT NULL, `name` TEXT, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `url` TEXT NOT NULL, `feedFormat` TEXT NOT NULL, `lastFetchAt` TEXT NOT NULL, `lastImportedAt` TEXT NOT NULL, `importStatus` TEXT NOT NULL, `activeFeedVersion` TEXT NOT NULL, `feedVersionUrl` TEXT NOT NULL, PRIMARY KEY(`feedOneStopId`), FOREIGN KEY(`operatorOneStopId`) REFERENCES `Operator`(`operatorOneStopId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "feedOneStopId",
+            "columnName": "feedOneStopId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "operatorOneStopId",
+            "columnName": "operatorOneStopId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "feedFormat",
+            "columnName": "feedFormat",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastFetchAt",
+            "columnName": "lastFetchAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastImportedAt",
+            "columnName": "lastImportedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "importStatus",
+            "columnName": "importStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activeFeedVersion",
+            "columnName": "activeFeedVersion",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "feedVersionUrl",
+            "columnName": "feedVersionUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "feedOneStopId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_OperatorFeed_feedOneStopId",
+            "unique": true,
+            "columnNames": [
+              "feedOneStopId"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_OperatorFeed_feedOneStopId` ON `${TABLE_NAME}` (`feedOneStopId`)"
+          },
+          {
+            "name": "index_OperatorFeed_operatorOneStopId",
+            "unique": true,
+            "columnNames": [
+              "operatorOneStopId"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_OperatorFeed_operatorOneStopId` ON `${TABLE_NAME}` (`operatorOneStopId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Operator",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "operatorOneStopId"
+            ],
+            "referencedColumns": [
+              "operatorOneStopId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "OperatorFeedVersion",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sha1` TEXT NOT NULL, `feedOneStopId` TEXT NOT NULL, `earliestCalendarDate` TEXT NOT NULL, `latestCalendarDate` TEXT NOT NULL, `md5` TEXT NOT NULL, `fetchedAt` TEXT NOT NULL, `importedAt` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `importStatus` TEXT NOT NULL, `url` TEXT NOT NULL, `downloadUrl` TEXT NOT NULL, `importLevel` INTEGER NOT NULL, `isActiveFeedVersion` INTEGER NOT NULL, PRIMARY KEY(`sha1`), FOREIGN KEY(`feedOneStopId`) REFERENCES `OperatorFeed`(`feedOneStopId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "sha1",
+            "columnName": "sha1",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "feedOneStopId",
+            "columnName": "feedOneStopId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "earliestCalendarDate",
+            "columnName": "earliestCalendarDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latestCalendarDate",
+            "columnName": "latestCalendarDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "md5",
+            "columnName": "md5",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fetchedAt",
+            "columnName": "fetchedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "importedAt",
+            "columnName": "importedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "importStatus",
+            "columnName": "importStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "downloadUrl",
+            "columnName": "downloadUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "importLevel",
+            "columnName": "importLevel",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isActiveFeedVersion",
+            "columnName": "isActiveFeedVersion",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "sha1"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_OperatorFeedVersion_sha1",
+            "unique": true,
+            "columnNames": [
+              "sha1"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_OperatorFeedVersion_sha1` ON `${TABLE_NAME}` (`sha1`)"
+          },
+          {
+            "name": "index_OperatorFeedVersion_feedOneStopId",
+            "unique": true,
+            "columnNames": [
+              "feedOneStopId"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_OperatorFeedVersion_feedOneStopId` ON `${TABLE_NAME}` (`feedOneStopId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "OperatorFeed",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "feedOneStopId"
+            ],
+            "referencedColumns": [
+              "feedOneStopId"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"11a67054b29a437912588cc8213d68df\")"
+    ]
+  }
+}
