@@ -35,7 +35,7 @@ jobs:
         uses: scorebet/pull-request@v2
         with:
           source_branch: sample-dev
-          destination_branch: dev
+          destination_branch: develop
           pr_title: "Changes on INTERNAL merging into DEV"
           pr_body: "<p align='center'><img src='https://i.imgur.com/FoTJB8S.png'/><br/><b>PLEASE DON'T SQUASH MERGE</b></p>"
           pr_label: "needs-review,eod,auto-generated"
