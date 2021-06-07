@@ -6,7 +6,7 @@ name: CI
 on: 
   push:
     branches:
-      - develop
+      - sample-dev
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -30,3 +30,12 @@ jobs:
           TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           echo "The generated token is masked: ${TOKEN}"
+      - name: Create PR internal to dev
+        uses: scorebet/pull-request@v2
+        with:
+          source_branch: sample-dev
+          destination_branch: dev
+          pr_title: "Changes on INTERNAL merging into DEV"
+          pr_body: "<p align='center'><img src='https://i.imgur.com/FoTJB8S.png'/><br/><b>PLEASE DON'T SQUASH MERGE</b></p>"
+          pr_label: "needs-review,eod,auto-generated"
+          github_token: ${{ steps.generate_token.outputs.token }}
