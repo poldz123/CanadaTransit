@@ -122,7 +122,7 @@ abstract class AbstractQueueManager<T : Task> : QueueManager<T> {
         assert()
         // Retrieve the key and value for the next transfer, this will
         // not remove the key from the list of keys.
-        safeLet(queueKey.peek(), queueTaskMap[queueKey.peek()]) { key, task ->
+        safeLet(queueKey.peek(), queueTaskMap[queueKey.peek() ?: null]) { key, task ->
             // Initialize the active transfer
             activeTrackingId = key
             activeTask = task

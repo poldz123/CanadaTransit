@@ -8,6 +8,7 @@
     android:background="@null"
     android:focusableInTouchMode="true"
     android:hint="Search"
+    android:imeOptions="actionDone"
     android:importantForAutofill="no"
     android:inputType="text"
     android:textColor="@color/white"

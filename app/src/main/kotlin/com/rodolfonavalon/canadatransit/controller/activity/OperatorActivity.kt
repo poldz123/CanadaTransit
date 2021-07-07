@@ -57,8 +57,10 @@ class OperatorActivity : AppCompatActivity() {
                         operatorViewModel.operators.value?.also { operators ->
                             val filteredOperators = operators.filter { operator ->
                                 val name = operator.name.toLowerCase(Locale.getDefault())
+                                val website = operator.website?.toLowerCase(Locale.getDefault()) ?: ""
+                                val query = queryText.trim().toLowerCase(Locale.getDefault())
                                 val shortName = operator.shortName?.toLowerCase(Locale.getDefault()) ?: ""
-                                name.contains(queryText.trim().toLowerCase(Locale.getDefault())) || shortName.contains(queryText.trim().toLowerCase(Locale.getDefault()))
+                                name.contains(query) || shortName.contains(query) || website.contains(query.replace("/+s".toRegex(), ""))
                             }
                             recyclerAdapter.addAll(filteredOperators)
                         }
@@ -71,8 +73,10 @@ class OperatorActivity : AppCompatActivity() {
     }
 
     private fun setup() {
-        title = "Transits"
+        setSupportActionBar(binding.containerToolbar.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_close_white_24dp)
+        title = "Transits"
         // Setup recycler view list
         layoutManager = LinearLayoutManager(this)
         recyclerAdapter = OperatorAdapter(operatorViewModel)

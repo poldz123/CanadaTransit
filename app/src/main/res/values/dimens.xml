@@ -20,8 +20,9 @@
     <dimen name="elevation_toolbar">4dp</dimen>
 
     <dimen name="page_title">20sp</dimen>
-    <dimen name="list_title">16sp</dimen>
+    <dimen name="list_title">17sp</dimen>
     <dimen name="list_description">14sp</dimen>
+    <dimen name="list_description2">10sp</dimen>
     <dimen name="menu_title">14sp</dimen>
     <dimen name="radius_card_view">3dp</dimen>
 </resources>
