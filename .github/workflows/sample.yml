@@ -31,7 +31,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PR=$(gh pr view sample-dev --json state,number)
+          PR=$(gh pr view sample-dev123 --json state,number)
           PR_STATE=$(echo ${PR} | jq -r .state)
           PR_NUMBER=$(echo ${PR} | jq -r .number)
           if [[ "${PR_STATE}" == "OPEN" ]]; then
