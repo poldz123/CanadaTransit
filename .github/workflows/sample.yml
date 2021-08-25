@@ -34,5 +34,6 @@ jobs:
           PR=$(gh pr view sample-dev --json state,number)
           PR_STATE=$(echo ${PR} | jq .state)
           PR_NUMBER=$(echo ${PR} | jq .number)
-          echo "${PR_STATE}"
-          echo "${PR_NUMBER}"
+          if [[ "${PR_STATE}" == "OPEN" ]]; then
+            echo "sdfsdf"
+          fi
