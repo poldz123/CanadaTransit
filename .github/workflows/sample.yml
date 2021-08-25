@@ -35,5 +35,5 @@ jobs:
           PR_STATE=$(echo ${PR} | jq -r .state)
           PR_NUMBER=$(echo ${PR} | jq -r .number)
           if [[ "${PR_STATE}" == "OPEN" ]]; then
-            echo "sdfsdf"
+            gh pr edit ${PR_NUMBER} --title "I am editor muahahaha"
           fi
