@@ -37,5 +37,5 @@ jobs:
           if [[ "${PR_STATE}" == "OPEN" ]]; then
             # gh pr edit ${PR_NUMBER} --title "I am editor muahahaha"
             echo "${PR_NUMBER}"
-            gh pr merge 17 --auto
+            gh pr merge ${PR_NUMBER} --auto --merge
           fi
