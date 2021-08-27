@@ -36,5 +36,5 @@ jobs:
           PR_NUMBER=$(echo ${PR} | jq -r .number)
           if [[ "${PR_STATE}" == "OPEN" ]]; then
             # gh pr edit ${PR_NUMBER} --title "I am editor muahahaha"
-            gh pr merge --auto
+            gh pr merge ${PR_NUMBER} --auto
           fi
