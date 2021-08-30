@@ -27,15 +27,24 @@ jobs:
           private_key: ${{ secrets.APP_SECRET }}
           # Optional (defaults to the current repository).
           # repository: owner/repo
-      - name: Use token
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PR=$(gh pr view sample-dev --json state,number)
-          PR_STATE=$(echo ${PR} | jq -r .state)
-          PR_NUMBER=$(echo ${PR} | jq -r .number)
-          if [[ "${PR_STATE}" == "OPEN" ]]; then
-            # gh pr edit ${PR_NUMBER} --title "I am editor muahahaha"
-            echo "${PR_NUMBER}"
-            gh pr merge ${PR_NUMBER} --auto --merge
-          fi
+      - name: Create PR internal to dev
+        uses: scorebet/pull-request@v2
+        with:
+          source_branch: develop
+          destination_branch: develop
+          pr_title: "Changes on INTERNAL merging into DEV"
+          pr_body: "<p align='center'><img src='https://i.imgur.com/FoTJB8S.png'/><br/><b>PLEASE DON'T SQUASH MERGE</b></p>"
+          pr_label: "needs-review,eod,auto-generated"
+          github_token: ${{ steps.generate_token.outputs.token }}
+#       - name: Use token
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         run: |
+#           PR=$(gh pr view sample-dev --json state,number)
+#           PR_STATE=$(echo ${PR} | jq -r .state)
+#           PR_NUMBER=$(echo ${PR} | jq -r .number)
+#           if [[ "${PR_STATE}" == "OPEN" ]]; then
+#             # gh pr edit ${PR_NUMBER} --title "I am editor muahahaha"
+#             echo "${PR_NUMBER}"
+#             gh pr merge ${PR_NUMBER} --auto --merge
+#           fi
