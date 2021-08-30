@@ -29,6 +29,9 @@ jobs:
           private_key: ${{ secrets.APP_SECRET }}
           # Optional (defaults to the current repository).
           # repository: owner/repo
+      - name: HI
+        run: |
+          touch hello.txt
       - name: Create Pull Request
         id: create-pr
         uses: scorebet/create-pull-request@v3
