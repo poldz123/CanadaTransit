@@ -37,10 +37,12 @@ jobs:
           title: "Hi"
           body: "<p align='center'><img src='https://i.imgur.com/FoTJB8S.png'/><br/><b>PLEASE DON'T SQUASH MERGE</b></p>"
           labels: "needs-review,code-completion,auto-generated"
-          token: ${{ secrets.BOT_GITHUB_ACTIONS_TOKEN }}
-          committer: "${{ secrets.BOT_GPG_USERNAME }} <${{ secrets.BOT_GPG_EMAIL }}>"
-          author: "${{ secrets.BOT_GPG_USERNAME }} <${{ secrets.BOT_GPG_EMAIL }}>"
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Merge dev into internal"
+      - name: Sample
+        if: ${{ steps.create-pr.outputs.pull-request-url }}
+        run: |
+          echo HI
 #       - name: Use token
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
