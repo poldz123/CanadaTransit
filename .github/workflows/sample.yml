@@ -19,6 +19,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: develop
       - name: Generate token
         id: generate_token
         uses: tibdex/github-app-token@v1
@@ -27,15 +29,18 @@ jobs:
           private_key: ${{ secrets.APP_SECRET }}
           # Optional (defaults to the current repository).
           # repository: owner/repo
-      - name: Create PR internal to dev
-        uses: scorebet/pull-request@v2
+      - name: Create Pull Request
+        id: create-pr
+        uses: scorebet/create-pull-request@v3
         with:
-          source_branch: develop
-          destination_branch: develop
-          pr_title: "Changes on INTERNAL merging into DEV"
-          pr_body: "<p align='center'><img src='https://i.imgur.com/FoTJB8S.png'/><br/><b>PLEASE DON'T SQUASH MERGE</b></p>"
-          pr_label: "needs-review,eod,auto-generated"
-          github_token: ${{ steps.generate_token.outputs.token }}
+          branch: "merge-dev-into-internal"
+          title: "Hi"
+          body: "<p align='center'><img src='https://i.imgur.com/FoTJB8S.png'/><br/><b>PLEASE DON'T SQUASH MERGE</b></p>"
+          labels: "needs-review,code-completion,auto-generated"
+          token: ${{ secrets.BOT_GITHUB_ACTIONS_TOKEN }}
+          committer: "${{ secrets.BOT_GPG_USERNAME }} <${{ secrets.BOT_GPG_EMAIL }}>"
+          author: "${{ secrets.BOT_GPG_USERNAME }} <${{ secrets.BOT_GPG_EMAIL }}>"
+          commit-message: "Merge dev into internal"
 #       - name: Use token
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
