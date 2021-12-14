@@ -22,7 +22,7 @@ jobs:
       - name: Sample
         run: |
 
-          echo "${SAMPLE}"
+          update-ca-certificates
       
       
 #       - name: Generate token
