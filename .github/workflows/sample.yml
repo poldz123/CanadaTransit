@@ -5,9 +5,9 @@ name: CI
 
 # Controls when the action will run. 
 on: 
-  push:
+  pull_request:
     branches:
-      - sample-dev
+      - develop
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -18,34 +18,34 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: develop
-      - name: Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_SECRET }}
-          # Optional (defaults to the current repository).
-          # repository: owner/repo
-      - name: HI
-        run: |
-          touch hello.txt
-      - name: Create Pull Request
-        id: create-pr
-        uses: scorebet/create-pull-request@v3
-        with:
-          branch: "merge-dev-into-internal"
-          title: "Hi"
-          body: "<p align='center'><img src='https://i.imgur.com/FoTJB8S.png'/><br/><b>PLEASE DON'T SQUASH MERGE</b></p>"
-          labels: "needs-review,code-completion,auto-generated"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Merge dev into internal"
+#       - uses: actions/checkout@v2
+#         with:
+#           ref: develop
+#       - name: Generate token
+#         id: generate_token
+#         uses: tibdex/github-app-token@v1
+#         with:
+#           app_id: ${{ secrets.APP_ID }}
+#           private_key: ${{ secrets.APP_SECRET }}
+#           # Optional (defaults to the current repository).
+#           # repository: owner/repo
+#       - name: HI
+#         run: |
+#           touch hello.txt
+#       - name: Create Pull Request
+#         id: create-pr
+#         uses: scorebet/create-pull-request@v3
+#         with:
+#           branch: "merge-dev-into-internal"
+#           title: "Hi"
+#           body: "<p align='center'><img src='https://i.imgur.com/FoTJB8S.png'/><br/><b>PLEASE DON'T SQUASH MERGE</b></p>"
+#           labels: "needs-review,code-completion,auto-generated"
+#           token: ${{ secrets.GITHUB_TOKEN }}
+#           commit-message: "Merge dev into internal"
       - name: Sample
         if: ${{ steps.create-pr.outputs.pull-request-url }}
         run: |
-          echo HI
+          echo "${{ toJson(github) }}"
 #       - name: Use token
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
