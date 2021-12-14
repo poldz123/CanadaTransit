@@ -4,7 +4,7 @@ name: CI
 
 # Controls when the action will run. 
 on: 
-  push:
+  pull_request:
     branches:
       - develop
 
@@ -17,15 +17,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout private tools
-        uses: actions/checkout@v2
-        with:
-          repository: scoremedia/github-actions-playground
-          token: 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
-          path: my-tools
       - name: Sample
         run: |
-          ls my-tools
+          echo "${{ toJson(github) }}"
       
 #       - name: Generate token
 #         id: generate_token
