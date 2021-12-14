@@ -22,7 +22,7 @@ jobs:
       - name: Sample
         run: |
 
-          update-ca-certificates
+          sudo update-ca-certificates
       
       
 #       - name: Generate token
