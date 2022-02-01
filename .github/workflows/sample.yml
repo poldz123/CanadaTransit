@@ -21,9 +21,10 @@ jobs:
     steps:
       - name: Sample
         run: |
-
-          sudo update-ca-certificates
-      
+          echo "::set-output name=build-variant::a"
+      - name: Sample2
+        run: |
+          echo "::set-output name=build-variant::b"
       
 #       - name: Generate token
 #         id: generate_token
