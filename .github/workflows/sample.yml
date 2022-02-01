@@ -23,7 +23,7 @@ jobs:
       - name: Sample
         id: hi
         run: |
-          echo "::set-output name=build-variant::a"
+          echo "::set-output name=build-variant::${{ secrets.SAMPLE }}"
       - name: Sample2
         run: |
           echo "::set-output name=build-variant2::b"
