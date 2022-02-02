@@ -20,6 +20,7 @@ jobs:
       cache-build-key: ${{ steps.hi.outputs.build-variant }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: actions/checkout@v2
       - name: Sample
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
