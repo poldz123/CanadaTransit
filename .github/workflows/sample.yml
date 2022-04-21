@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - develop
+env:
+  SAMPLE: ${{ false && 'hi' || 'hi2' }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -14,13 +16,20 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    outputs:
+      cache-build-key: ${{ steps.hi.outputs.build-variant }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Sample
-        run: |
-          echo "${{ toJson(github) }}"
-      
+      - uses: actions/checkout@v2
+      - name: 'Comment PR'
+        uses: actions/github-script@0.3.0
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
+            github.issues.createComment({ issue_number, owner, repo, body: 'Hello world ! 👋' });
+
 #       - name: Generate token
 #         id: generate_token
 #         uses: tibdex/github-app-token@v1
