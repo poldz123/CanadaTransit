@@ -9,4 +9,4 @@ jobs:
     steps:
       - name: Analysis detekt
         run: |
-          echo "${{ github }}"
+          echo "${{ fromJSON(github) }}"
