@@ -4,6 +4,7 @@ on:
     types: [created]
 jobs:
   slash-command:
+    if: contains(github.event.comment.body, '/ci')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
